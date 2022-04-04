@@ -9,7 +9,6 @@ urlpatterns = [
     path('viewPolicies/', views.viewPolicies.as_view(), name='viewPolicies'),
     re_path(r'^checkClaims/(?P<id>\d+)/$', views.checkClaims.as_view(), name='checkClaims'),
     path('viewClaimRequests/', views.viewClaimRequests.as_view(), name='viewClaimRequests'),
-
-    
+    path('insurancePayments/', views.insurancePayments.as_view(), name='insurancePayments'),    
     
    ]

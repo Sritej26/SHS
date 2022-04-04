@@ -10,6 +10,7 @@ from .forms import *
 from django.contrib import messages
 from django.utils.decorators import method_decorator
 from django.contrib.auth import logout
+import uuid
 
 # Create your views here.
 class insuranceHome(View):
@@ -67,35 +68,51 @@ class checkClaims(View):
     def get(self, request, id):
         claimDetails = InsuranceClaimDetails.objects.get(claim_id=id)   
         print(claimDetails.claim_id)
+        print(claimDetails.patient_id)
         registerDetails = InsuranceClaimRegister.objects.all()
         policyDetails = InsurancePolicies.objects.all()
         policy_number =0
         amt =0
+        current_claimed_amt = claimDetails.claim_amt
+        remaining_claim_amt = 0
         print("hello")
         for a in policyDetails:
             if a.policy_name == claimDetails.policy_name:
                 policy_number = a .policy_id
-                amt = a.insurance_amt
+                amt = a.insurance_amt  #total policy amt
                 print("hi")
                 print(policy_number)
         print(policy_number)
+        checkClaimTotal = InsuranceClaimDetails.objects.filter(patient_id = claimDetails.patient_id)
+        for i in checkClaimTotal:
+            if (i.claim_transaction_status == 'Approved' and 
+               i.patient_firstname.casefold() == claimDetails.patient_firstname.casefold() and
+               i.patient_lastname.casefold() == claimDetails.patient_lastname.casefold() and
+               i.policy_name == claimDetails.policy_name):
+                current_claimed_amt+= i.claim_amt
+                print(current_claimed_amt)
+
+
+
         found =0
         for a in registerDetails:
             if(a.patient_id == claimDetails.patient_id and 
-                a.patient_firstname == claimDetails.patient_firstname and
-                a.patient_lastname == claimDetails.patient_lastname and
-                a.policy_id == policy_number and amt > claimDetails.claim_amt):
+                a.patient_firstname.casefold() == claimDetails.patient_firstname.casefold() and
+                a.patient_lastname.casefold() == claimDetails.patient_lastname.casefold() and
+                a.policy_id == policy_number and amt >= current_claimed_amt):
                 print("Approved")
                 print(claimDetails.patient_firstname)
                 claimDetails.claim_status = 'Approved'
                 claimDetails.claim_transaction_status = 'Approved'
+                claimDetails.claim_transaction_id = '#C{}'.format(uuid.uuid1().time_low)
                 claimDetails.save()
+                remaining_claim_amt = amt - current_claimed_amt
                 found = 1
                 print("Saved")
 
         if(found):
            # messages.success(request, 'Approved on Verification')
-            messages.success(request, 'Approved on Verification')
+            messages.success(request, 'Approved on Verification with remaining claim amt ${}'.format(remaining_claim_amt))
             #msgS = "Approved on Verification"
             print("true")
         else:
@@ -122,6 +139,14 @@ class viewClaimRequests(View):
     def get(self,request):
         appDetails = InsuranceClaimDetails.objects.all()
         return render(request,'viewClaimRequests.html',{
+            'user':'InsuranceStaff',
+            'appDetails': appDetails,
+        })
+
+class insurancePayments(View):
+    def get(self,request):
+        appDetails = InsuranceClaimDetails.objects.filter(claim_transaction_status = 'Done')
+        return render(request,'insurancePayments.html',{
             'user':'InsuranceStaff',
             'appDetails': appDetails,
         })

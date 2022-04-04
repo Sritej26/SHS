@@ -107,6 +107,7 @@
                             <th>Claim Amount</th>
                             <th>Status</th>
                             <th>Transaction Status</th>
+                            <th>Transaction ID</th>
                             <th>Action</th>
                         </tr>
                         </thead>
@@ -120,6 +121,11 @@
                             <td width="10%">{{a.claim_amt}}</td>
                             <td width="10%">{{a.claim_status}}</td>  
                             <td width="10%">{{a.claim_transaction_status}}</td>  
+                            <td width="10%">
+                                {%if a.claim_transaction_status == 'Approved' %}
+                                    {{a.claim_transaction_id}}
+                                    {%endif%}
+                            </td>
 
                             
                             <td width="5%">

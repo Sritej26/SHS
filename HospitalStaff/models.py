@@ -13,3 +13,4 @@ class AppointmentDetails(models.Model):
     status =models.CharField(max_length=255,default="Pending")
     patient_diagnosis = models.CharField(max_length=255, default="adding....")
     transaction_status =models.CharField(max_length=255,default="Pending")
+    transaction_id = models.CharField(max_length=100, null=False, default="#C")

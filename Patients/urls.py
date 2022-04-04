@@ -15,5 +15,7 @@ urlpatterns = [
     re_path(r'^registerPolicy/(?P<id>\d+)/$', views.registerPolicy.as_view(), name='registerPolicy'),
     re_path(r'^declineTransaction/(?P<id>\d+)/$', views.declineTransaction.as_view(), name='declineTransaction'),
     re_path(r'^approveTransaction/(?P<id>\d+)/$', views.approveTransaction.as_view(), name='approveTransaction'),
+    re_path(r'^patientPayment/(?P<id>\d+)/$', views.patientPayment.as_view(), name='patientPayment'),
+
 
 ]
