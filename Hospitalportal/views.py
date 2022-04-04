@@ -84,13 +84,16 @@ class Login(View):
                         id=pid.patient_id
                         return HttpResponseRedirect(reverse('patient:patientHome', args=[id]))
 
-                        # return redirect("/patient/home/id")
-                    elif test.Role == 'Doctor':
-                        return redirect("/doctor/",{'name':user})
                     elif test.Role == 'Admin':
                         return redirect("/admin/",{'name':user})
                     elif test.Role == 'Labstaff':
                         return redirect("/labStaff/",{'name':user})
+                    elif test.Role == 'Doctorstaff':
+                        return redirect("/doctors/",{'name':user})
+                    elif test.Role == 'Insurancestaff':
+                        return redirect("/insurance/",{'name':user})
+                    elif test.Role == 'HospitalStaff':
+                        return redirect("/hospitalStaff/", {'name': user})
                 else:
                     messages.info(request,'User already logged in')
                     return render(request,'Login.html')  
