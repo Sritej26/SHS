@@ -1,5 +1,6 @@
 from operator import mod
 from statistics import mode
+from tkinter import N
 #from tkinter import N
 from django.db import models
 
@@ -12,6 +13,7 @@ class EmployeeDetails(models.Model):
     employee_id = models.AutoField(primary_key=True)
     employee_first_name = models.CharField(max_length=255, null=False)
     employee_last_name = models.CharField(max_length=255, null=False)
+    employee_email = models.EmailField(null=False)
     employee_dept = models.CharField(max_length=255, null=False)
 
 class TransactionDetails(models.Model):

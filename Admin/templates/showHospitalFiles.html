@@ -1,0 +1,71 @@
+{% include 'adminNavbar.html' %}
+
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+
+</head>
+
+<div class="content-wrapper">
+    <section class="content">
+        <div class="container-fluid">
+            {% include 'messages.html' %}
+            <script>
+                setTimeout(function(){
+                  if ($('#msg').length > 0) {
+                    $('#msg').remove();
+                  }
+                }, 2000)
+            </script>
+            <ul class="nav nav-tabs">
+                <li><a href="showInternalFiles.html">Patient Files</a></li>
+                <li><a href="showDoctorFiles.html">Doctor Files</a></li>
+                <li><a href="showInsuranceFiles.html">Insurance Files</a></li>
+                <li><a href="showLabFiles.html">Lab Files</a></li>
+                <li class="active"><a href="#hospitalFiles">Hospital Files</a></li>
+            </ul>
+            <div class="tab-content">
+                <div id="hospitalFiles">
+                    <h3>Appointment files</h3>
+                    <table id="data" class="table table-striped table-bordered compact" cellspacing="0"
+                        style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Appointment ID</th>
+                                <th>Patient ID</th>
+                                <th>Patient firstname</th>
+                                <th>Patient lastname</th>
+                                <th>Doctor ID</th>
+                                <th>Requested Date</th>
+                                <th>Prescribed Report Status</th>
+                                <th>Report Status</th>
+                                <td>Status</td>
+                                <td>Patient diagnosis</td>
+                                <td>Transaction status</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {%for appointment in appointment_details%}
+                            <tr>
+                                <td>{{appointment.appointment_id}}</td>
+                                <td>{{appointment.patient_id}}</td>
+                                <td>{{appointment.first_name}}</td>
+                                <td>{{appointment.last_name}}</td>
+                                <td>{{appointment.doctor_id}}</td>
+                                <td>{{appointment.requested_date}}</td>
+                                <td>{{appointment.prescribed_report_status}}</td>
+                                <td>{{appointment.status}}</td>
+                                <td>{{appointment.patient_diagnosis}}</td>
+                                <td>{{appointment.transaction_status}}</td>
+                            </tr>
+                            {%endfor%}
+                        </tbody>
+                    </table>
+                    <p> </p>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

@@ -38,7 +38,7 @@ def logout_user(request,id):
 
 
 class patientHome(View):
-    def get(self,request,id):
+    def get(self, request, id):
         if not (request.user.is_authenticated):
             return redirect('/Login')
 
@@ -50,19 +50,6 @@ class patientHome(View):
         return render(request,'patientHome.html',{
             'id':id
         })
-
-class patientPayment(View):
-    def get(self,request,id):
-        appDetails = AppointmentDetails.objects.filter(patient_id = id)
-        detail = InsuranceClaimDetails.objects.filter(patient_id = id)
-        return render(request,'patientPayment.html',{
-            'user':'aish',
-            'appDetails': appDetails,
-            'detail':detail,
-            'id':id
-        })
-   
-        
 
 class bookAppointment(View):
     def get(self,request,id):
@@ -271,37 +258,33 @@ class registerPolicy(View):
         })
     def post(self,request,id):
         msgS = ''
-        msgE = ''
-        form = registerPolicyForm(request.POST)        
-        request_failed = 0
-        if form.is_valid():
+        try:
+            form = registerPolicyForm(request.POST)
+            if form.is_valid():
 
-            patient_firstname = form.cleaned_data.get('patient_firstname')
-            patient_lastname = form.cleaned_data.get('patient_lastname')
-            patient_age = form.cleaned_data.get('patient_age')
-            patient_address = form.cleaned_data.get('patient_address')
-            patient_phone_no = form.cleaned_data.get('patient_phone_no')
-            patient_email = form.cleaned_data.get('patient_email')
-        
-            appDetails = InsuranceClaimRegister.objects.filter(patient_id=4)
-
-            for i in appDetails: 
-                if (i.patient_firstname.casefold() == patient_firstname.casefold() and 
-                    i.patient_lastname.casefold() == patient_lastname.casefold() and 
-                    i.policy_id == int(id) and i.patient_id == 4):
-                    request_failed = 1
-                    msgE = "Already Registered"
-            if request_failed == 0:
+                patient_firstname = form.cleaned_data.get('patient_firstname')
+                patient_lastname = form.cleaned_data.get('patient_lastname')
+                patient_age = form.cleaned_data.get('patient_age')
+                patient_address = form.cleaned_data.get('patient_address')
+                patient_phone_no = form.cleaned_data.get('patient_phone_no')
+                patient_email = form.cleaned_data.get('patient_email')
+               
                 print("going to save")
-                InsuranceClaimRegisterObj = InsuranceClaimRegister(patient_id = 4,patient_firstname=patient_firstname,patient_lastname=patient_lastname,
+                InsuranceClaimRegisterObj = InsuranceClaimRegister(patient_id = 1,patient_firstname=patient_firstname,patient_lastname=patient_lastname,
                                             policy_id=id,patient_age=patient_age,patient_address=patient_address,patient_phone_no=patient_phone_no,patient_email=patient_email)
                 InsuranceClaimRegisterObj.save()
                 print("Saved")
                 msgS = "Added Successfully"
-            
-        messages.add_message(request, messages.SUCCESS if msgS else messages.ERROR, (msgS if not msgS == '' else msgE),
-                                extra_tags='callout callout-success calloutCustom lead' if msgS else 'callout callout-danger calloutCustom lead')
-        return HttpResponseRedirect(reverse('patient:registerPolicy', args=[id]))
+            else:
+                msgE = "Mention Name of the Application Type"
+        except:
+            print("in except block")
+            msgE = "Something went Wrong"
+        finally:
+            print("in finally block")
+            messages.add_message(request, messages.SUCCESS if msgS else messages.ERROR, (msgS if not msgS == '' else msgE),
+                                 extra_tags='callout callout-success calloutCustom lead' if msgS else 'callout callout-danger calloutCustom lead')
+            return HttpResponseRedirect(reverse('patient:registerPolicy', args=[id]))
 
 
 class declineTransaction(View):

@@ -1,0 +1,44 @@
+{% load static %}
+{% include 'adminNavbar.html' %}
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+
+</head>
+<div class="content-wrapper">
+    <section class="content">
+        <div class="container-fluid">
+            <br>
+            <br>
+            <!-- /.card-header -->
+            <div class="card-body pt-0">
+                <h3>System Log Files</h3></br>
+                <ul class="list-group list-group-flush">
+                    {% for log_file in log_files %}
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col">
+                                <p>{{log_file}}</p>
+                                </p>
+                            </div>
+                            <div class="col text-right">
+                                <form method="POST" role="form" id="form-client-info"
+                                    action="{% url 'Admin:showLogFiles' %}">
+                                    {% csrf_token %}
+                                    <button id="bold" class="btn btn-outline-info btn-sm" value={{log_file}} name="filename">
+                                        <span class='glyphicon glyphicon-new-window'></span>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </li>
+                    <br>
+                    {% endfor %}
+                </ul>
+            </div>
+            <!-- /.card-body -->
+        </div>
+    </section>
+</div>

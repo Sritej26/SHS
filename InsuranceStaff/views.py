@@ -96,10 +96,17 @@ class checkClaims(View):
 
         found =0
         for a in registerDetails:
+<<<<<<< Updated upstream
             if(a.patient_id == claimDetails.patient_id and 
                 a.patient_firstname.casefold() == claimDetails.patient_firstname.casefold() and
                 a.patient_lastname.casefold() == claimDetails.patient_lastname.casefold() and
                 a.policy_id == policy_number and amt >= current_claimed_amt):
+=======
+            if(a.patient_id == 1 and 
+                a.patient_firstname == claimDetails.patient_firstname and
+                a.patient_lastname == claimDetails.patient_lastname and
+                a.policy_id == policy_number and amt > claimDetails.claim_amt):
+>>>>>>> Stashed changes
                 print("Approved")
                 print(claimDetails.patient_firstname)
                 claimDetails.claim_status = 'Approved'

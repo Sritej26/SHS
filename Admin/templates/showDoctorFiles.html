@@ -1,0 +1,72 @@
+{% include 'adminNavbar.html' %}
+
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+
+</head>
+
+<div class="content-wrapper">
+    <section class="content">
+        <div class="container-fluid">
+            {% include 'messages.html' %}
+            <script>
+                setTimeout(function(){
+                  if ($('#msg').length > 0) {
+                    $('#msg').remove();
+                  }
+                }, 2000)
+            </script>
+            <ul class="nav nav-tabs">
+                <li><a href="showInternalFiles.html">Patient Files</a></li>
+                <li class="active"><a href="#doctorFiles">Doctor Files</a></li>
+                <li><a href="showInsuranceFiles.html">Insurance Files</a></li>
+                <li><a href="showLabFiles.html">Lab Files</a></li>
+                <li><a href="showHospitalFiles.html">Hospital Files</a></li>
+            </ul>
+            <div class="tab-content">
+                <div id="doctorFiles">
+                    <h3>Prescription details</h3>
+                    <table id="data" class="table table-striped table-bordered compact" cellspacing="0"
+                        style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Patient ID</th>
+                                <th>Appointment ID</th>
+                                <th>Patient firstname</th>
+                                <th>Patient lastname</th>
+                                <th>Requested date</th>
+                                <th>Doctor ID</th>
+                                <th>Patient diagnosis</th>
+                                <th>Drug</th>
+                                <th>Unit</th>
+                                <th>Dosage</th>
+                                <th>Prescription</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {%for prescription in prescription_details%}
+                            <tr>
+                                <td>{{prescription.patient_id}}</td>
+                                <td>{{prescription.appointment_id}}</td>
+                                <td>{{prescription.first_name}}</td>
+                                <td>{{prescription.last_name}}</td>
+                                <td>{{prescription.requested_date}}</td>
+                                <td>{{prescription.doctor_id}}</td>
+                                <td>{{prescription.patient_diagnosis}}</td>
+                                <td>{{prescription.drug}}</td>
+                                <td>{{prescription.unit}}</td>
+                                <td>{{prescription.dosage}}</td>
+                                <td>{{prescription.prescription_text}}</td>
+                            </tr>
+                            {%endfor%}
+                        </tbody>
+                    </table>
+                    <p> </p>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

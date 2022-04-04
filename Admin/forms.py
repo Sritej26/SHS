@@ -1,10 +1,10 @@
 from django import forms
 
 employee_depts= [
-    ('Doctor Staff', 'Doctor Staff'),
-    ('Lab Staff', 'Lab Staff'),
-    ('Hospital Staff', 'Hospital staff'),
-    ('Insurance Staff', 'Insurance Staff'),
+    ('Doctor', 'Doctor Staff'),
+    ('Labstaff', 'Lab Staff'),
+    ('Hospitalstaff', 'Hospital Staff'),
+    ('Insurancestaff', 'Insurance Staff'),
     ]
 
 class createEmployeeForm(forms.Form):
@@ -22,4 +22,13 @@ class createEmployeeForm(forms.Form):
                                     'class': 'form-control',
                                     'placeholder': ('Last name')
                                 }))
+    employee_email = forms.EmailField(label="Email", required=True,
+                                widget=forms.TextInput(attrs=
+                                {
+                                    'required': True,
+                                    'class': 'form-control',
+                                    'placeholder': ('Email')
+                                }))
     employee_dept = forms.ChoiceField(choices = employee_depts)
+
+    

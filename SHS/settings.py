@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'InsuranceStaff',
     'LabStaff',
     'Doctors',
+    'fileprovider'
 ]
 
 MIDDLEWARE = [
@@ -66,6 +67,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'fileprovider.middleware.FileProviderMiddleware'
 ]
 
 ROOT_URLCONF = 'SHS.urls'
@@ -156,3 +158,27 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 DEFAULT_APPS = [
     'django.contrib.messages'
 ]
+
+LOGGING = {
+    'version': 1,
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'DEBUG'
+        }
+    },
+    'handlers': {
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': './logs/debug2.log',
+            'formatter': 'demo'
+        }
+    },
+    'formatters': {
+        'demo': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        }
+    }
+}
