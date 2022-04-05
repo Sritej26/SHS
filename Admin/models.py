@@ -1,6 +1,6 @@
 from operator import mod
 from statistics import mode
-from tkinter import N
+#from tkinter import N
 #from tkinter import N
 from django.db import models
 
