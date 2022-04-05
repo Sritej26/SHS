@@ -176,6 +176,8 @@ class updateAppointment(View):
 
 class insuranceClaimRequest(View):
     def get(self,request,id):
+        if not (request.user.is_authenticated):
+            return redirect('/Login')
         appDetails = InsuranceClaimDetails.objects.filter(patient_id=id)
         policyDetails = InsurancePolicies.objects.all()
         return render(request,'insuranceClaimRequest.html',{
@@ -218,6 +220,8 @@ class insuranceClaimRequest(View):
 
 class updateInsuranceClaimRequest(View):
     def get(self, request, id):
+        if not (request.user.is_authenticated):
+            return redirect('/Login')
         try:
             detail = InsuranceClaimDetails.objects.get(claim_id=id)
             detail = {'patient_id': detail.patient_id,'patient_firstname': detail.patient_firstname,'patient_lastname': detail.patient_lastname,
@@ -295,6 +299,8 @@ class nextAppointment(View):
 
 class registerPolicy(View):
     def get(self,request,id):
+        if not (request.user.is_authenticated):
+            return redirect('/Login')
         appDetails = InsuranceClaimRegister.objects.all()
         policyDetails = InsurancePolicies.objects.all()
         return render(request,'registerPolicy.html',{
@@ -374,6 +380,8 @@ class approveTransaction(View):
 class requestLabTests(View):
       def get(self, request, id):
           try:
+              if not (request.user.is_authenticated):
+                return redirect('/Login')
               id = signing.loads(id)
               testDetails = labTests.objects.filter(patient_id=id ,lab_test_status="adding....")
               testRequestRecord =[]
@@ -425,6 +433,8 @@ class requestLabTests(View):
 class viewRecords(View):
      def get(self, request, id):
          try:
+             if not (request.user.is_authenticated):
+                return redirect('/Login')
              id = signing.loads(id)
              appDetail = AppointmentDetails.objects.filter(patient_id=id)
              record =[]
