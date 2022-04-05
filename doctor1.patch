@@ -1,0 +1,203 @@
+diff --git a/Doctors/templates/navbardoctors.html b/Doctors/templates/navbardoctors.html
+index 1f8f15f..74f342d 100644
+--- a/Doctors/templates/navbardoctors.html
++++ b/Doctors/templates/navbardoctors.html
+@@ -63,7 +63,7 @@
+       <nav class="mt-2">
+         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+           <li class="nav-item">
+-            <a href="/doctors" class="nav-link">
++            <a href="/doctors/doctorHome/{{user}}" class="nav-link">
+               <i class="nav-icon fas fa-home"></i>
+               <p>Home</p>
+             </a>
+diff --git a/Doctors/views.py b/Doctors/views.py
+index 6cbcf2e..1ba156e 100644
+--- a/Doctors/views.py
++++ b/Doctors/views.py
+@@ -21,7 +21,7 @@ from django.db.models import Q
+ import operator
+ from Patients.models import PatientDetails
+ from HospitalStaff.models import AppointmentDetails
+-from Doctors.models import prescriptions, labTests
++from Doctors.models import prescriptions, labTests, DoctorDetails
+ import datetime
+ from Hospitalportal.models import *
+ from django.core import signing
+@@ -48,7 +48,11 @@ def logout_user(request,user):
+ 
+ class doctorHome(View):
+     def get(self,request,user):
+-        appDetails = AppointmentDetails.objects.filter(requested_date = datetime.date.today(), status = "Confirmed")
++        global doctorName
++        doctorName = user
++        doctormap = DoctorDetails.objects.get(doctor_name=user)
++        doctorId = doctormap.doctor_id
++        appDetails = AppointmentDetails.objects.filter(requested_date = datetime.date.today(), status = "Confirmed", doctor_id = doctorId)
+         print(appDetails)
+         print(datetime.date.today())
+         date = datetime.date.today()
+@@ -133,7 +137,7 @@ class addPrescription(View):
+ class viewLabReports(View):
+     def get(self,request):
+         return render(request,'viewLabReports.html',{
+-            'user':'Doctor',
++            'user':doctorName,
+             'flag1': 'true'
+         })
+ 
+@@ -259,13 +263,13 @@ class addDiagnosis(View):
+ class patientRecords(View):
+     def get(self,request):
+         return render(request,'patientRecords.html',{
+-            'user':'Doctor'
++            'user':doctorName
+         })
+ 
+ class patientDiagnosis(View):
+     def get(self,request):
+         return render(request,'searchDiagnosis.html',{
+-            'user':'Doctor'
++            'user':doctorName
+         })
+ 
+ def searchBar(request):
+@@ -328,7 +332,7 @@ def searchAppointments(request):
+         appDetails = AppointmentDetails.objects.filter(requested_date = start)
+         date = start
+         return render(request,'doctorHome.html',{
+-            'user':'Doctor',
++            'user':doctorName,
+             'appDetails': appDetails,
+             'date': date
+         })
+diff --git a/Hospitalportal/views.py b/Hospitalportal/views.py
+index f04d63c..580689b 100644
+--- a/Hospitalportal/views.py
++++ b/Hospitalportal/views.py
+@@ -140,7 +140,7 @@ class Login(View):
+                     elif test.Role == 'Doctor':
+                         return HttpResponseRedirect(reverse('doctors:doctorHome', args=[user]))
+                     elif test.Role == 'Insurancestaff':
+-                        return redirect("/insurance/",{'name':user})
++                        return HttpResponseRedirect(reverse('insuranceStaff:insuranceHome', args=[user]))
+                     elif test.Role == 'HospitalStaff':
+                         return redirect("/hospitalStaff/", {'name': user})
+                 else:
+diff --git a/InsuranceStaff/templates/navbarInsurance.html b/InsuranceStaff/templates/navbarInsurance.html
+index 4b356ce..65bd3d3 100644
+--- a/InsuranceStaff/templates/navbarInsurance.html
++++ b/InsuranceStaff/templates/navbarInsurance.html
+@@ -39,7 +39,7 @@
+         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+       </li>
+       <li class="nav-item d-none d-sm-inline-block">
+-        <a href="/insurance" class="nav-link">Home</a>
++        <a href="/insurance/insuranceHome/{{user}}" class="nav-link">Home</a>
+       </li>
+       <li class="nav-item d-none d-sm-inline-block">
+         <a href="#" class="nav-link">Contact</a>
+@@ -63,7 +63,7 @@
+       <nav class="mt-2">
+         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+           <li class="nav-item">
+-            <a href="/insurance" class="nav-link">
++            <a href="/insurance/insuranceHome/{{user}}" class="nav-link">
+               <i class="nav-icon fas fa-home"></i>
+               <p>Home</p>
+             </a>
+@@ -88,7 +88,7 @@
+             </a>
+           </li>
+           <li class="nav-item">
+-            <a href="" class="nav-link">
++            <a href="/insurance/logout/{{user}}" class="nav-link">
+                 <i class="nav-icon fas fa-sign-out-alt"></i>
+                     <p> Sign out</p>
+             </a>
+diff --git a/InsuranceStaff/views.py b/InsuranceStaff/views.py
+index 96ace7a..ae11bfc 100644
+--- a/InsuranceStaff/views.py
++++ b/InsuranceStaff/views.py
+@@ -9,23 +9,42 @@ from InsuranceStaff.models import InsuranceClaimRegister
+ from .forms import *
+ from django.contrib import messages
+ from django.utils.decorators import method_decorator
++from AdminSHS.models import EmployeeDetails
++from Hospitalportal.models import *
+ from django.contrib.auth import logout
+ import uuid
+ 
+ # Create your views here.
+ class insuranceHome(View):
+-    def get(self,request):
++    def get(self,request, user):
++        global insuranceStaffName
++        insuranceStaffName = user
+         appDetails = InsuranceClaimDetails.objects.filter(claim_status = 'Pending')
+         return render(request,'insuranceHome.html',{
+-            'user':'InsuranceStaff',
++            'user': user,
+             'appDetails': appDetails,
+         })
+ 
++def logout_user(request,user):
++    print("yes")
++    print(user)
++    # name = signing.loads(user)
++    logout(request)
++    print("Loggedout")
++    username = EmployeeDetails.objects.get(employee_first_name=user)
++    test = HospitalPortal.objects.get(username = username.employee_first_name)
++    test.session='N'
++    test.save()
++    # now = datetime.now()
++    # dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
++    #logger.info("USERNAME:  " username.patient_name "   LOGOUTIME:   "+dt_string)
++    return redirect('/Login')
++
+ class newPolicies(View):
+     def get(self,request):
+         appDetails = InsurancePolicies.objects.all()
+         return render(request,'newPolicies.html',{
+-            'user':'InsuranceStaff',
++            'user':insuranceStaffName,
+             'newInsurancePolicyForm': newInsurancePolicyForm,
+             'appDetails': appDetails,
+         })
+@@ -59,7 +78,7 @@ class viewPolicies(View):
+      def get(self, request):
+         appDetails = InsurancePolicies.objects.all()
+         return render(request,'viewPolicies.html',{
+-            'user':'InsuranceStaff',
++            'user':insuranceStaffName,
+             'newInsurancePolicyForm':newInsurancePolicyForm,
+             'appDetails': appDetails,
+         })
+@@ -131,7 +150,7 @@ class checkClaims(View):
+         appDetails = InsuranceClaimDetails.objects.filter(claim_status = 'Pending')
+ 
+         return render(request,'insuranceHome.html',{
+-            'user':'InsuranceStaff',
++            'user':insuranceStaffName,
+              'appDetails': appDetails,
+         })
+ 
+@@ -139,7 +158,7 @@ class viewClaimRequests(View):
+     def get(self,request):
+         appDetails = InsuranceClaimDetails.objects.all()
+         return render(request,'viewClaimRequests.html',{
+-            'user':'InsuranceStaff',
++            'user':insuranceStaffName,
+             'appDetails': appDetails,
+         })
+ 
+@@ -147,7 +166,7 @@ class insurancePayments(View):
+     def get(self,request):
+         appDetails = InsuranceClaimDetails.objects.filter(claim_transaction_status = 'Done')
+         return render(request,'insurancePayments.html',{
+-            'user':'InsuranceStaff',
++            'user':insuranceStaffName,
+             'appDetails': appDetails,
+         })
+ 

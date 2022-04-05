@@ -129,7 +129,7 @@ class createEmployeeRecords(View):
                     EmployeeObj = EmployeeDetails(employee_first_name = employee_first_name, employee_last_name = employee_last_name, employee_username = employee_username, employee_email = employee_email, employee_dept = employee_dept)
                     EmployeeObj.save()
                     if employee_dept == 'Doctor':
-                        DoctorObj = DoctorDetails(doctor_name = employee_first_name + ' ' + employee_last_name, doctor_spec = 'Physician', slot = 15)
+                        DoctorObj = DoctorDetails(doctor_name = employee_first_name, doctor_spec = 'Physician', slot = 15)
                         DoctorObj.save()
                     msgS = "Added Successfully"
             else:

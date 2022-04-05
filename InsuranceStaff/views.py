@@ -9,23 +9,42 @@ from InsuranceStaff.models import InsuranceClaimRegister
 from .forms import *
 from django.contrib import messages
 from django.utils.decorators import method_decorator
+from AdminSHS.models import EmployeeDetails
+from Hospitalportal.models import *
 from django.contrib.auth import logout
 import uuid
 
 # Create your views here.
 class insuranceHome(View):
-    def get(self,request):
+    def get(self,request, user):
+        global insuranceStaffName
+        insuranceStaffName = user
         appDetails = InsuranceClaimDetails.objects.filter(claim_status = 'Pending')
         return render(request,'insuranceHome.html',{
-            'user':'InsuranceStaff',
+            'user': user,
             'appDetails': appDetails,
         })
+
+def logout_user(request,user):
+    print("yes")
+    print(user)
+    # name = signing.loads(user)
+    logout(request)
+    print("Loggedout")
+    username = EmployeeDetails.objects.get(employee_first_name=user)
+    test = HospitalPortal.objects.get(username = username.employee_first_name)
+    test.session='N'
+    test.save()
+    # now = datetime.now()
+    # dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+    #logger.info("USERNAME:  " username.patient_name "   LOGOUTIME:   "+dt_string)
+    return redirect('/Login')
 
 class newPolicies(View):
     def get(self,request):
         appDetails = InsurancePolicies.objects.all()
         return render(request,'newPolicies.html',{
-            'user':'InsuranceStaff',
+            'user':insuranceStaffName,
             'newInsurancePolicyForm': newInsurancePolicyForm,
             'appDetails': appDetails,
         })
@@ -59,7 +78,7 @@ class viewPolicies(View):
      def get(self, request):
         appDetails = InsurancePolicies.objects.all()
         return render(request,'viewPolicies.html',{
-            'user':'InsuranceStaff',
+            'user':insuranceStaffName,
             'newInsurancePolicyForm':newInsurancePolicyForm,
             'appDetails': appDetails,
         })
@@ -131,7 +150,7 @@ class checkClaims(View):
         appDetails = InsuranceClaimDetails.objects.filter(claim_status = 'Pending')
 
         return render(request,'insuranceHome.html',{
-            'user':'InsuranceStaff',
+            'user':insuranceStaffName,
              'appDetails': appDetails,
         })
 
@@ -139,7 +158,7 @@ class viewClaimRequests(View):
     def get(self,request):
         appDetails = InsuranceClaimDetails.objects.all()
         return render(request,'viewClaimRequests.html',{
-            'user':'InsuranceStaff',
+            'user':insuranceStaffName,
             'appDetails': appDetails,
         })
 
@@ -147,7 +166,7 @@ class insurancePayments(View):
     def get(self,request):
         appDetails = InsuranceClaimDetails.objects.filter(claim_transaction_status = 'Done')
         return render(request,'insurancePayments.html',{
-            'user':'InsuranceStaff',
+            'user':insuranceStaffName,
             'appDetails': appDetails,
         })
 

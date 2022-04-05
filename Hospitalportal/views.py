@@ -140,7 +140,7 @@ class Login(View):
                     elif test.Role == 'Doctor':
                         return HttpResponseRedirect(reverse('doctors:doctorHome', args=[user]))
                     elif test.Role == 'Insurancestaff':
-                        return redirect("/insurance/",{'name':user})
+                        return HttpResponseRedirect(reverse('insuranceStaff:insuranceHome', args=[user]))
                     elif test.Role == 'HospitalStaff':
                         return redirect("/hospitalStaff/", {'name': user})
                 else:

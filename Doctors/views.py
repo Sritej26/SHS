@@ -21,7 +21,7 @@ from django.db.models import Q
 import operator
 from Patients.models import PatientDetails
 from HospitalStaff.models import AppointmentDetails
-from Doctors.models import prescriptions, labTests
+from Doctors.models import prescriptions, labTests, DoctorDetails
 import datetime
 from Hospitalportal.models import *
 from django.core import signing
@@ -48,7 +48,11 @@ def logout_user(request,user):
 
 class doctorHome(View):
     def get(self,request,user):
-        appDetails = AppointmentDetails.objects.filter(requested_date = datetime.date.today(), status = "Confirmed")
+        global doctorName
+        doctorName = user
+        doctormap = DoctorDetails.objects.get(doctor_name=user)
+        doctorId = doctormap.doctor_id
+        appDetails = AppointmentDetails.objects.filter(requested_date = datetime.date.today(), status = "Confirmed", doctor_id = doctorId)
         print(appDetails)
         print(datetime.date.today())
         date = datetime.date.today()
@@ -133,7 +137,7 @@ class addPrescription(View):
 class viewLabReports(View):
     def get(self,request):
         return render(request,'viewLabReports.html',{
-            'user':'Doctor',
+            'user':doctorName,
             'flag1': 'true'
         })
 
@@ -259,13 +263,13 @@ class addDiagnosis(View):
 class patientRecords(View):
     def get(self,request):
         return render(request,'patientRecords.html',{
-            'user':'Doctor'
+            'user':doctorName
         })
 
 class patientDiagnosis(View):
     def get(self,request):
         return render(request,'searchDiagnosis.html',{
-            'user':'Doctor'
+            'user':doctorName
         })
 
 def searchBar(request):
@@ -328,7 +332,7 @@ def searchAppointments(request):
         appDetails = AppointmentDetails.objects.filter(requested_date = start)
         date = start
         return render(request,'doctorHome.html',{
-            'user':'Doctor',
+            'user':doctorName,
             'appDetails': appDetails,
             'date': date
         })
