@@ -25,6 +25,9 @@
             <fieldset>
             <br>
             <br>
+            {%if flag1 != "true" %}
+                <h1 style="color: brown;">No Lab Tests with this appointment number</h1>
+            {% endif %}
             {%for a in labreportdetails%}
     <label aria-setsize="20">Lab Test Name</label>
     <textfield style=" min-width:25px; max-width:50%;min-height:50px;height:50%;width:50%;">{{a.lab_test}}</textfield>

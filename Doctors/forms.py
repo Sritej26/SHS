@@ -74,10 +74,15 @@ class diagnosisForm(forms.Form):
                                    }))
 
 Lab_Tests= [
-    ('lab_test1', 'lab_test1'),
-    ('lab_test2', 'lab_test2'),
-    ('lab_test3', 'lab_test3'),
-    ('lab_test4', 'lab_test4'),
+    ('Complete Blood Count', 'Complete Blood Count'),
+    ('Prothrombin Time', 'Prothrombin Time'),
+    ('Basic Metabolic Panel', 'Basic Metabolic Panel'),
+    ('Comprehensive Metabolic Panel', 'Comprehensive Metabolic Panel'),
+    ('Lipid Panel','Lipid Panel'),
+    ('Liver Panel','Liver Panel'),
+    ('Thyroid Stimulating Hormone','Thyroid Stimulating Hormone'),
+    ('Hemoglobin A1C','Hemoglobin A1C'),
+    ('Urinalysis','Urinalysis')
     ]
 
 class labTestsForm(forms.Form):
@@ -175,3 +180,29 @@ class patientPrescriptionForm(forms.Form):
                                        'class': 'form-control',
                                        'placeholder': ('prescription_text')
                                    }))
+
+class appointmentForm(forms.Form):
+    first_name = forms.CharField(label='Firstname.**', required=True,
+                                   widget=forms.TextInput(attrs=
+                                   {
+                                       'required': True,
+                                       'class': 'form-control',
+                                       'placeholder': ('Firstname')
+                                   }))
+    last_name = forms.CharField(label='Lastname.**', required=True,
+                                   widget=forms.TextInput(attrs=
+                                   {
+                                       'required': True,
+                                       'class': 'form-control',
+                                       'placeholder': ('Lastname')
+                                   }))                               
+    requested_date = forms.DateField(label="Requested Date", required=False,
+                                     widget=forms.widgets.DateInput(attrs={'type': 'date', 'class': 'form-control', }))
+
+    doctor_id = forms.IntegerField(label='Appointment With', required=True,
+                                        widget=forms.NumberInput(attrs=
+                                        {
+                                            'required': False,
+                                            'class': 'form-control',
+                                            'placeholder': ('Appointment with')
+                                        }))

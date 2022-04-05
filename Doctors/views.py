@@ -4,6 +4,7 @@ from email import message
 from functools import reduce
 from pickle import NONE
 from tokenize import Number
+from urllib import request
 from wsgiref.simple_server import demo_app
 from xml.dom.minidom import Attr
 from django.shortcuts import render
@@ -11,7 +12,6 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render,redirect
 from django.urls import reverse
 from django.views import View
-from Doctors.models import prescriptions, labTests
 
 from Doctors import models
 from .forms import *
@@ -21,18 +21,39 @@ from django.db.models import Q
 import operator
 from Patients.models import PatientDetails
 from HospitalStaff.models import AppointmentDetails
+from Doctors.models import prescriptions, labTests
 import datetime
+from Hospitalportal.models import *
+from django.core import signing
+from AdminSHS.models import EmployeeDetails
+from django.contrib.auth import logout
+#from HospitalStaff.helper import mask,unmask
 
 flag = 'true'
 
+def logout_user(request,user):
+    print("yes")
+    print(user)
+    # name = signing.loads(user)
+    logout(request)
+    print("Loggedout")
+    username = EmployeeDetails.objects.get(employee_first_name=user)
+    test = HospitalPortal.objects.get(username = username.employee_first_name)
+    test.session='N'
+    test.save()
+    # now = datetime.now()
+    # dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+    #logger.info("USERNAME:  " username.patient_name "   LOGOUTIME:   "+dt_string)
+    return redirect('/Login')
+
 class doctorHome(View):
-    def get(self,request):
-        appDetails = AppointmentDetails.objects.filter(requested_date = datetime.date.today())
+    def get(self,request,user):
+        appDetails = AppointmentDetails.objects.filter(requested_date = datetime.date.today(), status = "Confirmed")
         print(appDetails)
         print(datetime.date.today())
         date = datetime.date.today()
         return render(request,'doctorHome.html',{
-            'user':'Doctor',
+            'user': user,
             'appDetails': appDetails,
             'date':date
         })
@@ -112,7 +133,8 @@ class addPrescription(View):
 class viewLabReports(View):
     def get(self,request):
         return render(request,'viewLabReports.html',{
-            'user':'Doctor'
+            'user':'Doctor',
+            'flag1': 'true'
         })
 
 class addDiagnosis(View):
@@ -136,7 +158,7 @@ class addDiagnosis(View):
     def post(self, request, id):
         msgS=''
         flag = 'true'
-        if request.POST.get('lab_tests') == 'lab_test1' or request.POST.get('lab_tests') == 'lab_test2' or request.POST.get('lab_tests') == 'lab_test3' or request.POST.get('lab_tests') == 'lab_test4':
+        if request.POST.get('lab_tests') in ['Complete Blood Count','Prothrombin Time','Basic Metabolic Panel','Comprehensive Metabolic Panel','Lipid Panel','Liver Panel','Thyroid Stimulating Hormone','Hemoglobin A1C','Urinalysis']:
             print("-------")
             try:
                 print("Enteredlab try")
@@ -145,19 +167,14 @@ class addDiagnosis(View):
                 # except:
                 #     raise Http404
                 detail1 = AppointmentDetails.objects.get(appointment_id = id)
-                print(detail1.patient_id)
-                print("user detail---------")
-                print(detail1.patient_id)
-                # client_persons=client_person.objects.filter(client_id=id)
+                labDeatils = labTests.objects.filter(appointment_id = id)
+                testNames = []
+                for i in labDeatils:
+                    testNames.append(i.lab_test)
                 labTests1 = labTestsForm(request.POST)
-                print(labTests1.is_valid())
                 if labTests1.is_valid():
-                    print("entered prescription if")
-                    # detail.first_name = escapeXSS(str(request.POST.get('first_name')))
-                    # detail.first_name = escapeXSS(str(request.POST.get('address')))
-                    # detail.first_name = signing.loads(request.POST.get('sector'))
-                    # detail.first_name = signing.loads(request.POST.get('under_ministry'))
-                    #detail1.patient_diagnosis = request.POST.get('patient_diagnosis')
+                    if labTests1.cleaned_data.get('lab_tests') in testNames:
+                        return messages.error(request, labTests1.cleaned_data.get('lab_tests') + ' already recommended')
                     lab_tests1 = labTests1.cleaned_data.get('lab_tests')
                     print(lab_tests1)
                     pt = detail1.patient_id
@@ -169,14 +186,11 @@ class addDiagnosis(View):
                     pd = detail1.patient_diagnosis
 
                     labTestObj = labTests(patient_id = pt,appointment_id = ap,first_name = fs,
-                    last_name = ls, requested_date = rq,doctor_id = di, patient_diagnosis = pd,lab_test = lab_tests1, lab_report_status = True)
+                    last_name = ls, requested_date = rq,doctor_id = di, patient_diagnosis = pd,lab_test = lab_tests1, lab_test_status = 'Recommended',lab_report_status = True)
                     print(labTestObj)
                     labTestObj.save()
                     print(detail1)
-                    #PatientDetailsObj = PatientDetails(patient_id = detail.patient_id,patient_name=detail.patient_name,patient_age = detail.patient_age, patient_weight = detail.patient_weight,patient_height = detail.patient_height, patient_address = detail.patient_address, patient_phone_no = detail.patient_phone_no,patient_email =detail.patient_email,insurance_id = detail.insurance_id, patient_diagnosis = detail.patient_diagnosis,patient_reports=detail.patient_reports, patient_prescription=detail.patient_prescription)
-                    #PatientDetailsObj.save()
-                    #msgS="Updated Successfully"
-                    messages.success(request, 'Lab Test Added Successfully!')
+                    messages.success(request, labTests1.cleaned_data.get('lab_tests')+' Added Successfully!')
                 #return HttpResponseRedirect(reverse('doctors:updatePatientDetails', args=[detail1.patient_id]))
             except:
                 #msgE="Something Went Wrong"
@@ -256,50 +270,56 @@ class patientDiagnosis(View):
 
 def searchBar(request):
     flag = "true"
+    flag1 = "true"
     if request.method == 'GET':
         query = request.GET.get('query')
-        if query:
-            patientdetails = PatientDetails.objects.filter(patient_id = query)
+        patientid = PatientDetails.objects.all()
+        patientdetails = PatientDetails.objects.filter(patient_id = query)
+        if query and patientdetails:
             print("search bar")
             print(patientdetails)
             details = {}
-            return render(request, 'searchResultsView.html', {'patientdetails': patientdetails, "details": details, "flag":flag})
+            return render(request, 'searchResultsView.html', {'patientdetails': patientdetails, "details": details, "flag1": flag1, "flag":flag})
         else:
+            flag1 = "flase"
             print("No patient with this id number")
-            return render(request, 'searchResultsView.html',{})
+            #messages.error(request, 'No patient with this id number')
+            return render(request, 'searchResultsView.html',{"flag1":flag1, "flag":flag})
 
 def searchLabReports(request):
-    flag = "true"
+    flag1 = "true"
     if request.method == 'GET':
         query = request.GET.get('query')
         #query1 = request.GET.get('query1')
-        if query:
-            labreportdetails = labTests.objects.filter(appointment_id = query)
+        labreportdetails = labTests.objects.filter(appointment_id = query)
+        if query and labreportdetails:
             #labreportdetails = labreportdetails.filter(lab_Tests = query1)
             print("search bar")
             print("labreportdetails")
             print(labreportdetails)
             details = {}
-            return render(request, 'viewLabReports.html', {'labreportdetails': labreportdetails, "details": details, "flag":flag})
+            return render(request, 'viewLabReports.html', {'labreportdetails': labreportdetails, "details": details,"flag1":flag1})
         else:
-            print("No patient with this id number")
-            return render(request, 'viewLabReports.html',{})
+            flag1 = "false"
+            return render(request, 'viewLabReports.html',{"flag1":flag1})
 
 def searchDiagnosis(request):
     flag = "true"
+    flag1 = "true"
     if request.method == 'GET':
         print("Entered Serach Diagnosis")
         query = request.GET.get('query')
-        if query:
-            patientdetails = AppointmentDetails.objects.filter(patient_id = query)
+        patientdetails = AppointmentDetails.objects.filter(patient_id = query)
+        if query and patientdetails:
             #patientdetails = patientdetails.filter(doctor_id = 2)
             print("search bar")
             print(patientdetails)
             details = {}
-            return render(request, 'ViewDiagnosis.html', {'patientdetails': patientdetails, "details": details, "flag":flag})
+            return render(request, 'ViewDiagnosis.html', {'patientdetails': patientdetails, "details": details,"flag1":flag1, "flag":flag})
         else:
-            print("No patient with this id number")
-            return render(request, 'ViewDiagnosis.html',{})
+            flag1 = "false"
+            flag = "true"
+            return render(request, 'ViewDiagnosis.html',{"flag1":flag1, "flag":flag})
 
 def searchAppointments(request):
     if request.method == 'GET':
@@ -438,19 +458,62 @@ class updatePatientDiagnosis(View):
             print(patientdetails)
             return render(request, 'ViewDiagnosis.html',{"patientdetails":patientdetails, "flag":flag})
 
-
 class deletePatientDiagnosis(View):
-    def post(self, request, id):
-            flag = 'false'
-            try:
-                print("Entered try")
-                print(id)
-                details = AppointmentDetails.objects.get(appointment_id=id)
-                print(details)
-                details = {'appointment_id': details.appointment_id,'patient_id': details.patient_id,'first_name': details.first_name, 'last_name': details.last_name,
-                'doctor_id': details.doctor_id, 'requested_date': details.requested_date, 'status': details.status,
-                'patient_diagnosis': details.patient_diagnosis}
-                print(details)
-            finally:
-                print("enteed finally")
-                return render(request, 'ViewDiagnosis.html', {'details': details, 'patientDiagnosisForm': patientDiagnosisForm(details), "flag":flag})
+    def get(self, request, id, id1):
+        flag = "true"
+        flag1 = "true"
+        query = request.GET.get('query')
+        patientdetails = AppointmentDetails.objects.filter(patient_id = id1)
+        flag1 = "true"
+        flag = "true"
+        details = AppointmentDetails.objects.get(appointment_id=id)
+        details.patient_diagnosis = ""
+        details.save()
+
+        return render(request, 'ViewDiagnosis.html', {'patientdetails': patientdetails, 'details': details, 'patientDiagnosisForm': patientDiagnosisForm(details),"flag1": flag1, "flag":flag})
+
+class addnextAppointment(View):
+     def get(self, request, id):
+         try:
+             detail = AppointmentDetails.objects.get(appointment_id=id)
+             detail = {'appointment_id': detail.appointment_id,'patient_id': detail.patient_id,'first_name': detail.first_name,'last_name': detail.last_name,
+                         'doctor_id': detail.doctor_id}
+         finally:
+             return render(request, 'addnextAppointment.html', {               
+                 'appointmentForm': appointmentForm(detail),             
+             })
+     def post(self,request, id):
+         msgS = ''
+         try:
+             form = appointmentForm(request.POST)
+             if form.is_valid():
+                 first_name = form.cleaned_data.get('first_name')
+                 last_name = form.cleaned_data.get('last_name')
+                 requested_date = form.cleaned_data.get('requested_date')
+                 doctor_id = form.cleaned_data.get('doctor_id')
+                 print("going to save")
+                 AppointmentObj = AppointmentDetails(patient_id=2,first_name=first_name,last_name=last_name,
+                                             doctor_id=doctor_id,requested_date=requested_date)
+                 AppointmentObj.save()
+                 print("Saved")
+                 msgS = "Next Appointment Added Successfully"
+             else:
+                 msgE = "Mention Name of the Application Type"
+         except:
+             print("in except block")
+             msgE = "Something went Wrong"
+         finally:
+             print("in finally block")
+             details = AppointmentDetails.objects.get(appointment_id=id)
+             #lab_tests1 = AppointmentDetails.objects.get(appointment_id = id)
+             print(details)
+             details2 = AppointmentDetails.objects.filter(appointment_id=id)
+             details = {'patient_diagnosis': details.patient_diagnosis, 'appointment_id': id}
+             #lab_tests = {'lab_tests': lab_tests1.lab_tests, 'appointment_id': id}
+            # print(lab_tests)
+             labTestDetails = labTests.objects.filter(appointment_id = id)
+             print(labTestDetails)
+             messages.add_message(request, messages.SUCCESS if msgS else messages.ERROR,
+                                  (msgS if not msgS == '' else msgE),
+                                  extra_tags='callout callout-success calloutCustom lead' if msgS else 'callout callout-danger calloutCustom lead')
+             return render(request, 'patientDiagnosis.html', {'details2': details2, 'flag': flag, 'labTestDetails': labTestDetails, 'diagnosisForm': diagnosisForm(details), 'labTestsForm': labTestsForm(), 'details': details})

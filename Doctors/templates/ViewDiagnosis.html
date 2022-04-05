@@ -41,11 +41,20 @@
                     }, 2000)
                 </script>
             {% csrf_token %}
+            {%if flag1 != "true" %}
+                <h1 style="color: brown;">No patient diagnosis with this id number</h1>
+            {% endif %}
             {%for a in patientdetails%}
             <a href="/doctors/diagnosis/searchDiagnosis/{{a.appointment_id}}">
                 <p data-placement="top" data-toggle="tooltip" title="Update">
                     <button class="btn btn-info btn-xs" data-title="Update" data-toggle="modal"
                             data-target="#edit"><span class="glyphicon glyphicon-pencil"></span></button>
+                </p>
+            </a>
+            <a href="/doctors/diagnosis/searchDiagnosis/deleteDiagnosis/{{a.appointment_id}}/{{a.patient_id}}">
+                <p data-placement="top" data-toggle="tooltip" title="Delete">
+                    <button class="btn btn-info btn-xs" data-title="Delete" data-toggle="modal"
+                            data-target="#edit"><span class="glyphicon glyphicon-trash"></span>Delete Diagnosis </button>
                 </p>
             </a>
             <label aria-setsize="20">Patient ID</label>
@@ -71,4 +80,4 @@
         {% endif %}
         </div>
         </section>
-        </div>
+        </div>

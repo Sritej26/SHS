@@ -33,12 +33,15 @@
         {%elif flag == "true" %}
         <fieldset>
         {% include 'messages.html' %}
+        {%if flag1 != "true" %}
+            <h1 style="color: brown;">No patient with this id number</h1>
+        {% endif %}
         <script>
             setTimeout(function(){
               if ($('#msg').length > 0) {
                 $('#msg').remove();
               }
-            }, 2000)
+            }, 10000)
         </script>
             {% csrf_token %}
             {%for a in patientdetails%}

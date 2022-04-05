@@ -27,7 +27,7 @@ from django.core import signing
 import string
 import pickle
 from sklearn import preprocessing
-import pandas as pd
+#import pandas as pd
  
 
 now = datetime.now()
@@ -138,7 +138,7 @@ class Login(View):
                     elif test.Role == 'Labstaff':
                         return redirect("/labStaff/",{'name':user})
                     elif test.Role == 'Doctor':
-                        return redirect("/doctors/",{'name':user})
+                        return HttpResponseRedirect(reverse('doctors:doctorHome', args=[user]))
                     elif test.Role == 'Insurancestaff':
                         return redirect("/insurance/",{'name':user})
                     elif test.Role == 'HospitalStaff':
