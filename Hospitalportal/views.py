@@ -1,4 +1,4 @@
-from django.http import HttpResponseRedirect,HttpResponse
+from django.http import HttpResponseRedirect,HttpResponse, HttpRequest
 from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import get_user_model
@@ -24,6 +24,10 @@ from django.template.loader import render_to_string
 import logging
 from datetime import datetime
 from django.core import signing
+import string
+import pickle
+from sklearn import preprocessing
+import pandas as pd
  
 
 now = datetime.now()
@@ -34,6 +38,47 @@ logger = logging.getLogger()
 
 logger.setLevel(logging.INFO)
 User = get_user_model()
+
+
+
+my_model = pickle.load(open('maliciousLogin_model.pkl', 'rb'))
+is_guest_login='1'
+def get_predict(login_data):
+    duration='0'
+    protocol_type='1' 
+    service = '1'
+    dst_bytes='1'
+    logged_in='1'
+    is_host_login='1'
+    if login_data.get('wsgi.multithread'):
+        land='0'
+        flag='1'
+        urgent='1'
+        same_srv_rate='1'
+        srv_serror_rate='1'
+    else:
+        land='1'
+        flag='0'
+        urgent='0'
+    num_root = '1'
+    num_file_creations = '1'  
+    num_shells='1'  
+    sample = [[duration,protocol_type,service,land,1,
+    dst_bytes,1,0,urgent,0,0,
+    logged_in,1,1,1,num_root,
+    num_file_creations,num_shells,1,1,
+    is_host_login,is_guest_login,1,1,1,
+    srv_serror_rate,1,1,same_srv_rate,
+    1,1,1,1,
+    1,0,0,
+    1,1,1,1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1,1,1,1]]
+ 
+    result = my_model.predict(sample).tolist()[0]
+    print(result)
+    return True if result == "normal" else False
+
+
 class EmailThread(threading.Thread):
 
     def __init__(self, email):
@@ -76,7 +121,7 @@ class Login(View):
                     messages.add_message(request, messages.ERROR,'Email is not verified, please check your email inbox')
                     return render(request,'Login.html')
                 test = HospitalPortal.objects.get(username=username)
-                if test.session =='N':
+                if test.session =='N' and get_predict(request.META):                    
                     login(request,user)
                     test.session = 'Y'
                     test.save()
@@ -170,3 +215,6 @@ def activate_user(request, uidb64, token):
         return redirect(reverse('Login'))
 
     return render(request, 'activate-failed.html', {"user": user})
+
+
+      
