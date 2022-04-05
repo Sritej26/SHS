@@ -167,10 +167,10 @@ class Registercheck(View):
             passwordcheck = form.cleaned_data.get('passwordcheck')
             if password == passwordcheck:
                 if User.objects.filter(username=patient_name).exists():
-                    messages.info(request,'PATIENT NAME ALREADY EXIST')
+                    messages.info(request,'USER NAME ALREADY EXISTS')
                     return render(request,'register.html')
                 if User.objects.filter(email=str(patient_email)).exists():
-                    messages.info(request,'EMAIL ALREADY EXIST')
+                    messages.info(request,'EMAIL ALREADY EXISTS')
                     return render(request,'register.html')
                 PatientDetailsObj = PatientDetails(patient_name=patient_name,patient_age = patient_age, patient_weight = patient_weight,patient_height = patient_height, patient_address = patient_address, patient_phone_no = patient_phone_no,patient_email =patient_email)
                 PatientDetailsObj.save()
@@ -207,9 +207,10 @@ def activate_user(request, uidb64, token):
     if user and generate_token.check_token(user, token):
         user.is_email_verified = True
         user.save()
-        EmployeeObject = EmployeeDetails.objects.get(employee_email = user.email)
-        HospitalPortalObj = HospitalPortal(Role = EmployeeObject.employee_dept, username = EmployeeObject.employee_first_name, session = 'N')
-        HospitalPortalObj.save()
+        if EmployeeDetails.objects.filter(employee_email = user.email).exists():
+            EmployeeObject = EmployeeDetails.objects.get(employee_email = user.email)
+            HospitalPortalObj = HospitalPortal(Role = EmployeeObject.employee_dept, username = EmployeeObject.employee_first_name, session = 'N')
+            HospitalPortalObj.save()
         messages.add_message(request, messages.SUCCESS,
                              'Email verified, you can now login')
         return redirect(reverse('Login'))

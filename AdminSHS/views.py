@@ -1,11 +1,12 @@
 from asyncio.log import logger
+from audioop import reverse
 from django import conf
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib import messages
 from sklearn.datasets import load_files
-from AdminSHS.forms import createEmployeeForm
+from AdminSHS.forms import createEmployeeForm, editEmployeeForm
 from AdminSHS.models import EmployeeDetails
 import logging
 import os
@@ -27,6 +28,8 @@ from django.conf import settings
 import threading
 import string
 import random
+from HospitalStaff.helper import mask,unmask
+from django.core import signing
 
 from Patients.models import PatientDetails
 
@@ -95,11 +98,9 @@ class viewEmployeeRecords(View):
 
 class createEmployeeRecords(View):
     def get(self, request):
-        employeeDetails = EmployeeDetails.objects.all()
         return render(request, 'createEmployeeRecords.html', {
             'user': 'AdminSHS',
-            'createEmployeeForm': createEmployeeForm,
-            'employeeDetails': employeeDetails
+            'createEmployeeForm': createEmployeeForm
         })
     def post(self, request):
         msgS = ''
@@ -108,18 +109,24 @@ class createEmployeeRecords(View):
             if form.is_valid():
                 employee_first_name = form.cleaned_data.get('employee_first_name')
                 employee_last_name = form.cleaned_data.get('employee_last_name')
+                employee_username = form.cleaned_data.get('employee_username')
                 employee_dept = form.cleaned_data.get('employee_dept')
-                employee_email = form.cleaned_data.get('employee_email')
-                if User.objects.filter(email = employee_email).exists():
+                employee_email = mask(form.cleaned_data.get('employee_email'))
+                if User.objects.filter(email = unmask(employee_email)).exists():
                     msgE = 'Email already exists. Try another email'
+                elif EmployeeDetails.objects.filter(employee_email = employee_email).exists():
+                    msgE = 'Email already exists. Try another email'
+                elif EmployeeDetails.objects.filter(employee_username = employee_username).exists():
+                    msgE = 'Username already exists. Try another username'
                 else:
                     password = ''.join(random.choices(string.ascii_uppercase + string.digits, k = 10))
-                    Userobj = User.objects.create_user(username=employee_first_name, password = password, email = employee_email)
+                    Userobj = User.objects.create_user(username=employee_first_name, password = password, email = unmask(employee_email))
                     Userobj.save()
-                    send_mail(subject = 'Login credentials', message = 'Username: ' +  employee_first_name + ' Password: ' + password, from_email='admin@gmail.com', recipient_list=[employee_email])  
+                    to_send_email = unmask(employee_email)
+                    send_mail(subject = 'Login credentials', message = 'Username: ' +  employee_username + ' Password: ' + password, from_email='admin@gmail.com', recipient_list=[to_send_email])
                     send_action_email(Userobj,request)
                     messages.info(request,'Please check your email to verify the account')
-                    EmployeeObj = EmployeeDetails(employee_first_name = employee_first_name, employee_last_name = employee_last_name, employee_email = employee_email, employee_dept = employee_dept)
+                    EmployeeObj = EmployeeDetails(employee_first_name = employee_first_name, employee_last_name = employee_last_name, employee_username = employee_username, employee_email = employee_email, employee_dept = employee_dept)
                     EmployeeObj.save()
                     if employee_dept == 'Doctor':
                         DoctorObj = DoctorDetails(doctor_name = employee_first_name + ' ' + employee_last_name, doctor_spec = 'Physician', slot = 15)
@@ -144,72 +151,49 @@ class editEmployeeRecords(View):
             'employeeDetails': employeeDetails
         })
     def post(self, request):
-        msgS = ''
-        try:
-            form = createEmployeeForm(request.POST)
-            if form.is_valid():
-                employee_first_name = form.cleaned_data.get('employee_first_name')
-                employee_last_name = form.cleaned_data.get('employee_last_name')
-                employee_dept = form.cleaned_data.get('employee_dept')
-                employee_email = form.cleaned_data.get('employee_email')
-                print("going to save")
-                EmployeeObj = EmployeeDetails(employee_first_name = employee_first_name, employee_last_name = employee_last_name, employee_email = employee_email, employee_dept = employee_dept)
-                EmployeeObj.save()
-                print("Saved")
-                msgS = "Added Successfully"
-            else:
-                msgE = "Mention Name of the Application Type"
-        except:
-            print("in except block")
-            msgE = "Something went Wrong"
-        finally:
-            print("in finally block")
-            messages.add_message(request, messages.SUCCESS if msgS else messages.ERROR,
-                                    (msgS if not msgS == '' else msgE),
-                                    extra_tags='callout callout-success calloutCustom lead' if msgS else 'callout callout-danger calloutCustom lead')
-            return redirect('/adminSHS/editEmployeeRecords.html')
+       pass
 
 class updateEmployeeDetails(View):
     def get(self, request, id):
         flag = 'false'
         print('hello')
         try:
+            id = signing.loads(id)
             print("Entered try")
-            details = EmployeeDetails.objects.get(employee_id=id)
-            print(details)
-            details = {'employee_id': details.employee_id,'employee_first_name': details.employee_first_name,'employee_last_name': details.employee_last_name, 'employee_email': details.employee_email, 'employee_dept': details.employee_dept}
-            print(details)
+            EmployeeObj = EmployeeDetails.objects.get(employee_id=id)
+            details = {'employee_id': EmployeeObj.employee_id,'employee_first_name': EmployeeObj.employee_first_name,'employee_last_name': EmployeeObj.employee_last_name, 'employee_username': EmployeeObj.employee_username, 'employee_email': unmask(EmployeeObj.employee_email), 'employee_dept': EmployeeObj.employee_dept}
         except:
             print('Error')
         finally:
-            return render(request, 'updateEmployeeRecords.html', {'details': details, 'employeeDetailsForm': createEmployeeForm(details), "flag": flag})
+            return render(request, 'updateEmployeeRecords.html', {'details': details, 'employeeDetailsForm': editEmployeeForm(details), "flag": flag})
 
     def post(self, request, id):
         msgS=''
         try:
+            id = signing.loads(id)
             detail1 = EmployeeDetails.objects.get(employee_id = id)
-            detailForm = createEmployeeForm(request.POST)
+            detailForm = editEmployeeForm(request.POST)
             print(detailForm.is_valid())
             if detailForm.is_valid():
-                print("entered if")
                 detail1.employee_first_name = request.POST.get('employee_first_name')
                 detail1.employee_last_name = request.POST.get('employee_last_name')
                 detail1.employee_dept = request.POST.get('employee_dept')
-                detail1.employee_email = request.cleaned_data.get('employee_email')
                 detail1.save()
                 messages.success(request, 'Employee Details Updated Successfully!')
         except:
             messages.error(request, 'Something Went Wrong!')
         finally:
             flag = 'true'
-            print(detail1.employee_id)
+            id = signing.dumps(id)
             employeeDetails = EmployeeDetails.objects.all()
-            print(employeeDetails)
             return redirect('/adminSHS/editEmployeeRecords.html')
+            # return HttpResponseRedirect(reverse('adminSHS:editEmployeeRecords', args=[id]))
 
 class deleteEmployeeRecord(View):
     def get(self, request, id):
+        print('yes')
         try:
+            id = signing.loads(id)
             employee = EmployeeDetails.objects.get(employee_id=id)
             user = User.objects.get(id=id)
             employee.delete()
