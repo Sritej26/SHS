@@ -1,0 +1,152 @@
+{% include 'navbar.html' %}
+
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+
+</head>
+{{appointmentForm.media}}
+
+<div class="content-wrapper">
+    <section class="content">
+        <div class="container-fluid">
+
+            {% if messages %}
+            <ul class="messages" style="padding:3px">
+                {% for message in messages %}
+                <p style="padding:3px;font-weight:600; font-size:13px" {% if message.tags %} class="{{ message.tags }}"
+                    {% endif %}>
+                    {{ message }}</p>
+                {% endfor %}
+            </ul>
+            {% endif %}
+
+
+            <ul class="nav nav-tabs">
+                <li ><a data-toggle="tab" href="#request">View Reports</a></li>
+                <li class="active"><a data-toggle="tab" href="#view">Request Lab Tests</a></li>
+            </ul>
+            <div class="tab-content">
+                <div id="request" class="tab-pane fade ">
+                    <h3>Request Lab Tests</h3>
+                    <table id="data" class="table table-striped table-bordered compact" cellspacing="0" style="width:100%">
+                        <thead>
+                        <tr>
+                            <th>Appointment ID</th>
+                            <!-- <th>Patient ID</th> -->
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Doctor</th>
+                            <!-- <th>Requested Date</th> -->
+                            <th>Lab Test</th>
+                            <th>Lab Report Status</th>
+                            <th>Lab Report</th>
+                            
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {%for a in reportDetails%}
+                        <tr>
+                            <td width="5%">{{a.appointment_id}}</td>
+                            <!-- <td width="5%">{{a.patient_id}}</td> -->
+                            <td width="10%">{{a.first_name}}</td>
+                            <td width="10%">{{a.last_name}}</td>
+                            <td width="10%">{{a.doctor_id}}</td>
+                            <!-- <td width="20%">{{a.requested_date}}</td> -->
+                            <td width="10%">{{a.lab_test}}</td>  
+                            <td width="10%">{{a.lab_report_status}}</td>  
+                            <td width="10%">{{a.lab_report}}</td>  
+
+                            
+                           
+
+                        </tr>
+                        {%endfor%}
+                        </tbody>
+                    </table>
+        
+
+                </div>
+                <div id="view" class="tab-pane fade in active">
+                    <h3>Request Lab Tests</h3>
+                    <table id="data" class="table table-striped table-bordered compact" cellspacing="0" style="width:100%">
+                        <thead>
+                        <tr>
+                            <th>Appointment ID</th>
+                            
+                            <th> Name</th>
+                           
+                            <th>Doctor</th>
+                            <!-- <th>Requested Date</th> -->
+                            <th>Lab Test</th>
+                            <!-- <th>Lab Test Status</th> -->
+                            <th>Request Test</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {%for a in testRequestRecord%}
+                        <tr>
+                            <td width="5%">{{a.appointment_id}}</td>
+                           
+                            <td width="10%">{{a.first_name}} {{a.last_name}}</td>
+                            
+                            <td width="10%">{{a.doctor_name}}</td>
+                            <!-- <td width="20%">{{a.requested_date}}</td> -->
+                            <td width="10%">{{a.lab_test}}</td>  
+                            <!-- <td width="10%">{{a.lab_test_status}}</td>   -->
+                            
+                            <td width="5%">
+                                {%if a.lab_test_status == 'adding....'%}
+                                
+                                    <p data-placement="top" data-toggle="tooltip" title="Update">
+                                        <form method="POST">  {%csrf_token%}
+                                            <input type="hidden" style="float:right" name="appointment_id_value"
+                                            class="btn  btn-danger btn-lg" value="{{a.test_id}}"/> 
+
+    
+                                        
+                                            <button type="submit" class="btn btn-primary">Request Test</button>
+                                        </form></p>
+                                
+                                {%elif a.status == 'Confirmed'%}
+                                <a href="/quote/bookAppointment/update/{{q.id}}">
+                                    <p data-placement="top" data-toggle="tooltip" title="View">
+                                        <button class="btn btn-info btn-xs" data-title="View" data-toggle="modal"
+                                                data-target="#edit"><span class="fa fa-eye"></span></button>
+                                    </p>
+                                </a>
+                                {%elif a.status == 'Rejected'%}
+                                <a href="/quote/bookAppointment/update/{{q.id}}">
+                                    <p data-placement="top" data-toggle="tooltip" title="View">
+                                        <button class="btn btn-info btn-xs" data-title="View" data-toggle="modal"
+                                                data-target="#edit"><span class="fa fa-eye"></span></button>
+                                    </p>
+                                </a>
+                                {%elif a.status == 'Cancelled'%}
+                                <a href="/quote/bookAppointment/update/{{q.id}}">
+                                    <p data-placement="top" data-toggle="tooltip" title="View">
+                                        <button class="btn btn-info btn-xs" data-title="View" data-toggle="modal"
+                                                data-target="#edit"><span class="fa fa-eye"></span></button>
+                                    </p>
+                                </a>
+                                {%endif%}
+                            </td>
+
+
+                        </tr>
+                        {%endfor%}
+                        </tbody>
+                    </table>
+        
+                    <p> </p>
+                </div>
+            </div>
+        </div>
+
+
+
+</div>
+</section>
+</div>

@@ -1,5 +1,5 @@
 {% include 'navbar.html' %}
-
+{% load encrypt%}
 <head>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -38,6 +38,16 @@
                         {%for field in appointmentForm%}
                         {{ field.label_tag }} {{ field }}</br>
                         {%endfor%}
+                        <div class="form-group" style="margin-bottom:10px;margin-top:30px;">
+                                                         <label>Appointment with**:</label>
+                                                         <select class="form-control" style="margin-block-end: 20px;" name="doctor_id"
+                                                                 style="width:50%; font-size:15px">
+                                                             <option disabled selected value> -- select --</option>
+                                                             {%for doc in docDetails%}
+                                                             <option value="{{doc.doctor_id}}">{{doc.doctor_name}} -- {{doc.doctor_spec}}</option>
+                                                             {%endfor%}
+                                                         </select>
+                                                     </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
 
                     </form>
@@ -49,7 +59,7 @@
                         <thead>
                         <tr>
                             <th>Appointment ID</th>
-                            <th>Patient ID</th>
+            
                             <th>First Name</th>
                             <th>Last Name</th>
                             <th>Appointment With</th>
@@ -60,13 +70,13 @@
                         </tr>
                         </thead>
                         <tbody>
-                        {%for a in appDetails%}
+                        {%for a in record%}
                         <tr>
                             <td width="5%">{{a.appointment_id}}</td>
-                            <td width="5%">{{a.patient_id}}</td>
+                           
                             <td width="10%">{{a.first_name}}</td>
                             <td width="10%">{{a.last_name}}</td>
-                            <td width="10%">{{a.doctor_id}}</td>
+                            <td width="20%">{{a.doctor_name}} -- {{a.doctor_spec}}</td>
                             <td width="10%">{{a.requested_date}}</td>
                             <td width="10%">{{a.status}}</td>  
                             <td width="10%">{{a.transaction_status}} 
@@ -90,33 +100,29 @@
                             
                             <td width="5%">
                                 {%if a.status == 'Pending'%}
-                                <a href="/patient/updateAppointment/{{a.appointment_id}}">
+                               <a href="/patient/updateAppointment/{{k|patient_id_encrypt_tag:a.appointment_id}}/{{k|patient_id_encrypt_tag:id}}">
                                     <p data-placement="top" data-toggle="tooltip" title="Update">
                                         <button class="btn btn-info btn-xs" data-title="Update" data-toggle="modal"
                                                 data-target="#edit"><span class="glyphicon glyphicon-pencil"></span></button>
                                     </p>
                                 </a>
                                 {%elif a.status == 'Confirmed'%}
-                                <a href="/quote/bookAppointment/update/{{q.id}}">
-                                    <p data-placement="top" data-toggle="tooltip" title="View">
-                                        <button class="btn btn-info btn-xs" data-title="View" data-toggle="modal"
-                                                data-target="#edit"><span class="fa fa-eye"></span></button>
+                                <a href="/patient/cancelAppointment/{{k|patient_id_encrypt_tag:a.appointment_id}}/{{k|patient_id_encrypt_tag:id}}">
+                                    <p data-placement="top" data-toggle="tooltip" title="View"> 
+                                          <button class="btn btn-danger btn-xs" data-title="Cancel Appointment" data-toggle="modal"
+                                               data-target="#edit"><span class="fa fa-times"></span></button>
+                                         
                                     </p>
                                 </a>
                                 {%elif a.status == 'Rejected'%}
-                                <a href="/quote/bookAppointment/update/{{q.id}}">
-                                    <p data-placement="top" data-toggle="tooltip" title="View">
-                                        <button class="btn btn-info btn-xs" data-title="View" data-toggle="modal"
-                                                data-target="#edit"><span class="fa fa-eye"></span></button>
+                                <p data-placement="top" data-toggle="tooltip" title="View">
+                                    Cannnot Update this Record
                                     </p>
-                                </a>
                                 {%elif a.status == 'Cancelled'%}
-                                <a href="/quote/bookAppointment/update/{{q.id}}">
                                     <p data-placement="top" data-toggle="tooltip" title="View">
-                                        <button class="btn btn-info btn-xs" data-title="View" data-toggle="modal"
-                                                data-target="#edit"><span class="fa fa-eye"></span></button>
+                                               Cannnot Update this Record
+
                                     </p>
-                                </a>
                                 {%endif%}
                             </td>
 

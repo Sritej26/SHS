@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-q2pve$0b_vzd7@elnx=0l7@%t(l$y7)u#p&nyip@%lv#x_na!r
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 MESSAGE_TAGS = {
     messages.DEBUG: 'alert-info',

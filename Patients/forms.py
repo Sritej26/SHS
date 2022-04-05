@@ -20,13 +20,13 @@ class appointmentForm(forms.Form):
     requested_date = forms.DateField(label="Requested Date", required=False,
                                      widget=forms.widgets.DateInput(attrs={'type': 'date', 'class': 'form-control', }))
 
-    doctor_id = forms.IntegerField(label='Appointment With', required=True,
-                                        widget=forms.NumberInput(attrs=
-                                        {
-                                            'required': False,
-                                            'class': 'form-control',
-                                            'placeholder': ('Appointment with')
-                                        }))
+    #doctor_id = forms.IntegerField(label='Appointment With', required=True,
+     #                                   widget=forms.NumberInput(attrs=
+      #                                  {
+       #                                     'required': False,
+        #                                    'class': 'form-control',
+         #                                   'placeholder': ('Appointment with')
+          #                              }))
 class insuranceClaimRequestForm(forms.Form):
     patient_firstname = forms.CharField(label='Firstname.**', required=True,
                                    widget=forms.TextInput(attrs=

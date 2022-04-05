@@ -12,5 +12,7 @@ class PatientDetails(models.Model):
     patient_address = models.CharField(max_length=1000, null=False)
     patient_phone_no = models.IntegerField(null=False)
     patient_email = models.EmailField(null=True)
-    doctor_id = models.ForeignKey(DoctorDetails, null=True, on_delete=models.SET_NULL)
+    change_request_status = models.IntegerField(default=0)
+    request_info = models.CharField(max_length=1000, default="")
+    
     

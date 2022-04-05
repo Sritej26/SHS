@@ -1,4 +1,5 @@
 {% load static %}
+{% load encrypt%}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -39,10 +40,11 @@
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="./index3" class="nav-link">Home</a>
+                <a href="/patient/home/{{k|patient_id_encrypt_tag:id}}" class="nav-link">Home</a>
+
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="#" class="nav-link">Contact</a>
+                <a href="/patient/contactHelp/{{k|patient_id_encrypt_tag:id}}" class="nav-link">Contact</a>
       </li>
     </ul>
 
@@ -63,31 +65,31 @@
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <li class="nav-item">
-            <a href="/patient" class="nav-link">
+                      <a href="/patient/home/{{k|patient_id_encrypt_tag:id}}" class="nav-link">
               <i class="nav-icon fas fa-home"></i>
               <p>Home</p>
             </a>
           </li>
           <li class="nav-item">
-            <a href="/patient/bookAppointment/{{id}}" class="nav-link">
-                <i class="nav-icon fas fa-user-md"></i>
+                       <a href="/patient/bookAppointment/{{k|patient_id_encrypt_tag:id}}" class="nav-link">
+              <i class="nav-icon fas fa-user-md"></i>
                     <p> Book Appointment </p>
             </a>
           </li>
           <li class="nav-item">
-            <a href="/patient/insuranceClaimRequest/{{id}}" class="nav-link">
+           <a href="/patient/insuranceClaimRequest/{{id}}" class="nav-link">
                 <i class="nav-icon fas fa-medkit"></i>
                     <p> Insurance Claim </p>
             </a>
 
           <li class="nav-item">
-            <a href="" class="nav-link">
-                <i class="nav-icon fas fa-tasks" aria-hidden="true"></i>
+                       <a href="/patient/viewRecords/{{k|patient_id_encrypt_tag:id}}" class="nav-link">
+              <i class="nav-icon fas fa-tasks" aria-hidden="true"></i>
                    <p>View Records </p>
             </a>
           </li>
           <li class="nav-item">
-            <a href="" class="nav-link">
+                       <a href="/patient/requestLabTests/{{k|patient_id_encrypt_tag:id}}" class="nav-link">
               <i class="nav-icon fas fa-th"></i>
                 <p> Request Lab Tests</p>
             </a>
@@ -99,8 +101,14 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="/patient/logout/{{id}}" class="nav-link">
-                <i class="nav-icon fas fa-sign-out-alt"></i>
+            <a href="/patient/profileUpdateRequest/{{k|patient_id_encrypt_tag:id}}" class="nav-link">
+                             <i class="nav-icon fas fa-th"></i>
+                               <p> View Profile / Update Request  </p>
+                           </a>
+                         </li>
+                         <li class="nav-item">
+                           <a href="/patient/logout/{{k|patient_id_encrypt_tag:id}}" class="nav-link">
+                                           <i class="nav-icon fas fa-sign-out-alt"></i>
                     <p> Sign out</p>
             </a>
           </li>

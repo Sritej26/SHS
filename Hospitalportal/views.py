@@ -22,6 +22,8 @@ import threading
 from django.template.loader import render_to_string
 import logging
 from datetime import datetime
+from django.core import signing
+ 
 
 now = datetime.now()
 logging.basicConfig(filename="userstatus.log",
@@ -82,13 +84,14 @@ class Login(View):
                     if test.Role == 'Patient':
                         pid= PatientDetails.objects.get(patient_name=username)
                         id=pid.patient_id
+                        id = signing.dumps(id)
                         return HttpResponseRedirect(reverse('patient:patientHome', args=[id]))
 
                     elif test.Role == 'Admin':
                         return redirect("/admin/",{'name':user})
                     elif test.Role == 'Labstaff':
                         return redirect("/labStaff/",{'name':user})
-                    elif test.Role == 'Doctorstaff':
+                    elif test.Role == 'Doctor':
                         return redirect("/doctors/",{'name':user})
                     elif test.Role == 'Insurancestaff':
                         return redirect("/insurance/",{'name':user})

@@ -1,0 +1,483 @@
+INFO Watching for file changes with StatReloader
+INFO Watching for file changes with StatReloader
+ERROR Internal Server Error: /patient/bookAppointment/IjQi:1nbGkF:klkYbw9EUNobmMKqexh_7K-Ujo7tyBMohPi_BPr6iDQ
+Traceback (most recent call last):
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/core/handlers/base.py", line 188, in _get_response
+    self.check_response(response, callback)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/core/handlers/base.py", line 309, in check_response
+    raise ValueError(
+ValueError: The view Patients.views.view didn't return an HttpResponse object. It returned None instead.
+ERROR "GET /patient/bookAppointment/IjQi:1nbGkF:klkYbw9EUNobmMKqexh_7K-Ujo7tyBMohPi_BPr6iDQ HTTP/1.1" 500 64824
+WARNING Not Found: /favicon.ico
+WARNING "GET /favicon.ico HTTP/1.1" 404 3373
+INFO "GET /Login HTTP/1.1" 200 2168
+INFO "POST /Login HTTP/1.1" 200 2234
+INFO "POST /Login HTTP/1.1" 200 2234
+INFO Watching for file changes with StatReloader
+INFO "GET /Login HTTP/1.1" 200 2168
+INFO "POST /Register HTTP/1.1" 200 3165
+INFO "POST /Registercheck HTTP/1.1" 302 0
+INFO "GET /Login HTTP/1.1" 200 2237
+INFO "GET /activate-user/Mw/b3e2v5-61fc1f56248c9aec4ef739d0930c298d HTTP/1.1" 302 0
+INFO "GET /Login HTTP/1.1" 200 2225
+INFO "POST /Login HTTP/1.1" 200 2234
+INFO "POST /Login HTTP/1.1" 302 0
+INFO "GET /patient/home/Mw:1nbaHl:_OekYXP0OarQTIzdiaVg5ut--6_CGujavuzey4P7vS4 HTTP/1.1" 200 11560
+ERROR Internal Server Error: /patient/bookAppointment/Mw:1nbaHl:_OekYXP0OarQTIzdiaVg5ut--6_CGujavuzey4P7vS4
+Traceback (most recent call last):
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/core/handlers/base.py", line 188, in _get_response
+    self.check_response(response, callback)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/core/handlers/base.py", line 309, in check_response
+    raise ValueError(
+ValueError: The view Patients.views.view didn't return an HttpResponse object. It returned None instead.
+ERROR "GET /patient/bookAppointment/Mw:1nbaHl:_OekYXP0OarQTIzdiaVg5ut--6_CGujavuzey4P7vS4 HTTP/1.1" 500 65012
+INFO /Users/aish/Sem1/SS_Project/SHS_Grp14/Patients/views.py changed, reloading.
+INFO Watching for file changes with StatReloader
+ERROR Internal Server Error: /patient/bookAppointment/Mw:1nbaHl:_OekYXP0OarQTIzdiaVg5ut--6_CGujavuzey4P7vS4
+Traceback (most recent call last):
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/core/handlers/base.py", line 188, in _get_response
+    self.check_response(response, callback)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/core/handlers/base.py", line 309, in check_response
+    raise ValueError(
+ValueError: The view Patients.views.view didn't return an HttpResponse object. It returned None instead.
+ERROR "GET /patient/bookAppointment/Mw:1nbaHl:_OekYXP0OarQTIzdiaVg5ut--6_CGujavuzey4P7vS4 HTTP/1.1" 500 64932
+INFO /Users/aish/Sem1/SS_Project/SHS_Grp14/Admin/views.py changed, reloading.
+INFO Watching for file changes with StatReloader
+INFO /Users/aish/Sem1/SS_Project/SHS_Grp14/Patients/views.py changed, reloading.
+INFO Watching for file changes with StatReloader
+ERROR Internal Server Error: /patient/bookAppointment/Mw:1nbaHl:_OekYXP0OarQTIzdiaVg5ut--6_CGujavuzey4P7vS4
+Traceback (most recent call last):
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/core/handlers/base.py", line 188, in _get_response
+    self.check_response(response, callback)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/core/handlers/base.py", line 309, in check_response
+    raise ValueError(
+ValueError: The view Patients.views.view didn't return an HttpResponse object. It returned None instead.
+ERROR "GET /patient/bookAppointment/Mw:1nbaHl:_OekYXP0OarQTIzdiaVg5ut--6_CGujavuzey4P7vS4 HTTP/1.1" 500 64932
+INFO /Users/aish/Sem1/SS_Project/SHS_Grp14/Patients/views.py changed, reloading.
+INFO Watching for file changes with StatReloader
+INFO /Users/aish/Sem1/SS_Project/SHS_Grp14/Patients/views.py changed, reloading.
+INFO Watching for file changes with StatReloader
+INFO "GET /patient/bookAppointment/Mw:1nbaHl:_OekYXP0OarQTIzdiaVg5ut--6_CGujavuzey4P7vS4 HTTP/1.1" 200 10296
+WARNING Not Found: /admin/HospitalStaff/appointmentdetails/
+WARNING "GET /admin/HospitalStaff/appointmentdetails/ HTTP/1.1" 404 6356
+INFO "GET /admin/ HTTP/1.1" 200 10030
+INFO "GET /admin/createEmployeeRecords HTTP/1.1" 200 9285
+INFO "POST /admin/createEmployeeRecords HTTP/1.1" 302 0
+INFO "GET /admin/createEmployeeRecords.html HTTP/1.1" 200 9572
+INFO /Users/aish/Sem1/SS_Project/SHS_Grp14/Hospitalportal/views.py changed, reloading.
+INFO Watching for file changes with StatReloader
+INFO "POST /admin/createEmployeeRecords.html HTTP/1.1" 302 0
+INFO "GET /admin/createEmployeeRecords.html HTTP/1.1" 200 9441
+INFO "GET /admin/createEmployeeRecords.html HTTP/1.1" 200 9285
+INFO "POST /admin/createEmployeeRecords.html HTTP/1.1" 302 0
+INFO "GET /admin/createEmployeeRecords.html HTTP/1.1" 200 9572
+INFO /Users/aish/Sem1/SS_Project/SHS_Grp14/Patients/views.py changed, reloading.
+INFO Watching for file changes with StatReloader
+INFO "GET /patient/bookAppointment/IjQi:1nbGkF:klkYbw9EUNobmMKqexh_7K-Ujo7tyBMohPi_BPr6iDQ HTTP/1.1" 200 10312
+INFO "GET /patient/bookAppointment/IjQi:1nbaUV:M9cNmO4LeU2ykPnhde7ruBLW7DWXfsJsmf6lnb_ScRQ HTTP/1.1" 200 10312
+INFO "GET /patient/home/IjQi:1nbaUY:cgeRAssI0qpF-iIiJ_CItObe0tMN9W222erFn7Sdueg HTTP/1.1" 200 11576
+INFO /Users/aish/Sem1/SS_Project/SHS_Grp14/Patients/views.py changed, reloading.
+INFO Watching for file changes with StatReloader
+INFO "GET /patient/home/IjQi:1nbaUY:cgeRAssI0qpF-iIiJ_CItObe0tMN9W222erFn7Sdueg HTTP/1.1" 200 11576
+INFO "GET /patient/bookAppointment/IjQi:1nbaUs:cPcPfX1rA-kJpzTTmtJaKq9I7tQDaRenKAw41iw0jp4 HTTP/1.1" 200 10479
+INFO "POST /patient/bookAppointment/IjQi:1nbaUs:cPcPfX1rA-kJpzTTmtJaKq9I7tQDaRenKAw41iw0jp4 HTTP/1.1" 302 0
+INFO "GET /patient/bookAppointment/IjQi:1nbaV8:ijmx1gGOeTKkxyrjJV_isI0bhhSV2wJjdZa8rvhzMRQ HTTP/1.1" 200 10800
+INFO /Users/aish/Sem1/SS_Project/SHS_Grp14/Patients/views.py changed, reloading.
+INFO Watching for file changes with StatReloader
+INFO "GET /patient/bookAppointment/IjQi:1nbaV8:ijmx1gGOeTKkxyrjJV_isI0bhhSV2wJjdZa8rvhzMRQ HTTP/1.1" 200 10479
+INFO "POST /patient/bookAppointment/IjQi:1nbaV8:ijmx1gGOeTKkxyrjJV_isI0bhhSV2wJjdZa8rvhzMRQ HTTP/1.1" 302 0
+INFO "GET /patient/bookAppointment/IjQi:1nbaWP:NbCprSFNSvoX2khTMtybhpnmHaec0Nbbo7SekAvR2uw HTTP/1.1" 200 10800
+INFO /Users/aish/Sem1/SS_Project/SHS_Grp14/Patients/views.py changed, reloading.
+INFO Watching for file changes with StatReloader
+INFO "GET /patient/bookAppointment/IjQi:1nbaWP:NbCprSFNSvoX2khTMtybhpnmHaec0Nbbo7SekAvR2uw HTTP/1.1" 200 10479
+INFO "POST /patient/bookAppointment/IjQi:1nbaWP:NbCprSFNSvoX2khTMtybhpnmHaec0Nbbo7SekAvR2uw HTTP/1.1" 302 0
+INFO "GET /patient/bookAppointment/IjQi:1nbaYh:jbWilOfkN0tnwvVdwDcbn1IyG-6LSaFYOuVtPkddHFs HTTP/1.1" 200 10800
+INFO /Users/aish/Sem1/SS_Project/SHS_Grp14/Patients/views.py changed, reloading.
+INFO Watching for file changes with StatReloader
+INFO "GET /patient/bookAppointment/IjQi:1nbaYh:jbWilOfkN0tnwvVdwDcbn1IyG-6LSaFYOuVtPkddHFs HTTP/1.1" 200 10479
+INFO "POST /patient/bookAppointment/IjQi:1nbaYh:jbWilOfkN0tnwvVdwDcbn1IyG-6LSaFYOuVtPkddHFs HTTP/1.1" 302 0
+INFO "GET /patient/bookAppointment/IjQi:1nbaZt:IMD-3thJJ5hcNb8bZGHgtSXBzT1wHBaLgmDQcW8EZEU HTTP/1.1" 200 10800
+INFO /Users/aish/Sem1/SS_Project/SHS_Grp14/Patients/views.py changed, reloading.
+INFO Watching for file changes with StatReloader
+INFO /Users/aish/Sem1/SS_Project/SHS_Grp14/Patients/views.py changed, reloading.
+INFO Watching for file changes with StatReloader
+INFO /Users/aish/Sem1/SS_Project/SHS_Grp14/Patients/views.py changed, reloading.
+INFO Watching for file changes with StatReloader
+INFO /Users/aish/Sem1/SS_Project/SHS_Grp14/Patients/views.py changed, reloading.
+INFO Watching for file changes with StatReloader
+INFO "GET /patient/bookAppointment/IjQi:1nbaZt:IMD-3thJJ5hcNb8bZGHgtSXBzT1wHBaLgmDQcW8EZEU HTTP/1.1" 200 10480
+INFO "POST /patient/bookAppointment/IjQi:1nbaZt:IMD-3thJJ5hcNb8bZGHgtSXBzT1wHBaLgmDQcW8EZEU HTTP/1.1" 302 0
+INFO "GET /patient/bookAppointment/IjQi:1nbauO:sSYcLRXvtM1QAPjaUKxVccoiLbTP9tmZyrng-CQermA HTTP/1.1" 200 12180
+INFO "GET /patient/home/IjQi:1nbauO:sSYcLRXvtM1QAPjaUKxVccoiLbTP9tmZyrng-CQermA HTTP/1.1" 200 11576
+INFO "GET /patient/bookAppointment/IjQi:1nbax2:MDtdrrhZqAAgUj2imTUjrfrOtSJuyUNzV26GAns5d4I HTTP/1.1" 200 11859
+INFO "GET /patient/home/IjQi:1nbax3:o0lXa_rsKezRMC50YlB5SCb0y1tnoi5SqujQbpU-rxc HTTP/1.1" 200 11576
+INFO "GET /patient/bookAppointment/IjQi:1nbax3:o0lXa_rsKezRMC50YlB5SCb0y1tnoi5SqujQbpU-rxc HTTP/1.1" 200 11859
+INFO "GET /patient/insuranceClaimRequest/4 HTTP/1.1" 301 0
+INFO "GET /patient/insuranceClaimRequest/4/ HTTP/1.1" 200 10500
+INFO "GET /patient/viewRecords/IjQi:1nbax5:to67mUoToWxksn1LAGbXBZ7CbTH7W0kbZTY7zBBDybg HTTP/1.1" 200 8377
+INFO "GET /patient/requestLabTests/IjQi:1nbax6:FQcCJ7jicG-ymIOGg8JhVSkBFVJ083aVsC67Wg_1AYA HTTP/1.1" 200 9472
+WARNING Not Found: /patient/patientPayment/4
+WARNING "GET /patient/patientPayment/4 HTTP/1.1" 404 6809
+ERROR Internal Server Error: /patient/profileUpdateRequest/IjQi:1nbax7:Afd94_q91BUGiYUkZ0MoZoDlUF4NS9bwvg5nNh_WufE
+Traceback (most recent call last):
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/views/generic/base.py", line 69, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/views/generic/base.py", line 101, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/aish/Sem1/SS_Project/SHS_Grp14/Patients/views.py", line 488, in get
+    patientDetails = PatientDetails.objects.get(patient_id =id)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/db/models/manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/db/models/query.py", line 439, in get
+    raise self.model.DoesNotExist(
+Patients.models.PatientDetails.DoesNotExist: PatientDetails matching query does not exist.
+ERROR "GET /patient/profileUpdateRequest/IjQi:1nbax7:Afd94_q91BUGiYUkZ0MoZoDlUF4NS9bwvg5nNh_WufE HTTP/1.1" 500 82715
+INFO "GET /patient/bookAppointment/IjQi:1nbGkF:klkYbw9EUNobmMKqexh_7K-Ujo7tyBMohPi_BPr6iDQ HTTP/1.1" 200 11859
+ERROR Internal Server Error: /patient/home/IklrbHFVV2s2TVc1aVVtcFBPa3Q0V2s5VFUxWTVRWHB2UjJNMVRGSjBWMUZKVjBKbmRsaEpkR1pJVkVkVk9ISXRibFpETmtkQlEyY2k6MW5iUnRCOlBYNzdYYWlvTlcxY21yM0txTms1SmZOMDJzVlEzdHFlQUdTMDFGT2Yycmsi:1nbS6F:BqFPNaCxLwc6BSVlnTKxThw2RIUOroGgyL5KfPKWu40
+Traceback (most recent call last):
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/db/models/fields/__init__.py", line 1822, in get_prep_value
+    return int(value)
+ValueError: invalid literal for int() with base 10: 'IklqUWk6MW5iUmpPOkt4Wk9TU1Y5QXpvR2M1TFJ0V1FJV0JndlhJdGZIVEdVOHItblZDNkdBQ2ci:1nbRtB:PX77XaioNW1cmr3KqNk5JfN02sVQ3tqeAGS01FOf2rk'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/views/generic/base.py", line 69, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/views/generic/base.py", line 101, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/aish/Sem1/SS_Project/SHS_Grp14/Patients/views.py", line 58, in get
+    noOfAppointments = AppointmentDetails.objects.filter(patient_id=id,status ="Confirmed").count()
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/db/models/manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/db/models/query.py", line 974, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/db/models/query.py", line 992, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/db/models/query.py", line 999, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/db/models/sql/query.py", line 1375, in add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/db/models/sql/query.py", line 1396, in _add_q
+    child_clause, needed_inner = self.build_filter(
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/db/models/sql/query.py", line 1329, in build_filter
+    condition = self.build_lookup(lookups, col, value)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/db/models/sql/query.py", line 1180, in build_lookup
+    lookup = lookup_class(lhs, rhs)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/db/models/lookups.py", line 22, in __init__
+    self.rhs = self.get_prep_lookup()
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/db/models/lookups.py", line 79, in get_prep_lookup
+    return self.lhs.output_field.get_prep_value(self.rhs)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/db/models/fields/__init__.py", line 1824, in get_prep_value
+    raise e.__class__(
+ValueError: Field 'patient_id' expected a number but got 'IklqUWk6MW5iUmpPOkt4Wk9TU1Y5QXpvR2M1TFJ0V1FJV0JndlhJdGZIVEdVOHItblZDNkdBQ2ci:1nbRtB:PX77XaioNW1cmr3KqNk5JfN02sVQ3tqeAGS01FOf2rk'.
+ERROR "GET /patient/home/IklrbHFVV2s2TVc1aVVtcFBPa3Q0V2s5VFUxWTVRWHB2UjJNMVRGSjBWMUZKVjBKbmRsaEpkR1pJVkVkVk9ISXRibFpETmtkQlEyY2k6MW5iUnRCOlBYNzdYYWlvTlcxY21yM0txTms1SmZOMDJzVlEzdHFlQUdTMDFGT2Yycmsi:1nbS6F:BqFPNaCxLwc6BSVlnTKxThw2RIUOroGgyL5KfPKWu40 HTTP/1.1" 500 135041
+INFO "GET /patient/home/IjQi:1nbax7:Afd94_q91BUGiYUkZ0MoZoDlUF4NS9bwvg5nNh_WufE HTTP/1.1" 200 11576
+INFO "GET /patient/home/IjQi:1nbaxr:bMy7TnCCNUhu7JnuNQLm7ZE5vnPdT6YrATK-maEwxDo HTTP/1.1" 200 11576
+WARNING Not Found: /patient/patientPayment/4
+WARNING "GET /patient/patientPayment/4 HTTP/1.1" 404 6809
+INFO "GET /patient/requestLabTests/IjQi:1nbaxs:a6uxDis6lnyKq9zthaF5HpbLkW53MyjFhEJ2-NUk9UU HTTP/1.1" 200 9472
+ERROR Internal Server Error: /patient/logout/IjQi:1nbaxz:XXPutQiVyQ97YPZjFDqB1nsZx2gZrEZFEaN3xRx7qlg
+Traceback (most recent call last):
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/aish/Sem1/SS_Project/SHS_Grp14/Patients/views.py", line 34, in logout_user
+    username= PatientDetails.objects.get(patient_id=id)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/db/models/manager.py", line 85, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/db/models/query.py", line 439, in get
+    raise self.model.DoesNotExist(
+Patients.models.PatientDetails.DoesNotExist: PatientDetails matching query does not exist.
+ERROR "GET /patient/logout/IjQi:1nbaxz:XXPutQiVyQ97YPZjFDqB1nsZx2gZrEZFEaN3xRx7qlg HTTP/1.1" 500 72806
+INFO "GET /patient/home/IjQi:1nbax7:Afd94_q91BUGiYUkZ0MoZoDlUF4NS9bwvg5nNh_WufE HTTP/1.1" 200 11576
+INFO "GET /patient/insuranceClaimRequest/4/ HTTP/1.1" 200 10500
+INFO "GET /patient/bookAppointment/IjQi:1nbax3:o0lXa_rsKezRMC50YlB5SCb0y1tnoi5SqujQbpU-rxc HTTP/1.1" 200 11859
+INFO "GET /patient/home/IjQi:1nbax3:o0lXa_rsKezRMC50YlB5SCb0y1tnoi5SqujQbpU-rxc HTTP/1.1" 200 11576
+INFO "GET /patient/bookAppointment/IjQi:1nbax2:MDtdrrhZqAAgUj2imTUjrfrOtSJuyUNzV26GAns5d4I HTTP/1.1" 200 11859
+INFO "GET /patient/home/IjQi:1nbauO:sSYcLRXvtM1QAPjaUKxVccoiLbTP9tmZyrng-CQermA HTTP/1.1" 200 11576
+INFO "GET /patient/bookAppointment/IjQi:1nbauO:sSYcLRXvtM1QAPjaUKxVccoiLbTP9tmZyrng-CQermA HTTP/1.1" 200 11859
+INFO "GET /patient/bookAppointment/IjQi:1nbaZt:IMD-3thJJ5hcNb8bZGHgtSXBzT1wHBaLgmDQcW8EZEU HTTP/1.1" 200 11859
+INFO "GET /patient/bookAppointment/IjQi:1nbaYh:jbWilOfkN0tnwvVdwDcbn1IyG-6LSaFYOuVtPkddHFs HTTP/1.1" 200 11859
+INFO "GET /patient/bookAppointment/IjQi:1nbaWP:NbCprSFNSvoX2khTMtybhpnmHaec0Nbbo7SekAvR2uw HTTP/1.1" 200 11859
+INFO "GET /patient/bookAppointment/IjQi:1nbaV8:ijmx1gGOeTKkxyrjJV_isI0bhhSV2wJjdZa8rvhzMRQ HTTP/1.1" 200 11859
+INFO "GET /patient/bookAppointment/IjQi:1nbaUs:cPcPfX1rA-kJpzTTmtJaKq9I7tQDaRenKAw41iw0jp4 HTTP/1.1" 200 11859
+INFO "GET /patient/home/IjQi:1nbaUY:cgeRAssI0qpF-iIiJ_CItObe0tMN9W222erFn7Sdueg HTTP/1.1" 200 11576
+INFO "GET /patient/bookAppointment/IjQi:1nbaUV:M9cNmO4LeU2ykPnhde7ruBLW7DWXfsJsmf6lnb_ScRQ HTTP/1.1" 200 11859
+INFO "GET /patient/bookAppointment/IjQi:1nbGkF:klkYbw9EUNobmMKqexh_7K-Ujo7tyBMohPi_BPr6iDQ HTTP/1.1" 200 11859
+INFO "GET /admin/createEmployeeRecords.html HTTP/1.1" 200 9285
+INFO "GET /admin/createEmployeeRecords HTTP/1.1" 200 9285
+INFO "GET /patient/bookAppointment/Mw:1nbaHl:_OekYXP0OarQTIzdiaVg5ut--6_CGujavuzey4P7vS4 HTTP/1.1" 200 10464
+INFO "GET /patient/home/Mw:1nbaHl:_OekYXP0OarQTIzdiaVg5ut--6_CGujavuzey4P7vS4 HTTP/1.1" 200 11560
+INFO "GET /Login HTTP/1.1" 200 2168
+INFO /Users/aish/Sem1/SS_Project/SHS_Grp14/Patients/views.py changed, reloading.
+INFO Watching for file changes with StatReloader
+INFO "GET /patient/logout/Mw:1nbayZ:GsOtbOCSh70-x4WibEqdTRvDMsrdVoaxQT8eYylz7tc HTTP/1.1" 302 0
+INFO "GET /Login HTTP/1.1" 200 2168
+INFO "POST /Login HTTP/1.1" 302 0
+INFO "GET /patient/home/Mw:1nbbJ3:swsR-bUsFgipxJUEO_LR5QzAOUz1F7Ze1bKqwq466wY HTTP/1.1" 200 11560
+INFO "GET /patient/viewRecords/Mw:1nbbJ3:swsR-bUsFgipxJUEO_LR5QzAOUz1F7Ze1bKqwq466wY HTTP/1.1" 200 8361
+INFO "GET /patient/viewRecords/Mw:1nbbJ7:GRyEr8kRRKxg04STiUT2VROoOKj2UfF1ZIVpMpCNvSw HTTP/1.1" 200 8361
+INFO "GET /patient/requestLabTests/Mw:1nbbJ9:uoUbUzfVGXLyLmlwMgmVoqNojJB1pSjmE86tn4La9SY HTTP/1.1" 200 9456
+WARNING Not Found: /patient/patientPayment/3
+WARNING "GET /patient/patientPayment/3 HTTP/1.1" 404 6809
+INFO "GET /patient/profileUpdateRequest/Mw:1nbbJ9:uoUbUzfVGXLyLmlwMgmVoqNojJB1pSjmE86tn4La9SY HTTP/1.1" 200 19680
+INFO "GET /patient/home/Mw:1nbbJH:3fGq7Ay1xZsJJnqDsAE1q7gJdXORCRElju5oc_crJZc HTTP/1.1" 200 11560
+INFO "GET /patient/bookAppointment/Mw:1nbbJL:UbVsSlLncc6mLBhbnOKXU3ytjrVrzh9fqOa0Q-It8Vg HTTP/1.1" 200 10464
+INFO "GET /patient/insuranceClaimRequest/3 HTTP/1.1" 301 0
+INFO "GET /patient/insuranceClaimRequest/3/ HTTP/1.1" 200 10500
+INFO "GET /patient/logout/IjMi:1nbbJP:U8EtuymdHBnwvsZg3Q3QcQDqEV2Rri5w7pSq6eF243c HTTP/1.1" 302 0
+INFO "GET /Login HTTP/1.1" 200 2168
+INFO /Users/aish/Sem1/SS_Project/SHS_Grp14/Patients/views.py changed, reloading.
+INFO Watching for file changes with StatReloader
+INFO "GET /patient/logout/IjMi:1nbbJP:U8EtuymdHBnwvsZg3Q3QcQDqEV2Rri5w7pSq6eF243c HTTP/1.1" 302 0
+INFO "GET /Login HTTP/1.1" 200 2168
+INFO "GET /patient/insuranceClaimRequest/3/ HTTP/1.1" 200 10500
+INFO "GET /patient/logout/IjMi:1nbbLF:txqYWVaHOaRYSgPGE7-Xd8_kep4Q1OsUzKES9kuWIdk HTTP/1.1" 302 0
+INFO "GET /Login HTTP/1.1" 200 2168
+INFO "GET /patient/logout/IjMi:1nbbLF:txqYWVaHOaRYSgPGE7-Xd8_kep4Q1OsUzKES9kuWIdk HTTP/1.1" 302 0
+INFO "GET /Login HTTP/1.1" 200 2168
+INFO "GET /patient/home/IjMi:1nbbLF:txqYWVaHOaRYSgPGE7-Xd8_kep4Q1OsUzKES9kuWIdk HTTP/1.1" 302 0
+INFO "GET /Login HTTP/1.1" 200 2168
+INFO /Users/aish/Sem1/SS_Project/SHS_Grp14/Patients/views.py changed, reloading.
+INFO Watching for file changes with StatReloader
+INFO "GET /patient/home/IjMi:1nbbLF:txqYWVaHOaRYSgPGE7-Xd8_kep4Q1OsUzKES9kuWIdk HTTP/1.1" 302 0
+INFO "GET /Login HTTP/1.1" 200 2168
+ERROR Internal Server Error: /patient/viewRecords/IjMi:1nbbLF:txqYWVaHOaRYSgPGE7-Xd8_kep4Q1OsUzKES9kuWIdk
+Traceback (most recent call last):
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/views/generic/base.py", line 69, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/views/generic/base.py", line 101, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/aish/Sem1/SS_Project/SHS_Grp14/Patients/views.py", line 455, in get
+    'record':record,
+UnboundLocalError: local variable 'record' referenced before assignment
+ERROR "GET /patient/viewRecords/IjMi:1nbbLF:txqYWVaHOaRYSgPGE7-Xd8_kep4Q1OsUzKES9kuWIdk HTTP/1.1" 500 74079
+ERROR Internal Server Error: /patient/requestLabTests/IjMi:1nbbLF:txqYWVaHOaRYSgPGE7-Xd8_kep4Q1OsUzKES9kuWIdk
+Traceback (most recent call last):
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/views/generic/base.py", line 69, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/views/generic/base.py", line 101, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/aish/Sem1/SS_Project/SHS_Grp14/Patients/views.py", line 402, in get
+    'testRequestRecord':testRequestRecord,
+UnboundLocalError: local variable 'testRequestRecord' referenced before assignment
+ERROR "GET /patient/requestLabTests/IjMi:1nbbLF:txqYWVaHOaRYSgPGE7-Xd8_kep4Q1OsUzKES9kuWIdk HTTP/1.1" 500 73892
+INFO "GET /patient/profileUpdateRequest/IjMi:1nbbLF:txqYWVaHOaRYSgPGE7-Xd8_kep4Q1OsUzKES9kuWIdk HTTP/1.1" 302 0
+INFO "GET /Login HTTP/1.1" 200 2168
+ERROR Internal Server Error: /patient/viewRecords/IjMi:1nbbLF:txqYWVaHOaRYSgPGE7-Xd8_kep4Q1OsUzKES9kuWIdk
+Traceback (most recent call last):
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/views/generic/base.py", line 69, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/views/generic/base.py", line 101, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/aish/Sem1/SS_Project/SHS_Grp14/Patients/views.py", line 455, in get
+    'record':record,
+UnboundLocalError: local variable 'record' referenced before assignment
+ERROR "GET /patient/viewRecords/IjMi:1nbbLF:txqYWVaHOaRYSgPGE7-Xd8_kep4Q1OsUzKES9kuWIdk HTTP/1.1" 500 74079
+INFO /Users/aish/Sem1/SS_Project/SHS_Grp14/Patients/views.py changed, reloading.
+INFO Watching for file changes with StatReloader
+ERROR Internal Server Error: /patient/requestLabTests/IjMi:1nbbLF:txqYWVaHOaRYSgPGE7-Xd8_kep4Q1OsUzKES9kuWIdk
+Traceback (most recent call last):
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/views/generic/base.py", line 69, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/views/generic/base.py", line 101, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/aish/Sem1/SS_Project/SHS_Grp14/Patients/views.py", line 402, in get
+    'testRequestRecord':testRequestRecord,
+UnboundLocalError: local variable 'testRequestRecord' referenced before assignment
+ERROR "GET /patient/requestLabTests/IjMi:1nbbLF:txqYWVaHOaRYSgPGE7-Xd8_kep4Q1OsUzKES9kuWIdk HTTP/1.1" 500 73892
+ERROR Internal Server Error: /patient/viewRecords/IjMi:1nbbLF:txqYWVaHOaRYSgPGE7-Xd8_kep4Q1OsUzKES9kuWIdk
+Traceback (most recent call last):
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/views/generic/base.py", line 69, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/views/generic/base.py", line 101, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/aish/Sem1/SS_Project/SHS_Grp14/Patients/views.py", line 455, in get
+    'record':record,
+UnboundLocalError: local variable 'record' referenced before assignment
+ERROR "GET /patient/viewRecords/IjMi:1nbbLF:txqYWVaHOaRYSgPGE7-Xd8_kep4Q1OsUzKES9kuWIdk HTTP/1.1" 500 74079
+INFO "GET /patient/insuranceClaimRequest/3/ HTTP/1.1" 200 10500
+ERROR Internal Server Error: /patient/requestLabTests/IjMi:1nbbOK:6M4EBVmJO41InmZBC7O5HwvPAQKKMpX4ST2OpV0v0UI
+Traceback (most recent call last):
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/views/generic/base.py", line 69, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/views/generic/base.py", line 101, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/aish/Sem1/SS_Project/SHS_Grp14/Patients/views.py", line 402, in get
+    'testRequestRecord':testRequestRecord,
+UnboundLocalError: local variable 'testRequestRecord' referenced before assignment
+ERROR "GET /patient/requestLabTests/IjMi:1nbbOK:6M4EBVmJO41InmZBC7O5HwvPAQKKMpX4ST2OpV0v0UI HTTP/1.1" 500 73892
+INFO /Users/aish/Sem1/SS_Project/SHS_Grp14/Patients/views.py changed, reloading.
+INFO Watching for file changes with StatReloader
+INFO /Users/aish/Sem1/SS_Project/SHS_Grp14/Patients/views.py changed, reloading.
+INFO Watching for file changes with StatReloader
+INFO "GET /patient/insuranceClaimRequest/3/ HTTP/1.1" 200 10500
+ERROR Internal Server Error: /patient/viewRecords/IjMi:1nbbP3:ZvlVXD7eyv3Qk_7EDOhufYm2PS-3YtovQgZdhgIT49I
+Traceback (most recent call last):
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/views/generic/base.py", line 69, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/views/generic/base.py", line 101, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/aish/Sem1/SS_Project/SHS_Grp14/Patients/views.py", line 455, in get
+    'record':record,
+UnboundLocalError: local variable 'record' referenced before assignment
+ERROR "GET /patient/viewRecords/IjMi:1nbbP3:ZvlVXD7eyv3Qk_7EDOhufYm2PS-3YtovQgZdhgIT49I HTTP/1.1" 500 74079
+ERROR Internal Server Error: /patient/requestLabTests/IjMi:1nbbP3:ZvlVXD7eyv3Qk_7EDOhufYm2PS-3YtovQgZdhgIT49I
+Traceback (most recent call last):
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/views/generic/base.py", line 69, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/views/generic/base.py", line 101, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/aish/Sem1/SS_Project/SHS_Grp14/Patients/views.py", line 402, in get
+    'testRequestRecord':testRequestRecord,
+UnboundLocalError: local variable 'testRequestRecord' referenced before assignment
+ERROR "GET /patient/requestLabTests/IjMi:1nbbP3:ZvlVXD7eyv3Qk_7EDOhufYm2PS-3YtovQgZdhgIT49I HTTP/1.1" 500 73892
+INFO /Users/aish/Sem1/SS_Project/SHS_Grp14/Patients/views.py changed, reloading.
+INFO Watching for file changes with StatReloader
+ERROR Internal Server Error: /patient/requestLabTests/IjMi:1nbbP3:ZvlVXD7eyv3Qk_7EDOhufYm2PS-3YtovQgZdhgIT49I
+Traceback (most recent call last):
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/views/generic/base.py", line 69, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/views/generic/base.py", line 101, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/aish/Sem1/SS_Project/SHS_Grp14/Patients/views.py", line 402, in get
+    'testRequestRecord':testRequestRecord,
+UnboundLocalError: local variable 'testRequestRecord' referenced before assignment
+ERROR "GET /patient/requestLabTests/IjMi:1nbbP3:ZvlVXD7eyv3Qk_7EDOhufYm2PS-3YtovQgZdhgIT49I HTTP/1.1" 500 73846
+ERROR Internal Server Error: /patient/requestLabTests/IjMi:1nbbP3:ZvlVXD7eyv3Qk_7EDOhufYm2PS-3YtovQgZdhgIT49I
+Traceback (most recent call last):
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/views/generic/base.py", line 69, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/views/generic/base.py", line 101, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/aish/Sem1/SS_Project/SHS_Grp14/Patients/views.py", line 402, in get
+    'testRequestRecord':testRequestRecord,
+UnboundLocalError: local variable 'testRequestRecord' referenced before assignment
+ERROR "GET /patient/requestLabTests/IjMi:1nbbP3:ZvlVXD7eyv3Qk_7EDOhufYm2PS-3YtovQgZdhgIT49I HTTP/1.1" 500 73892
+ERROR Internal Server Error: /patient/viewRecords/IjMi:1nbbP3:ZvlVXD7eyv3Qk_7EDOhufYm2PS-3YtovQgZdhgIT49I
+Traceback (most recent call last):
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/views/generic/base.py", line 69, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/views/generic/base.py", line 101, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/aish/Sem1/SS_Project/SHS_Grp14/Patients/views.py", line 456, in get
+    'record':record,
+UnboundLocalError: local variable 'record' referenced before assignment
+ERROR "GET /patient/viewRecords/IjMi:1nbbP3:ZvlVXD7eyv3Qk_7EDOhufYm2PS-3YtovQgZdhgIT49I HTTP/1.1" 500 74079
+INFO /Users/aish/Sem1/SS_Project/SHS_Grp14/Patients/views.py changed, reloading.
+INFO Watching for file changes with StatReloader
+INFO "GET /patient/insuranceClaimRequest/3/ HTTP/1.1" 200 10500
+ERROR Internal Server Error: /patient/viewRecords/IjMi:1nbbQ9:693ugUwvmUPzuhb2OMiXiygkgbihwc4ekywBbRfruoI
+Traceback (most recent call last):
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/views/generic/base.py", line 69, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/views/generic/base.py", line 101, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/aish/Sem1/SS_Project/SHS_Grp14/Patients/views.py", line 457, in get
+    'record':record,
+UnboundLocalError: local variable 'record' referenced before assignment
+ERROR "GET /patient/viewRecords/IjMi:1nbbQ9:693ugUwvmUPzuhb2OMiXiygkgbihwc4ekywBbRfruoI HTTP/1.1" 500 74079
+INFO /Users/aish/Sem1/SS_Project/SHS_Grp14/Patients/views.py changed, reloading.
+INFO Watching for file changes with StatReloader
+INFO /Users/aish/Sem1/SS_Project/SHS_Grp14/Patients/views.py changed, reloading.
+INFO Watching for file changes with StatReloader
+ERROR Internal Server Error: /patient/viewRecords/IjMi:1nbbQ9:693ugUwvmUPzuhb2OMiXiygkgbihwc4ekywBbRfruoI
+Traceback (most recent call last):
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/core/handlers/exception.py", line 47, in inner
+    response = get_response(request)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/core/handlers/base.py", line 181, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/views/generic/base.py", line 69, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Users/aish/Library/Python/3.8/lib/python/site-packages/django/views/generic/base.py", line 101, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/Users/aish/Sem1/SS_Project/SHS_Grp14/Patients/views.py", line 458, in get
+    'record':record,
+UnboundLocalError: local variable 'record' referenced before assignment
+ERROR "GET /patient/viewRecords/IjMi:1nbbQ9:693ugUwvmUPzuhb2OMiXiygkgbihwc4ekywBbRfruoI HTTP/1.1" 500 74079
+INFO "GET /patient/logout/IjMi:1nbbQ9:693ugUwvmUPzuhb2OMiXiygkgbihwc4ekywBbRfruoI HTTP/1.1" 302 0
+INFO "GET /Login HTTP/1.1" 200 2168
+INFO "POST /Login HTTP/1.1" 302 0
+INFO "GET /patient/home/Mw:1nbbQh:7r1wNPW6CwkEB4kJwUo2TEsUQOWAI2ymAxzVaFRgJTA HTTP/1.1" 200 11560
+INFO "GET /patient/viewRecords/Mw:1nbbQh:7r1wNPW6CwkEB4kJwUo2TEsUQOWAI2ymAxzVaFRgJTA HTTP/1.1" 200 8361
+INFO "GET /patient/logout/Mw:1nbbQm:I4-F7uvcMAxCjRFOzBVVog2UrXdUliXkWWVCbZvngpU HTTP/1.1" 302 0
+INFO "GET /Login HTTP/1.1" 200 2168
+INFO /Users/aish/Sem1/SS_Project/SHS_Grp14/Patients/views.py changed, reloading.
+INFO Watching for file changes with StatReloader
+INFO /Users/aish/Sem1/SS_Project/SHS_Grp14/Patients/views.py changed, reloading.
+INFO Watching for file changes with StatReloader
+INFO "GET /patient/home/Mw:1nbbQm:I4-F7uvcMAxCjRFOzBVVog2UrXdUliXkWWVCbZvngpU HTTP/1.1" 302 0
+INFO "GET /Login HTTP/1.1" 200 2168
+INFO "POST /Login HTTP/1.1" 302 0
+INFO "GET /patient/home/Mw:1nbbRr:HosLc5VSDJFrTtezEDkzuF8DKqNKqK9au82iVLY6vbg HTTP/1.1" 200 11560
+INFO "GET /patient/home/Mw:1nbbRr:HosLc5VSDJFrTtezEDkzuF8DKqNKqK9au82iVLY6vbg HTTP/1.1" 200 11560
+INFO "GET /patient/bookAppointment/Mw:1nbbRu:0NshOt2QFDUsm6vO1nAqhHTTmtGROfW-KCM3MnT_bhA HTTP/1.1" 200 10464
+INFO "GET /patient/requestLabTests/Mw:1nbbRu:0NshOt2QFDUsm6vO1nAqhHTTmtGROfW-KCM3MnT_bhA HTTP/1.1" 200 9456
+WARNING Not Found: /patient/patientPayment/3
+WARNING "GET /patient/patientPayment/3 HTTP/1.1" 404 6809
