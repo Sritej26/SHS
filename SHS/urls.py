@@ -20,7 +20,6 @@ from Doctors import urls
 
 urlpatterns = [
     path('', include('Hospitalportal.urls')),
-    path('home/', include('HomePage.urls')),
     path('adminSHS/', include('AdminSHS.urls', namespace='adminSHS')),
     path('admin/', admin.site.urls),
     path('patient/',include('Patients.urls')),

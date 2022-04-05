@@ -54,7 +54,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'Patients',
     'HospitalStaff',
-    'HomePage',
     'Hospitalportal',
     'AdminSHS',
     'InsuranceStaff',
