@@ -5,8 +5,8 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib import messages
 from sklearn.datasets import load_files
-from Admin.forms import createEmployeeForm
-from Admin.models import EmployeeDetails
+from AdminSHS.forms import createEmployeeForm
+from AdminSHS.models import EmployeeDetails
 import logging
 import os
 from django.views.static import serve
@@ -25,6 +25,8 @@ from django.utils.encoding import force_bytes,force_str,force_str,DjangoUnicodeD
 from django.core.mail import EmailMessage
 from django.conf import settings
 import threading
+import string
+import random
 
 from Patients.models import PatientDetails
 
@@ -59,7 +61,7 @@ def send_action_email(user, request):
 class adminHome(View):
     def get(self, request):
         return render(request, 'adminHome.html', {
-            'user': 'Admin'
+            'user': 'AdminSHS'
         })
 
 class showLogFiles(View):
@@ -69,7 +71,7 @@ class showLogFiles(View):
             with open(os.path.join('/Users/harshilgandhi/Documents/CSE545/SHS_Grp14/logs', filename), 'r') as file:
                 log_files.append(filename)
         return render(request, 'showLogFiles.html', {
-            'user': 'Admin',
+            'user': 'AdminSHS',
             'log_files': log_files
         })
     def post(self, request):
@@ -86,7 +88,7 @@ class viewEmployeeRecords(View):
     def get(self, request):
         employeeDetails = EmployeeDetails.objects.all()
         return render(request, 'viewEmployeeRecords.html', {
-            'user': 'Admin',
+            'user': 'AdminSHS',
             'createEmployeeForm': createEmployeeForm,
             'employeeDetails': employeeDetails
         })
@@ -95,7 +97,7 @@ class createEmployeeRecords(View):
     def get(self, request):
         employeeDetails = EmployeeDetails.objects.all()
         return render(request, 'createEmployeeRecords.html', {
-            'user': 'Admin',
+            'user': 'AdminSHS',
             'createEmployeeForm': createEmployeeForm,
             'employeeDetails': employeeDetails
         })
@@ -108,20 +110,21 @@ class createEmployeeRecords(View):
                 employee_last_name = form.cleaned_data.get('employee_last_name')
                 employee_dept = form.cleaned_data.get('employee_dept')
                 employee_email = form.cleaned_data.get('employee_email')
-                Userobj = User.objects.create_user(username=employee_first_name, password = '12345678', email = employee_email)
-                Userobj.save()
-                send_mail(subject = 'Login credentials', message = 'Username: ' +  employee_first_name + ' Password: 12345678', from_email='admin@gmail.com', recipient_list=[employee_email])  
-                print("going to save")
-                send_action_email(Userobj,request)
-                messages.info(request,'Please check your email to verify the account')
-                EmployeeObj = EmployeeDetails(employee_first_name = employee_first_name, employee_last_name = employee_last_name, employee_email = employee_email, employee_dept = employee_dept)
-                HospitalPortalObj = HospitalPortal(Role = employee_dept, username = employee_first_name, session = 'N')
-                EmployeeObj.save()
-                HospitalPortalObj.save()
-                if employee_dept == 'Doctor':
-                    DoctorObj = DoctorDetails(doctor_name = employee_first_name + ' ' + employee_last_name, doctor_spec = 'Physician', slot = 15)
-                    DoctorObj.save()
-                msgS = "Added Successfully"
+                if User.objects.filter(email = employee_email).exists():
+                    msgE = 'Email already exists. Try another email'
+                else:
+                    password = ''.join(random.choices(string.ascii_uppercase + string.digits, k = 10))
+                    Userobj = User.objects.create_user(username=employee_first_name, password = password, email = employee_email)
+                    Userobj.save()
+                    send_mail(subject = 'Login credentials', message = 'Username: ' +  employee_first_name + ' Password: ' + password, from_email='admin@gmail.com', recipient_list=[employee_email])  
+                    send_action_email(Userobj,request)
+                    messages.info(request,'Please check your email to verify the account')
+                    EmployeeObj = EmployeeDetails(employee_first_name = employee_first_name, employee_last_name = employee_last_name, employee_email = employee_email, employee_dept = employee_dept)
+                    EmployeeObj.save()
+                    if employee_dept == 'Doctor':
+                        DoctorObj = DoctorDetails(doctor_name = employee_first_name + ' ' + employee_last_name, doctor_spec = 'Physician', slot = 15)
+                        DoctorObj.save()
+                    msgS = "Added Successfully"
             else:
                 msgE = "Mention Name of the Application Type"
         except:
@@ -130,13 +133,13 @@ class createEmployeeRecords(View):
             messages.add_message(request, messages.SUCCESS if msgS else messages.ERROR,
                                     (msgS if not msgS == '' else msgE),
                                     extra_tags='callout callout-success calloutCustom lead' if msgS else 'callout callout-danger calloutCustom lead')
-            return redirect('/admin/createEmployeeRecords.html')
+            return redirect('/adminSHS/createEmployeeRecords.html')
 
 class editEmployeeRecords(View):
     def get(self, request):
         employeeDetails = EmployeeDetails.objects.all()
         return render(request, 'editEmployeeRecords.html', {
-            'user': 'Admin',
+            'user': 'AdminSHS',
             'createEmployeeForm': createEmployeeForm,
             'employeeDetails': employeeDetails
         })
@@ -164,7 +167,7 @@ class editEmployeeRecords(View):
             messages.add_message(request, messages.SUCCESS if msgS else messages.ERROR,
                                     (msgS if not msgS == '' else msgE),
                                     extra_tags='callout callout-success calloutCustom lead' if msgS else 'callout callout-danger calloutCustom lead')
-            return redirect('/admin/editEmployeeRecords.html')
+            return redirect('/adminSHS/editEmployeeRecords.html')
 
 class updateEmployeeDetails(View):
     def get(self, request, id):
@@ -202,18 +205,20 @@ class updateEmployeeDetails(View):
             print(detail1.employee_id)
             employeeDetails = EmployeeDetails.objects.all()
             print(employeeDetails)
-            return redirect('/admin/editEmployeeRecords.html')
+            return redirect('/adminSHS/editEmployeeRecords.html')
 
 class deleteEmployeeRecord(View):
     def get(self, request, id):
         try:
-            details = EmployeeDetails.objects.get(employee_id=id)
-            details.delete()
+            employee = EmployeeDetails.objects.get(employee_id=id)
+            user = User.objects.get(id=id)
+            employee.delete()
+            user.delete()
             logger.info('Record deleted')
         except:
             print('Error')
         finally:
-            return redirect('/admin/editEmployeeRecords.html')
+            return redirect('/adminSHS/editEmployeeRecords.html')
     
     def post(self, request):
         pass
@@ -238,7 +243,7 @@ class appointmentTransactionRequests(View):
         except:
             print('Error')
         finally:
-            return redirect('/admin/appointmentTransactionRequests.html')
+            return redirect('/adminSHS/appointmentTransactionRequests.html')
     
 class insuranceTransactionRequests(View):
     def get(self, request):
@@ -264,7 +269,7 @@ class insuranceTransactionRequests(View):
         except:
             print('Error')
         finally:
-            return redirect('/admin/insuranceTransactionRequests.html') 
+            return redirect('/adminSHS/insuranceTransactionRequests.html') 
 
 class showInternalFiles(View):
     def get(self, request):

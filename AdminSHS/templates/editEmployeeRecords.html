@@ -57,7 +57,7 @@
                             <td width="10%">{{employee.employee_dept}}</td>
                             <td width="5%">
                                 <div style="display: flex;">
-                                    <a href="/admin/updateEmployeeDetails/{{employee.employee_id}}">
+                                    <a href="/adminSHS/updateEmployeeDetails/{{employee.employee_id}}">
                                             <button class="btn btn-info btn-xs" data-title="Update" data-toggle="modal"
                                                 data-target="#edit"><span
                                                     class="glyphicon glyphicon-pencil"></span></button>
@@ -81,7 +81,7 @@
                                           //document.getElementById("demo").innerHTML = text;
                                         }
                                     </script> -->        
-                                    <a href="/admin/updateEmployeeDetails/delete/{{employee.employee_id}}">
+                                    <a href="/adminSHS/updateEmployeeDetails/delete/{{employee.employee_id}}">
                                         <p data-placement="top" data-toggle="tooltip" title="Delete">
                                             {% csrf_token %}
                                             <button class="btn btn-info btn-xs" data-title="Update" data-toggle="modal"

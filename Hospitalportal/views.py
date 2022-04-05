@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 from django.views import View
+from AdminSHS.models import EmployeeDetails
 from HospitalStaff.models import AppointmentDetails
 from InsuranceStaff.models import InsuranceClaimDetails
 from LabStaff.models import LabReports
@@ -87,8 +88,8 @@ class Login(View):
                         id = signing.dumps(id)
                         return HttpResponseRedirect(reverse('patient:patientHome', args=[id]))
 
-                    elif test.Role == 'Admin':
-                        return redirect("/admin/",{'name':user})
+                    elif test.Role == 'AdminSHS':
+                        return redirect("/adminSHS/",{'name':user})
                     elif test.Role == 'Labstaff':
                         return redirect("/labStaff/",{'name':user})
                     elif test.Role == 'Doctor':
@@ -161,7 +162,9 @@ def activate_user(request, uidb64, token):
     if user and generate_token.check_token(user, token):
         user.is_email_verified = True
         user.save()
-
+        EmployeeObject = EmployeeDetails.objects.get(employee_email = user.email)
+        HospitalPortalObj = HospitalPortal(Role = EmployeeObject.employee_dept, username = EmployeeObject.employee_first_name, session = 'N')
+        HospitalPortalObj.save()
         messages.add_message(request, messages.SUCCESS,
                              'Email verified, you can now login')
         return redirect(reverse('Login'))

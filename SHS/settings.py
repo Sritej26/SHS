@@ -8,6 +8,9 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
+
+Website address
+https://hospitalshs.azurewebsites.net
 """
 
 from pathlib import Path
@@ -29,6 +32,7 @@ SECRET_KEY = 'django-insecure-q2pve$0b_vzd7@elnx=0l7@%t(l$y7)u#p&nyip@%lv#x_na!r
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
+# ALLOWED_HOSTS = ['hospitalshs.azurewebsites.net']
 
 MESSAGE_TAGS = {
     messages.DEBUG: 'alert-info',
@@ -52,7 +56,7 @@ INSTALLED_APPS = [
     'HospitalStaff',
     'HomePage',
     'Hospitalportal',
-    'Admin',
+    'AdminSHS',
     'InsuranceStaff',
     'LabStaff',
     'Doctors',
@@ -61,6 +65,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    # 'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -141,6 +146,8 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'assets')
+# STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+# STATIC_ROOT = BASE_DIR / "staticfiles"
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_FROM_USER = 'SSTESTSHS@gmail.com'
