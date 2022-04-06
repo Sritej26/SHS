@@ -131,5 +131,57 @@ class newInsurancePolicyForm(forms.Form):
                                             'class': 'form-control',
                                             'placeholder': ('Max Claim amount')
                                         }))
-  
+    
+class editForm(forms.Form):
+    
+    patient_name = forms.CharField(label='patient_name', required=True,
+                                widget=forms.TextInput(attrs=
+                                {
+                                    'required': True,
+                                    'class': 'form-control',
+                                    'placeholder': ('Patient Name')
+                                }))
+    patient_age = forms.IntegerField(label='patient_age', required=True,
+                                widget=forms.NumberInput(attrs=
+                                {
+                                    'required': True,
+                                    'class': 'form-control',
+                                    'placeholder': ('Patient Age')
+                                }))
+    patient_weight = forms.IntegerField(label='patient_weight', required=True,
+                                widget=forms.NumberInput(attrs=
+                                {
+                                    'required': True,
+                                    'class': 'form-control',
+                                    'placeholder': ('Patient Weight')
+                                }))
+    patient_height = forms.IntegerField(label='patient_height', required=True,
+                                widget=forms.NumberInput(attrs=
+                                {
+                                    'required': True,
+                                    'class': 'form-control',
+                                    'placeholder': ('Patient Height')
+                                }))
+    patient_address = forms.CharField(label='patient_address.**', required=True,
+                                widget=forms.TextInput(attrs=
+                                {
+                                    'required': True,
+                                    'class': 'form-control',
+                                    'placeholder': ('Address')
+                                }))
+    patient_phone_no = forms.IntegerField(label='patient_phone_no', required=True,
+                                widget=forms.NumberInput(attrs=
+                                {
+                                    'required': True,
+                                    'class': 'form-control',
+                                    'placeholder': ('Patient Phone Number')
+                                }))
+    patient_email=forms.EmailField(max_length=50,required=False,label="Patient_Email",
+                                    widget=forms.EmailInput(attrs=
+                                    {
+                                    'required': False,
+                                    'class': 'form-control',
+                                    'placeholder': ('Patient Email')
+                                } ))
+
     

@@ -1,0 +1,30 @@
+{% include 'navbar1.html' %}
+
+<div class="content-wrapper">
+    <section class="content">
+        <div class="container-fluid">
+            {% include 'messages.html' %}
+            <h3 style="color: cadetblue;">Create patient Record</h3>
+            <fieldset>
+                {% csrf_token %}
+                <div class="tab-content">  
+                <form method="POST" role="form" id="form-client-info">
+                    {%csrf_token%}
+                    {%for field in patientDetailsForm%}
+                    {{ field.label_tag }} {{ field }}</br>
+                    {%endfor%}
+                    <button type="submit" class="btn btn-warning">Save</button>
+                </form>
+                </div>
+                <script>
+                    setTimeout(function(){
+                      if ($('#msg').length > 0) {
+                        $('#msg').remove();
+                      }
+                    }, 2000)
+                </script> 
+            </fieldset>
+           
+        </div>
+    </section>
+</div>

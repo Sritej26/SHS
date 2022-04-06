@@ -1,0 +1,67 @@
+{% include 'navbar1.html' %}
+
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+
+</head>
+
+<div class="content-wrapper">
+    {% include 'messages.html' %}
+    <script>
+        setTimeout(function(){
+          if ($('#msg').length > 0) {
+            $('#msg').remove();
+          }
+        }, 2000)
+    </script> 
+    <section class="content">
+        <div class="container-fluid">
+            
+            <div class="tab-content">
+                <h4>Enter Appointment Id:</h4>
+                <form action="search" method="get" class="d-flex">
+                    <input name="query" type="text" placeholder="Search...">
+                    <button class="btn btn-outline-success" type="submit">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </form>
+                {% if not mainflag and not flag1 %}
+                    
+                    
+                    <h3>Patient Details</h3>        
+                    <table  class="table table-striped table-bordered compact" cellspacing="0" style="width:100%">
+                    <tbody>
+                        {% for p in patientdetail %}
+                    <tr height="8%">
+                        <td colspan="2">
+                        <b><h4>{{p.first_name}} {{p.last_name}}</h4></b>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="5%" height="10%">Diagnosis</td>
+                        <td width="5%" height="10%">{{p.patient_diagnosis}}</td>
+                    
+                    </tr>
+                    <tr>
+                        <td width="5%"height="5%">Prescription</td>
+                        <td width="5%"height="5%">{{p.prescription}}</td>
+
+                    </tr>
+                    <tr>
+                        <td width="5%"height="5%">Lab tests</td>
+                        <td width="5%"height="5%">{{p.lab_tests}}</td>
+
+                    </tr>
+                {%endfor%}
+                    </tbody>
+                    </table>
+                {%endif%}
+
+            </div>
+        </div>
+    </section>
+</div>
+                                            

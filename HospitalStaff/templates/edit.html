@@ -1,0 +1,30 @@
+{% include 'navbar1.html' %}
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+
+</head>
+<div class="content-wrapper">
+    {% include 'messages.html' %}
+    <script>
+        setTimeout(function(){
+          if ($('#msg').length > 0) {
+            $('#msg').remove();
+          }
+        }, 2000)
+    </script> 
+    <div class="tab-content">
+        
+            <h3> Update Patient Details</h3></br>
+            <form method="POST" role="form" id="form-client-info">
+                {%csrf_token%}
+                {%for a in details%}
+                {{ a.label_tag }} {{ a }}</br>
+                {%endfor%}
+                <button type="submit" class="btn btn-warning">Update</button>
+            </form>
+        
+    </div>
+</div>

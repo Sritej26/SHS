@@ -31,6 +31,7 @@ from sklearn import preprocessing
 #import pandas as pd
 from django.core.mail import send_mail
 from HospitalStaff.helper import mask,unmask
+import re
 
 now = datetime.now()
 logging.basicConfig(filename="userstatus.log",
@@ -40,7 +41,13 @@ logger = logging.getLogger()
 
 logger.setLevel(logging.INFO)
 User = get_user_model()
-
+regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'   
+def check(email):   
+  
+    if(re.search(regex,email)):   
+        return True   
+    else:   
+        return False
 
 
 my_model = pickle.load(open('maliciousLogin_model.pkl', 'rb'))
@@ -169,9 +176,21 @@ class Registercheck(View):
             patient_card_details = form.cleaned_data.get('patient_card_details')
             password = form.cleaned_data.get('User_password')
             passwordcheck = form.cleaned_data.get('passwordcheck')
+            if not (form.cleaned_data.get('patient_name')):
+                 messages.info(request,'username mandatory')
+                 return render(request,'register.html')
+            if not (form.cleaned_data.get('patient_address')):
+                 messages.info(request,'Address mandatory')
+                 return render(request,'register.html')
+            if not (form.cleaned_data.get('User_password')):
+                 messages.info(request,'password mandatory')
+                 return render(request,'register.html')
             if password == passwordcheck:
                 if User.objects.filter(username=patient_name).exists():
                     messages.info(request,'USER NAME ALREADY EXISTS')
+                    return render(request,'register.html')
+                if not check(patient_email):
+                    messages.info(request,'EMAIL NOT VALID')
                     return render(request,'register.html')
                 if User.objects.filter(email=str(patient_email)).exists():
                     messages.info(request,'EMAIL ALREADY EXISTS')
@@ -183,7 +202,7 @@ class Registercheck(View):
                 HospitalPortalobj = HospitalPortal(username=patient_name,Role= 'Patient',session='N')
                 HospitalPortalobj.save()
                 send_action_email(Userobj,request)
-                messages.info(request,'Please check your email to verify the account')
+                messages.info(request,'Please check your inbox to verify the account')
                 return redirect("/Login")
             else:
                 messages.info(request,'PASSWORD DIDNT MATCH')

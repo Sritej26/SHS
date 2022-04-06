@@ -25,5 +25,6 @@ urlpatterns = [
     path('patient/',include('Patients.urls')),
     path('labStaff/', include('LabStaff.urls')),
     path('doctors/', include('Doctors.urls', namespace='doctors')),
-    path('insurance/', include('InsuranceStaff.urls', namespace='insuranceStaff'))
+    path('insurance/', include('InsuranceStaff.urls', namespace='insuranceStaff')),
+    path('hospitalStaff/',include('HospitalStaff.urls', namespace='hospitalStaff')),
 ]

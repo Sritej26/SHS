@@ -1,5 +1,5 @@
-{% load static %}
-{% include 'navbardoctors.html' %}
+
+{% include 'navbar1.html' %}
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -16,12 +16,12 @@
             <!-- small box -->
             <div class="small-box bg-info">
               <div class="inner">
-                <p>View Patient Records</p>
+                <p>Create Patient Record</p>
               </div>
               <div class="icon">
                 <i class="fas fa-stethoscope"></i>
               </div>
-              <a href="/doctors/patientRecords" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="/hospitalStaff/createRecord" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -29,12 +29,14 @@
             <!-- small box -->
             <div class="small-box bg-success">
               <div class="inner">
-                <p>View Diagnosis</p>
+                <h3>{{appointments_count}}</h3>
+
+                <p>Approve Appointment</p>
               </div>
               <div class="icon">
                 <i class="ion ion-stats-bars"></i>
               </div>
-              <a href="/doctors/diagnosis" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="/hospitalStaff/approveAppointment" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
@@ -42,97 +44,71 @@
             <!-- small box -->
             <div class="small-box bg-warning">
               <div class="inner">
+                
 
-                <p> View Lab Reports</p>
+                <p> View Details</p>
               </div>
               <div class="icon">
                 <i class="fas fa-heartbeat"></i>
               </div>
-              <a href="/doctors/viewLabReports" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+              <a href="/hospitalStaff/viewDetails1" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-danger">
+              <div class="inner">
+                <h3>{{update_req_count}}</h3>
+
+                <p> Update Personal Info</p>
+              </div>
+              <div class="icon">
+                <i class="fas fa-plus-square"></i>
+              </div>
+              <a href="/hospitalStaff/updatepersonalinfo" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
           <!-- ./col -->
         </div>
         <!-- /.row -->
         <!-- Main row -->
         <div class="row">
           <!-- Left col -->
-          <section class="col-lg-9 connectedSortable">
-            <!-- Custom tabs (Charts with tabs)-->
+          <!-- <section class="col-lg-9 connectedSortable">
+            
             <div class="card bg-gradient-light">
                 <div class="card-header border-0">
   
                   <h3 class="card-title">
                     <i class="far fa-calendar-alt"></i>
-                   Today Appointments
+                    General Appointment Availability
                   </h3>
-                  <!-- tools card -->
+                  
                   <div class="card-tools">
-                    <!-- button with a dropdown -->
-                    <form action="searchAppointments" method="get" class="d-flex">
-                        <label for="start">Select date:</label>
-                        <input type="date" name="start" value={{date}} min="2018-01-01" max="2022-12-31">
-                        <button class="btn btn-outline-success" type="submit">
-                            <i class="fa fa-search"></i>
-                        </button>
-                    </form>
+                    
+                   
+                    <button type="button" class="btn btn-success btn-sm" data-card-widget="collapse">
+                      <i class="fas fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-success btn-sm" data-card-widget="remove">
+                      <i class="fas fa-times"></i>
+                    </button>
                   </div>
-                  <!-- /. tools -->
+                  
                 </div>
-                <!-- /.card-header -->
-            
                
-                  <!--The calendar -->
-                    <table id="data" class="table table-striped table-bordered compact" cellspacing="0" style="width:100%">
-                        <thead>
-                        <tr>
-                            <th>Patient ID</th>
-                            <th>appointment_id</th>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>Requested Date</th>
-                            <th>Status</th>
-                            <th>Add Diagnosis</th>
-                            <th>Add Prescription</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {%for a in appDetails%}
-                        <tr>
-                            <td width="5%">{{a.patient_id}}</td>
-                            <td width="2%">{{a.appointment_id}}</td>
-                            <td width="10%">{{a.first_name}}</td>
-                            <td width="10%">{{a.last_name}}</td>
-                            <td width="5%">{{a.requested_date}}</td>
-                            <td width="10%">{{a.status}}</td>  
-                            <td width="5%">
-                                <a href="/doctors/addDiagnosis/{{a.appointment_id}}">
-                                <button class="btn btn-outline-success" type="submit">
-                                    <i class="fa fa-plus" aria-hidden="true"></i>
-                                </button>
-                                </a>
-                            </td>
-                            <td width="5%">
-                                <a href="/doctors/addPrescription/{{a.appointment_id}}">
-                                    <button class="btn btn-outline-success" type="submit">
-                                        <i class="fa fa-plus" aria-hidden="true"></i>
-                                    </button>
-                                    </a>
-                            </td>
-                        </tr>
-                        {%endfor%}
-                        </tbody>
-                    </table>
-        
-                    <p> </p>
-                <!-- /.card-body -->
+                <div class="card-body pt-0">
+                  
+                  <div id="calendar" style="width: 100%"></div>
+                </div>
+                
             </div>
-            <!-- /.card -->
+            
 
            
            
-          </section>
+          </section> -->
           <!-- /.Left col -->
           <!-- right col (We are only adding the ID to make the widgets sortable)-->
           <section class="col-lg-3 connectedSortable">

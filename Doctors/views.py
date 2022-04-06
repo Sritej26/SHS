@@ -37,8 +37,8 @@ def logout_user(request,user):
     # name = signing.loads(user)
     logout(request)
     print("Loggedout")
-    username = EmployeeDetails.objects.get(employee_first_name=user)
-    test = HospitalPortal.objects.get(username = username.employee_first_name)
+    username = EmployeeDetails.objects.get(employee_username=user)
+    test = HospitalPortal.objects.get(username = username.employee_username)
     test.session='N'
     test.save()
     # now = datetime.now()
@@ -50,8 +50,10 @@ class doctorHome(View):
     def get(self,request,user):
         global doctorName
         doctorName = user
-        doctormap = DoctorDetails.objects.get(doctor_name=user)
+        print("called doctor again")
+        doctormap = DoctorDetails.objects.get(doctor_username=user)
         doctorId = doctormap.doctor_id
+        print(doctorId)
         appDetails = AppointmentDetails.objects.filter(requested_date = datetime.date.today(), status = "Confirmed", doctor_id = doctorId)
         print(appDetails)
         print(datetime.date.today())
@@ -67,7 +69,7 @@ class addPrescription(View):
         try:
             print("Entered Try")
             details = AppointmentDetails.objects.filter(appointment_id=id)
-            prescriptionDetails = models.prescriptions.objects.filter(appointment_id = id)
+            prescriptionDetails = prescriptions.objects.filter(appointment_id = id)
             details1 = {}
             print(details)
         finally:
@@ -131,7 +133,7 @@ class addPrescription(View):
             #return redirect('/doctors/patientRecords/search/', args=[detail1.patient_id])
             details = AppointmentDetails.objects.filter(appointment_id=id)
             details1 = {}
-            prescriptionDetails = models.prescriptions.objects.filter(appointment_id = detail1.appointment_id)
+            prescriptionDetails = prescriptions.objects.filter(appointment_id = detail1.appointment_id)
             return render(request, 'addPrescription.html',{"patientdetails" : details, 'patientPrescriptionForm': patientPrescriptionForm(details1),'prescriptionDetails': prescriptionDetails})
 
 class viewLabReports(View):
@@ -328,8 +330,14 @@ def searchDiagnosis(request):
 def searchAppointments(request):
     if request.method == 'GET':
         print(request)
+        print("Entered search")
+        doctormap = DoctorDetails.objects.get(doctor_username=doctorName)
+        print("Docto mao")
+        print(doctormap)
+        doctorId = doctormap.doctor_id
+        print(doctorId)
         start = request.GET.get('start')
-        appDetails = AppointmentDetails.objects.filter(requested_date = start)
+        appDetails = AppointmentDetails.objects.filter(requested_date = start, status = "Confirmed", doctor_id = doctorId)
         date = start
         return render(request,'doctorHome.html',{
             'user':doctorName,
