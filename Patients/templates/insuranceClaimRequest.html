@@ -1,4 +1,5 @@
 {% include 'navbar.html' %}
+{% load encrypt%}
 
 <head>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -77,8 +78,8 @@
                         </tbody>
                         </table>
                        
-                            
-                            <a href="/patient/registerPolicy/{{a.policy_id}}">
+                       
+                            <a href="/patient/registerPolicy/{{k|patient_id_encrypt_tag:a.policy_id}}/{{k|patient_id_encrypt_tag:id}}">
                             <p data-placement="top" data-toggle="tooltip" title="Update">
                                 <button class="btn btn-info btn-xs" data-title="Update" data-toggle="modal"
                                         data-target="#edit">Register</button>
@@ -130,7 +131,7 @@
                             
                             <td width="5%">
                                 {%if a.claim_status == 'Pending'%}
-                                <a href="/patient/updateInsuranceClaimRequest/{{a.patient_id}}">
+                                <a href="/patient/updateInsuranceClaimRequest/{{a.claim_id}}/{{a.patient_id}}">
                                     <p data-placement="top" data-toggle="tooltip" title="Update">
                                         <button class="btn btn-info btn-xs" data-title="Update" data-toggle="modal"
                                                 data-target="#edit"><span class="glyphicon glyphicon-pencil"></span></button>

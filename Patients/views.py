@@ -18,6 +18,7 @@ import logging
 from datetime import datetime
 from Doctors.models import *
 from django.core import signing
+import uuid
 from HospitalStaff.helper import mask,unmask
 
 
@@ -44,12 +45,12 @@ class patientHome(View):
      def get(self,request,id):     
         id = signing.loads(id)   
         print(request.user.is_authenticated)
-        # DoctorDetails(doctor_id=1,doctor_name="Dr. Raj",doctor_spec="Cardio",slot=10).save()
+        DoctorDetails(doctor_id=1,doctor_name="Dr. Raj",doctor_spec="Cardio",slot=10).save()
         if not (request.user.is_authenticated):
             return redirect('/Login')
-          # docObj = DoctorDetails(doctor_id=3,doctor_name="Dr.Prem",doctor_spec="General Appointment",
-          #                                     slot=20)
-          # docObj.save()
+            docObj = DoctorDetails(doctor_id=3,doctor_name="Dr.Prem",doctor_spec="General Appointment",
+                                               slot=20)
+            docObj.save()
           # print(user.is_authenticated)
           # print(request.session .get('id'))
          # print(request.id)
@@ -178,6 +179,7 @@ class insuranceClaimRequest(View):
     def get(self,request,id):
         if not (request.user.is_authenticated):
             return redirect('/Login')
+        id = signing.loads(id)
         appDetails = InsuranceClaimDetails.objects.filter(patient_id=id)
         policyDetails = InsurancePolicies.objects.all()
         return render(request,'insuranceClaimRequest.html',{
@@ -193,6 +195,7 @@ class insuranceClaimRequest(View):
         msgS = ''
         try:
             form = insuranceClaimRequestForm(request.POST)
+            id = signing.loads(id)
             if form.is_valid():
                 patient_firstname = form.cleaned_data.get('patient_firstname')
                 patient_lastname = form.cleaned_data.get('patient_lastname')
@@ -212,6 +215,7 @@ class insuranceClaimRequest(View):
             msgE = "Something went Wrong"
         finally:
             print("in finally block")
+            id = signing.dumps(id)
             messages.add_message(request, messages.SUCCESS if msgS else messages.ERROR,
                                  (msgS if not msgS == '' else msgE),
                                  extra_tags='callout callout-success calloutCustom lead' if msgS else 'callout callout-danger calloutCustom lead')
@@ -219,25 +223,28 @@ class insuranceClaimRequest(View):
 
 
 class updateInsuranceClaimRequest(View):
-    def get(self, request, id):
+  
+    def get(self, request, claim_id,id):
         if not (request.user.is_authenticated):
             return redirect('/Login')
         try:
-            detail = InsuranceClaimDetails.objects.get(claim_id=id)
+            detail = InsuranceClaimDetails.objects.get(claim_id=claim_id)
             detail = {'patient_id': detail.patient_id,'patient_firstname': detail.patient_firstname,'patient_lastname': detail.patient_lastname,
                         'policy_name': detail.policy_name,'claim_amt': detail.claim_amt}
         finally:
             return render(request, 'updateInsuranceClaimRequest.html', {               
-                'insuranceClaimRequestForm': insuranceClaimRequestForm(detail),             
+                'insuranceClaimRequestForm': insuranceClaimRequestForm(detail), 
+                'id':id,    
+                'claim_id':claim_id               
             })
-    def post(self, request, id):
+    def post(self, request, claim_id,id):
         msgS=''
         try:
             # try:
             #     id = signing.loads(id)
             # except:
             #     raise Http404
-            detail = InsuranceClaimDetails.objects.get(claim_id=id)
+            detail = InsuranceClaimDetails.objects.get(claim_id=claim_id)
             # client_persons=client_person.objects.filter(client_id=id)
             detailForm = insuranceClaimRequestForm(request.POST)
             if detailForm.is_valid():
@@ -247,7 +254,7 @@ class updateInsuranceClaimRequest(View):
                 # detail.first_name = signing.loads(request.POST.get('under_ministry'))
                 detail.patient_firstname = request.POST.get('patient_firstname')
                 detail.patient_lastname = request.POST.get('patient_lastname')
-                detail.policy_name = request.POST.get('policy_name')
+                #detail.policy_name = request.POST.get('policy_name')
                 detail.claim_amt = request.POST.get('claim_amt')
                 detail.save()
             msgS="Updated Successfully"
@@ -257,8 +264,8 @@ class updateInsuranceClaimRequest(View):
             # id = signing.dumps(id)
             messages.add_message(request, messages.SUCCESS if msgS else messages.ERROR, (msgS if not msgS == '' else msgE),
                                  extra_tags='callout callout-success calloutCustom lead' if msgS else 'callout callout-danger calloutCustom lead')
-            return HttpResponseRedirect(reverse('patient:updateInsuranceClaimRequest', args=[id]))
-
+            return HttpResponseRedirect(reverse('patient:updateInsuranceClaimRequest', args=[claim_id,id]))
+ 
 
 class nextAppointment(View):
      def get(self, request, id):
@@ -298,48 +305,73 @@ class nextAppointment(View):
              return redirect('/patient/bookAppointment')
 
 class registerPolicy(View):
-    def get(self,request,id):
+    
+    def get(self,request,policy_id,id):
         if not (request.user.is_authenticated):
-            return redirect('/Login')
+                 return redirect('/Login')
+        
         appDetails = InsuranceClaimRegister.objects.all()
         policyDetails = InsurancePolicies.objects.all()
+        policy_id = signing.loads(policy_id)
+        id = signing.loads(id)
         return render(request,'registerPolicy.html',{
-            'user':'aish',
-            'registerPolicyForm': registerPolicyForm,
-            'appDetails': appDetails,
-            'policyDetails': policyDetails,
-        })
-    def post(self,request,id):
-        msgS = ''
-        try:
-            form = registerPolicyForm(request.POST)
-            if form.is_valid():
-
-                patient_firstname = form.cleaned_data.get('patient_firstname')
-                patient_lastname = form.cleaned_data.get('patient_lastname')
-                patient_age = form.cleaned_data.get('patient_age')
-                patient_address = form.cleaned_data.get('patient_address')
-                patient_phone_no = form.cleaned_data.get('patient_phone_no')
-                patient_email = form.cleaned_data.get('patient_email')
-               
-                print("going to save")
-                InsuranceClaimRegisterObj = InsuranceClaimRegister(patient_id = 1,patient_firstname=patient_firstname,patient_lastname=patient_lastname,
-                                            policy_id=id,patient_age=patient_age,patient_address=patient_address,patient_phone_no=patient_phone_no,patient_email=patient_email)
-                InsuranceClaimRegisterObj.save()
-                print("Saved")
-                msgS = "Added Successfully"
-            else:
-                msgE = "Mention Name of the Application Type"
-        except:
-            print("in except block")
-            msgE = "Something went Wrong"
-        finally:
-            print("in finally block")
-            messages.add_message(request, messages.SUCCESS if msgS else messages.ERROR, (msgS if not msgS == '' else msgE),
+             'user':'aish',
+             'registerPolicyForm': registerPolicyForm,
+             'appDetails': appDetails,
+             'policyDetails': policyDetails,
+            'id':id
+         })
+    
+    def post(self,request,policy_id,id):
+         msgS = ''
+         msgE = ''
+         form = registerPolicyForm(request.POST)  
+         policy_id = signing.loads(policy_id)   
+         id = signing.loads(id)
+           
+         request_failed = 0
+         if form.is_valid():
+             patient_firstname = form.cleaned_data.get('patient_firstname')
+             patient_lastname = form.cleaned_data.get('patient_lastname')
+             patient_age = form.cleaned_data.get('patient_age')
+             patient_address = form.cleaned_data.get('patient_address')
+             patient_phone_no = form.cleaned_data.get('patient_phone_no')
+             patient_email = form.cleaned_data.get('patient_email')
+         
+             appDetails = InsuranceClaimRegister.objects.filter(patient_id=4)
+ 
+             for i in appDetails: 
+                 if (i.patient_firstname.casefold() == patient_firstname.casefold() and 
+                     i.patient_lastname.casefold() == patient_lastname.casefold() and 
+                     i.policy_id == int(id) and i.patient_id == id):
+                     request_failed = 1
+                     msgE = "Already Registered"
+             if request_failed == 0:
+                 print("going to save")
+                 InsuranceClaimRegisterObj = InsuranceClaimRegister(patient_id = id,patient_firstname=patient_firstname,patient_lastname=patient_lastname,
+                                             policy_id=policy_id,patient_age=patient_age,patient_address=patient_address,patient_phone_no=patient_phone_no,patient_email=patient_email)
+                 InsuranceClaimRegisterObj.save()
+                 print("Saved")
+                 msgS = "Added Successfully"
+         policy_id = signing.dumps(policy_id)  
+         id = signing.dumps(id)
+        
+         messages.add_message(request, messages.SUCCESS if msgS else messages.ERROR, (msgS if not msgS == '' else msgE),
                                  extra_tags='callout callout-success calloutCustom lead' if msgS else 'callout callout-danger calloutCustom lead')
-            return HttpResponseRedirect(reverse('patient:registerPolicy', args=[id]))
-
-
+         return HttpResponseRedirect(reverse('patient:registerPolicy', args=[policy_id,id]))
+ 
+ 
+class patientPayment(View):
+    def get(self,request,id):
+          appDetails = AppointmentDetails.objects.filter(patient_id = id)
+          detail = InsuranceClaimDetails.objects.filter(patient_id = id)
+          return render(request,'patientPayment.html',{
+              'user':'aish',
+              'appDetails': appDetails,
+              'detail':detail,
+              'id':id
+          })
+   
 class declineTransaction(View):
     def get(self,request,id):
         detail = AppointmentDetails.objects.get(appointment_id=id)
@@ -349,7 +381,7 @@ class declineTransaction(View):
         print("Saved")
        
         messages.error(request, 'Transaction request has been declined')
-        return redirect('/patient/bookAppointment')
+        return HttpResponseRedirect(reverse('patient:bookAppointment', args=[detail.patient_id]))
         '''
         appDetails = AppointmentDetails.objects.all()
         return render(request,'bookAppointment.html',{
@@ -363,11 +395,13 @@ class approveTransaction(View):
     def get(self,request,id):
         detail = AppointmentDetails.objects.get(appointment_id=id)
         detail.transaction_status = 'Approved'
+        detail.transaction_id ='#C{}'.format(uuid.uuid1().time_low)
         detail.save()
         print("Saved")
        
         messages.success(request, 'Transaction request has been Approved')
-        return redirect('/patient/bookAppointment')
+        return HttpResponseRedirect(reverse('patient:bookAppointment', args=[detail.patient_id]))
+       
         '''
         appDetails = AppointmentDetails.objects.all()
         return render(request,'bookAppointment.html',{

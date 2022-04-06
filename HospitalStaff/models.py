@@ -12,5 +12,5 @@ class AppointmentDetails(models.Model):
     report_status = models.CharField(null=False, max_length=255, default="Pending")                                 # whether the lab report request is "approved" by the patient or not
     status =models.CharField(max_length=255,default="Pending")
     patient_diagnosis = models.CharField(max_length=255, default="")
-    transaction_status =models.CharField(max_length=255,default="Pending")
+    transaction_status =models.CharField(max_length=255,default="null")
     transaction_id = models.CharField(max_length=100, null=False, default="#C")

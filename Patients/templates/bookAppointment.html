@@ -66,6 +66,7 @@
                             <th>Requested Date</th>
                             <th>Status</th>
                             <th>Transaction</th>
+                            <th>Transaction_ID</th>
                             <th>Action</th>
                         </tr>
                         </thead>
@@ -97,7 +98,7 @@
                                 {%endif%} 
                             </td>   
                             
-                            
+                            <td width="10%">{{a.transaction_id}} </td>
                             <td width="5%">
                                 {%if a.status == 'Pending'%}
                                <a href="/patient/updateAppointment/{{k|patient_id_encrypt_tag:a.appointment_id}}/{{k|patient_id_encrypt_tag:id}}">
