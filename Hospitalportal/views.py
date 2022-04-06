@@ -106,10 +106,6 @@ def send_action_email(user, request):
 
 class Login(View):
     def get(self,request):
-        username = "adminHarshil"
-        admin = User(password="adminHarshil", username=username, first_name="Harshil", last_name="Gandhi", email="hgandhi6@asu.edu", is_superuser=True, is_email_verified=True)
-        if not User.objects.filter(username=username).exists():
-            admin.save()
         return render(request,'Login.html')
     def post(self,request): 
         form = Loginform(request.POST)
