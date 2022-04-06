@@ -1,4 +1,6 @@
 {% load static %}
+{% load encrypt%}
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -43,10 +45,7 @@
                     <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
-                    <a href="./index3" class="nav-link">Home</a>
-                </li>
-                <li class="nav-item d-none d-sm-inline-block">
-                    <a href="#" class="nav-link">Contact</a>
+                    <a href="/adminSHS/adminHome/{{k|patient_id_encrypt_tag:id}}" class="nav-link">Home</a>
                 </li>
             </ul>
         </nav>
@@ -66,31 +65,31 @@
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                         data-accordion="false">
                         <li class="nav-item">
-                            <a href="/adminSHS/adminHome" class="nav-link">
+                            <a href="/adminSHS/adminHome/{{k|patient_id_encrypt_tag:id}}" class="nav-link">
                                 <i class="nav-icon fas fa-home"></i>
                                 <p>Home</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="/adminSHS/createEmployeeRecords" class="nav-link">
+                            <a href="/adminSHS/createEmployeeRecords/{{k|patient_id_encrypt_tag:id}}" class="nav-link">
                                 <i class="nav-icon fas fa-tasks" aria-hidden="true"></i>
                                 <p>Employee records</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="/adminSHS/showInternalFiles" class="nav-link">
+                            <a href="/adminSHS/showInternalFiles/{{k|patient_id_encrypt_tag:id}}" class="nav-link">
                                 <i class="nav-icon fas fa-copy" aria-hidden="true"></i>
                                 <p>Internal files</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="/adminSHS/appointmentTransactionRequests" class="nav-link">
+                            <a href="/adminSHS/appointmentTransactionRequests/{{k|patient_id_encrypt_tag:id}}" class="nav-link">
                                 <i class="nav-icon fas fa-exchange-alt" aria-hidden="true"></i>
                                 <p>Transaction requests</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="/adminSHS/showLogFiles" class="nav-link">
+                            <a href="/adminSHS/showLogFiles/{{k|patient_id_encrypt_tag:id}}" class="nav-link">
                                 <i class="nav-icon fas fa-file" aria-hidden="true"></i>
                                 <p>Log files</p>
                             </a>

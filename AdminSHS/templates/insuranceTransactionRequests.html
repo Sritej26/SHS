@@ -1,4 +1,5 @@
 {% include 'adminNavbar.html' %}
+{% load encrypt%}
 
 <head>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -20,7 +21,8 @@
                 }, 2000)
             </script>
             <ul class="nav nav-tabs">
-                <li><a href="appointmentTransactionRequests.html">Appointment requests</a></li>
+                <li><a href="/adminSHS/appointmentTransactionRequests/{{k|patient_id_encrypt_tag:id}}">Appointment
+                        requests</a></li>
                 <li class="active"><a href="#insuranceTransactionRequests">Insurance requests</a></li>
             </ul>
             <br>
@@ -50,7 +52,7 @@
                                     <div class="col">
                                         <p>Patient ID: {{request.patient_id}} </p>
                                         <p>Patient name: {{request.patient_firstname}} {{request.patient_lastname}}</p>
-                                        <p>Policy name: {{request.policy_name}}  Claim amount: {{request.claim_amt}}</p> 
+                                        <p>Policy name: {{request.policy_name}} Claim amount: {{request.claim_amt}}</p>
                                         <!-- Add maximum coverage here -->
                                     </div>
                                     <div class="col text-right">
@@ -59,14 +61,14 @@
                                         </button>
                                         <br>
                                         <br>
-                                        <form method="POST" role="form" id="form-client-info"
-                                            action="{% url 'AdminSHS:insuranceTransactionRequests' %}">
-                                            {% csrf_token %}
-                                            <button type="submit" class="btn btn-outline-success btn-sm"
-                                                value={{request.claim_id}} name="approve">
+                                        <a href="/adminSHS/appointmentTransactionRequests/delete/{{k|patient_id_encrypt_tag:id}}/{{k|patient_id_encrypt_tag:request.appointment_id}}">
+                                            <button type="submit" class="btn btn-outline-success btn-sm" name="approve" value={{request.appointment_id}}>
                                                 Approve
                                             </button>
-                                        </form>
+                                            <button type="submit" class="btn btn-outline-danger btn-sm" name="deny" value={{request.appointment_id}}>
+                                                Deny
+                                            </button>
+                                        </a>
                                     </div>
                                 </div>
                             </li>
@@ -76,20 +78,6 @@
                     </div>
                 </div>
             </section>
-            <!-- <div class="tab-content">
-                <div id="create"> -->
-            <!-- <h3>Appointment Form</h3></br> -->
-            <!-- <br>
-                    <form method="POST" role="form" id="form-client-info">
-                        {%csrf_token%}
-                        {%for field in createEmployeeForm%}
-                        {{ field.label_tag }} {{ field }}</br>
-                        {%endfor%}
-                        <br>
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </form>
-                </div>
-            </div> -->
         </div>
     </section>
 </div>

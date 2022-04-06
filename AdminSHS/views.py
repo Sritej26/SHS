@@ -1,10 +1,12 @@
 from asyncio.log import logger
-from audioop import reverse
+from django.urls import reverse
 from django import conf
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib import messages
+from matplotlib import use
+from numpy import sign
 from sklearn.datasets import load_files
 from AdminSHS.forms import createEmployeeForm, editEmployeeForm
 from AdminSHS.models import EmployeeDetails
@@ -62,23 +64,32 @@ def send_action_email(user, request):
 
 # Create your views here.
 class adminHome(View):
-    def get(self, request):
+    def get(self, request, id):
+        id = signing.loads(id)
+        adminName = User.objects.get(id=id)
+        print(adminName.first_name)
         return render(request, 'adminHome.html', {
-            'user': 'AdminSHS'
+            'user': adminName.first_name,
+            'id': id
         })
 
 class showLogFiles(View):
-    def get(self, request):
+    def get(self, request, id):
+        id = signing.loads(id)
+        adminName = User.objects.get(id=id)
         log_files = []
         for filename in os.listdir('/Users/harshilgandhi/Documents/CSE545/SHS_Grp14/logs'):
             with open(os.path.join('/Users/harshilgandhi/Documents/CSE545/SHS_Grp14/logs', filename), 'r') as file:
                 log_files.append(filename)
         return render(request, 'showLogFiles.html', {
-            'user': 'AdminSHS',
-            'log_files': log_files
+            'user': adminName.first_name,
+            'log_files': log_files,
+            'id': id
         })
-    def post(self, request):
+    def post(self, request, id):
         try:
+            id = signing.loads(id)
+            print(id)
             filename = request.POST.get('filename')
             response = HttpResponse()  
             response['X-File'] = '/Users/harshilgandhi/Documents/CSE545/SHS_Grp14/logs/' + filename 
@@ -88,21 +99,27 @@ class showLogFiles(View):
             print('Cannot open file. Try again!')
 
 class viewEmployeeRecords(View):
-    def get(self, request):
+    def get(self, request, id):
         employeeDetails = EmployeeDetails.objects.all()
+        id = signing.loads(id)
+        adminName = User.objects.get(id=id)
         return render(request, 'viewEmployeeRecords.html', {
-            'user': 'AdminSHS',
+            'user': adminName.first_name,
             'createEmployeeForm': createEmployeeForm,
-            'employeeDetails': employeeDetails
+            'employeeDetails': employeeDetails,
+            'id': id
         })
 
 class createEmployeeRecords(View):
-    def get(self, request):
+    def get(self, request, id):
+        id = signing.loads(id)
+        adminName = User.objects.get(id=id)
         return render(request, 'createEmployeeRecords.html', {
-            'user': 'AdminSHS',
-            'createEmployeeForm': createEmployeeForm
+            'user': adminName.first_name,
+            'createEmployeeForm': createEmployeeForm,
+            'id': id
         })
-    def post(self, request):
+    def post(self, request, id):
         msgS = ''
         try:
             form = createEmployeeForm(request.POST)
@@ -120,7 +137,7 @@ class createEmployeeRecords(View):
                     msgE = 'Username already exists. Try another username'
                 else:
                     password = ''.join(random.choices(string.ascii_uppercase + string.digits, k = 10))
-                    Userobj = User.objects.create_user(username=employee_first_name, password = password, email = unmask(employee_email))
+                    Userobj = User.objects.create_user(username=employee_username, password = password, email = unmask(employee_email))
                     Userobj.save()
                     to_send_email = unmask(employee_email)
                     send_mail(subject = 'Login credentials', message = 'Username: ' +  employee_username + ' Password: ' + password, from_email='admin@gmail.com', recipient_list=[to_send_email])
@@ -128,56 +145,71 @@ class createEmployeeRecords(View):
                     messages.info(request,'Please check your email to verify the account')
                     EmployeeObj = EmployeeDetails(employee_first_name = employee_first_name, employee_last_name = employee_last_name, employee_username = employee_username, employee_email = employee_email, employee_dept = employee_dept)
                     EmployeeObj.save()
-                    if employee_dept == 'Doctor':
-                        DoctorObj = DoctorDetails(doctor_name = employee_first_name, doctor_spec = 'Physician', slot = 15)
-                        DoctorObj.save()
                     msgS = "Added Successfully"
             else:
                 msgE = "Mention Name of the Application Type"
         except:
             msgE = "Something went Wrong"
         finally:
+            # id = signing.dumps(id)
             messages.add_message(request, messages.SUCCESS if msgS else messages.ERROR,
                                     (msgS if not msgS == '' else msgE),
                                     extra_tags='callout callout-success calloutCustom lead' if msgS else 'callout callout-danger calloutCustom lead')
-            return redirect('/adminSHS/createEmployeeRecords.html')
-
+            # return redirect('/adminSHS/createEmployeeRecords.html')
+            return HttpResponseRedirect(reverse('AdminSHS:createEmployeeRecords', args=[id]))
+            
 class editEmployeeRecords(View):
-    def get(self, request):
+    def get(self, request, id):
         employeeDetails = EmployeeDetails.objects.all()
+        id = signing.loads(id)
+        adminName = User.objects.get(id=id)
         return render(request, 'editEmployeeRecords.html', {
-            'user': 'AdminSHS',
+            'user': adminName.first_name,
             'createEmployeeForm': createEmployeeForm,
-            'employeeDetails': employeeDetails
+            'employeeDetails': employeeDetails,
+            'id': id
         })
+
     def post(self, request):
        pass
 
 class updateEmployeeDetails(View):
-    def get(self, request, id):
+    def get(self, request, id, a_id):
         flag = 'false'
-        print('hello')
         try:
             id = signing.loads(id)
-            print("Entered try")
-            EmployeeObj = EmployeeDetails.objects.get(employee_id=id)
+            a_id = signing.loads(a_id)
+            adminName = User.objects.get(id=id)
+            EmployeeObj = EmployeeDetails.objects.get(employee_id=a_id)
             details = {'employee_id': EmployeeObj.employee_id,'employee_first_name': EmployeeObj.employee_first_name,'employee_last_name': EmployeeObj.employee_last_name, 'employee_username': EmployeeObj.employee_username, 'employee_email': unmask(EmployeeObj.employee_email), 'employee_dept': EmployeeObj.employee_dept}
         except:
             print('Error')
         finally:
-            return render(request, 'updateEmployeeRecords.html', {'details': details, 'employeeDetailsForm': editEmployeeForm(details), "flag": flag})
+            return render(request, 'updateEmployeeRecords.html', {
+                'details': details, 
+                'employeeDetailsForm': editEmployeeForm(details), 
+                'flag': flag, 
+                'id': id, 
+                'user': adminName.first_name
+            })
 
-    def post(self, request, id):
+    def post(self, request, id, a_id):
         msgS=''
         try:
             id = signing.loads(id)
-            detail1 = EmployeeDetails.objects.get(employee_id = id)
+            a_id = signing.loads(a_id)
+            detail1 = EmployeeDetails.objects.get(employee_id = a_id)
             detailForm = editEmployeeForm(request.POST)
-            print(detailForm.is_valid())
             if detailForm.is_valid():
                 detail1.employee_first_name = request.POST.get('employee_first_name')
                 detail1.employee_last_name = request.POST.get('employee_last_name')
                 detail1.employee_dept = request.POST.get('employee_dept')
+                if detail1.employee_dept == 'Doctor':
+                        DoctorObj = DoctorDetails.objects.get(doctor_username = detail1.employee_username)
+                        DoctorObj.doctor_name = detail1.employee_first_name
+                        DoctorObj.doctor_spec = 'Physician'
+                        DoctorObj.slot = 15
+                        DoctorObj.save()
                 detail1.save()
                 messages.success(request, 'Employee Details Updated Successfully!')
         except:
@@ -186,128 +218,187 @@ class updateEmployeeDetails(View):
             flag = 'true'
             id = signing.dumps(id)
             employeeDetails = EmployeeDetails.objects.all()
-            return redirect('/adminSHS/editEmployeeRecords.html')
-            # return HttpResponseRedirect(reverse('adminSHS:editEmployeeRecords', args=[id]))
+            # return redirect('/adminSHS/editEmployeeRecords.html')
+            return HttpResponseRedirect(reverse('adminSHS:editEmployeeRecords', args=[id]))
 
 class deleteEmployeeRecord(View):
-    def get(self, request, id):
-        print('yes')
+    def get(self, request, id, a_id):
         try:
             id = signing.loads(id)
-            employee = EmployeeDetails.objects.get(employee_id=id)
-            user = User.objects.get(id=id)
+            a_id = signing.loads(a_id)
+            employee = EmployeeDetails.objects.get(employee_id=a_id)
+            if employee.employee_dept == 'Doctor':
+                doctor = DoctorDetails.objects.get(doctor_username = employee.employee_username)
+                doctor.delete()
+            user = User.objects.get(email=unmask(employee.employee_email))
             employee.delete()
             user.delete()
             logger.info('Record deleted')
         except:
             print('Error')
         finally:
-            return redirect('/adminSHS/editEmployeeRecords.html')
+            id = signing.dumps(id)
+            return HttpResponseRedirect(reverse('adminSHS:editEmployeeRecords', args=[id]))
     
     def post(self, request):
         pass
 
 class appointmentTransactionRequests(View):
-    def get(self, request):
+    def get(self, request, id, a_id):
         try:
             appointmentDetails = AppointmentDetails.objects.all()
+            id = signing.loads(id)
+            adminName = User.objects.get(id=id)
         except:
             print('Error loading data')
         finally:
             return render(request, 'appointmentTransactionRequests.html', {
-                'appointmentTransactions': appointmentDetails
+                'appointmentTransactions': appointmentDetails,
+                'id': id,
+                'user': adminName.first_name
             })
     
-    def post(seld, request):
+    def post(self, request, id, a_id):
         try:
-            appointment_id = int(request.POST.get('approve'))
-            AppointmentObj = AppointmentDetails.objects.get(appointment_id=appointment_id)
-            AppointmentObj.transaction_status = "Done"
-            AppointmentObj.save()
+            id = signing.loads(id)
+            a_id = signing.loads(a_id)
+            approve = request.POST.get("approve")
+            if approve != None:
+                appointment_id = a_id
+                AppointmentObj = AppointmentDetails.objects.get(appointment_id=appointment_id)
+                PatientObj = PatientDetails.objects.get(patient_id=AppointmentObj.patient_id)
+                send_mail(subject = 'Bill', message = 'Hello, ' + AppointmentObj.first_name + ' $300 has been deducted from your account with card details: ' +  str(PatientObj.card_details), from_email='admin@gmail.com', recipient_list=[PatientObj.patient_email])  
+                AppointmentObj.transaction_status = "Done"
+                AppointmentObj.save()
+            else:
+                appointment_id = a_id
+                AppointmentObj = AppointmentDetails.objects.get(appointment_id=appointment_id)
+                PatientObj = PatientDetails.objects.get(patient_id=AppointmentObj.patient_id)
+                send_mail(subject = 'Bill', message = 'Hello, ' + AppointmentObj.first_name + ' your transaction is declined.', from_email='admin@gmail.com', recipient_list=[PatientObj.patient_email])  
+                AppointmentObj.transaction_status = "Declined"
+                AppointmentObj.save()
         except:
             print('Error')
         finally:
-            return redirect('/adminSHS/appointmentTransactionRequests.html')
+            id = signing.dumps(id)
+            return HttpResponseRedirect(reverse('adminSHS:appointmentTransactionRequests', args=[id]))
     
 class insuranceTransactionRequests(View):
-    def get(self, request):
+    def get(self, request, id, a_id):
         try:
             insuranceDetails = InsuranceClaimDetails.objects.all()
+            id = signing.loads(id)
+            adminName = User.objects.get(id=id)
         except:
             print('Error loading data')
         finally:
             return render(request, 'insuranceTransactionRequests.html', {
-                'insuranceTransactions': insuranceDetails
+                'insuranceTransactions': insuranceDetails,
+                'id': id,
+                'user': adminName.first_name
             })
 
-    def post(self, request):
+    def post(self, request, id, a_id):
         try:
-            claim_id = int(request.POST.get('approve'))
-            InsuranceObj = InsuranceClaimDetails.objects.get(claim_id=claim_id)
-            patient_id = InsuranceObj.patient_id
-            PatientObj = PatientDetails.objects.get(patient_id=patient_id)
-            send_mail(subject = 'Bill', message = 'Hello, ' + InsuranceObj.patient_firstname + ' Claimed amount: ' +  str(InsuranceObj.claim_amt), from_email='admin@gmail.com', recipient_list=[PatientObj.patient_email])  
-            print('sent mail')
-            InsuranceObj.claim_transaction_status = "Done"
-            InsuranceObj.save()
+            id = signing.loads(id)
+            a_id = signing.loads(a_id)
+            approve = request.POST.get("approve")
+            if approve != None:
+                claim_id = a_id
+                InsuranceObj = InsuranceClaimDetails.objects.get(claim_id=claim_id)
+                patient_id = InsuranceObj.patient_id
+                PatientObj = PatientDetails.objects.get(patient_id=patient_id)
+                send_mail(subject = 'Insurance claimed', message = 'Hello, ' + InsuranceObj.patient_firstname + ' Claim amount of ' +  str(InsuranceObj.claim_amt) + ' has been applied to your account.', from_email='admin@gmail.com', recipient_list=[PatientObj.patient_email])  
+                print('sent mail')
+                InsuranceObj.claim_transaction_status = "Done"
+                InsuranceObj.save()
+            else:
+                claim_id = a_id
+                InsuranceObj = InsuranceClaimDetails.objects.get(claim_id=claim_id)
+                patient_id = InsuranceObj.patient_id
+                PatientObj = PatientDetails.objects.get(patient_id=patient_id)
+                send_mail(subject = 'Insurance claimed', message = 'Hello, ' + InsuranceObj.patient_firstname + ' Your insurance claim is declined ', from_email='admin@gmail.com', recipient_list=[PatientObj.patient_email])  
+                print('sent mail')
+                InsuranceObj.claim_transaction_status = "Declined"
+                InsuranceObj.save()
         except:
             print('Error')
         finally:
-            return redirect('/adminSHS/insuranceTransactionRequests.html') 
+            return HttpResponseRedirect(reverse('adminSHS:insuranceTransactionRequests', args=[id]))
 
 class showInternalFiles(View):
-    def get(self, request):
+    def get(self, request, id):
         try:
             patient_details = PatientDetails.objects.all()
+            id = signing.loads(id)
+            adminName = User.objects.get(id=id)
         except:
             print('Error loading data')
         finally:
             return render(request, 'showInternalFiles.html', {
-                'patient_details': patient_details
+                'patient_details': patient_details,
+                'id': id,
+                'user': adminName.first_name
             })
 
 class showHospitalFiles(View):
-    def get(self, request):
+    def get(self, request, id):
         try:
             appointment_details = AppointmentDetails.objects.all()
+            id = signing.loads(id)
+            adminName = User.objects.get(id=id)
         except:
             print('Error loading data')
         finally:
             return render(request, 'showHospitalFiles.html', {
-                'appointment_details': appointment_details
+                'appointment_details': appointment_details,
+                'id': id,
+                'user': adminName.first_name
             })
 
 class showInsuranceFiles(View):
-     def get(self, request):
+     def get(self, request, id):
         try:
             policy_details = InsurancePolicies.objects.all()
             claim_details = InsuranceClaimDetails.objects.all()
+            id = signing.loads(id)
+            adminName = User.objects.get(id=id)
         except:
             print('Error loading data')
         finally:
             return render(request, 'showInsuranceFiles.html', {
                 'policy_details': policy_details,
-                'claim_details': claim_details
+                'claim_details': claim_details,
+                'id': id,
+                'user': adminName.first_name
             })
 
 class showLabFiles(View):
-    def get(self, request):
+    def get(self, request, id):
         try:
             lab_details = LabReports.objects.all()
+            id = signing.loads(id)
+            adminName = User.objects.get(id=id)
         except:
             print('Error loading data')
         finally:
             return render(request, 'showLabFiles.html', {
-                'lab_details': lab_details
+                'lab_details': lab_details,
+                'id': id,
+                'user': adminName.first_name
             })
 
 class showDoctorFiles(View):
-    def get(self, request):
+    def get(self, request, id):
         try:
             prescription_details = prescriptions.objects.all()
+            id = signing.loads(id)
+            adminName = User.objects.get(id=id)
         except:
             print('Error loading data')
         finally:
             return render(request, 'showDoctorFiles.html', {
-                'prescription_details': prescription_details
+                'prescription_details': prescription_details,
+                'id': id,
+                'user': adminName.first_name
             })

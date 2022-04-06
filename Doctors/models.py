@@ -5,6 +5,7 @@ class DoctorDetails(models.Model):
     doctor_id = models.AutoField(primary_key=True)
     doctor_name = models.CharField(max_length=1000, null=False)
     doctor_spec = models.CharField(max_length=1000, null=False)
+    doctor_username = models.CharField(max_length=100, null=False)
     slot = models.IntegerField(default=10, null=False)
 
 class prescriptions(models.Model):

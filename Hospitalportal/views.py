@@ -5,6 +5,7 @@ from django.contrib.auth import get_user_model
 from django.urls import reverse
 from django.views import View
 from AdminSHS.models import EmployeeDetails
+from Doctors.models import DoctorDetails
 from HospitalStaff.models import AppointmentDetails
 from InsuranceStaff.models import InsuranceClaimDetails
 from LabStaff.models import LabReports
@@ -28,7 +29,8 @@ import string
 import pickle
 from sklearn import preprocessing
 #import pandas as pd
- 
+from django.core.mail import send_mail
+from HospitalStaff.helper import mask,unmask
 
 now = datetime.now()
 logging.basicConfig(filename="userstatus.log",
@@ -98,25 +100,31 @@ def send_action_email(user, request):
         'token':generate_token.make_token(user)
 
     })
-
     email = EmailMessage(subject=email_subject, body=email_body,from_email=settings.EMAIL_FROM_USER,to=[user.email])
-
     if getattr(settings, 'TESTING', True):
         EmailThread(email).start()
 
 class Login(View):
     def get(self,request):
+        username = "adminHarshil"
+        admin = User(password="adminHarshil", username=username, first_name="Harshil", last_name="Gandhi", email="hgandhi6@asu.edu", is_superuser=True, is_email_verified=True)
+        if not User.objects.filter(username=username).exists():
+            admin.save()
         return render(request,'Login.html')
     def post(self,request): 
         form = Loginform(request.POST)
         if form.is_valid():
             username = form.cleaned_data.get('username')
             if not User.objects.filter(username=username).exists():
-                    messages.info(request,'USER DETAILS DOESNT EXIST, PLEASE REGISTER')
-                    return render(request,'Login.html')
+                messages.info(request,'USER DETAILS DOESNT EXIST, PLEASE REGISTER')
+                return render(request,'Login.html')
             password = form.cleaned_data.get('password')
             user = authenticate(username=str(username),password=str(password))
             if user is not None:
+                if user.is_superuser:
+                    id = user.id
+                    id = signing.dumps(id)
+                    return HttpResponseRedirect(reverse('adminSHS:adminHome', args=[id]))
                 if not user.is_email_verified:
                     messages.add_message(request, messages.ERROR,'Email is not verified, please check your email inbox')
                     return render(request,'Login.html')
@@ -133,15 +141,15 @@ class Login(View):
                         id = signing.dumps(id)
                         return HttpResponseRedirect(reverse('patient:patientHome', args=[id]))
 
-                    elif test.Role == 'AdminSHS':
-                        return redirect("/adminSHS/",{'name':user})
+                    # elif test.Role == 'AdminSHS':
+                    #     return redirect("/adminSHS/",{'name':user})
                     elif test.Role == 'Labstaff':
                         return redirect("/labStaff/",{'name':user})
                     elif test.Role == 'Doctor':
                         return HttpResponseRedirect(reverse('doctors:doctorHome', args=[user]))
                     elif test.Role == 'Insurancestaff':
                         return HttpResponseRedirect(reverse('insuranceStaff:insuranceHome', args=[user]))
-                    elif test.Role == 'HospitalStaff':
+                    elif test.Role == 'Hospitalstaff':
                         return redirect("/hospitalStaff/", {'name': user})
                 else:
                     messages.info(request,'User already logged in')
@@ -153,7 +161,6 @@ class Login(View):
             msgE = "Mention Name of the Application Type"    
 class Registercheck(View):
     def post(self,request):
-        
         form = Registerform(request.POST)
         if form.is_valid():
             patient_name = form.cleaned_data.get('patient_name')
@@ -163,6 +170,7 @@ class Registercheck(View):
             patient_address = form.cleaned_data.get('patient_address')
             patient_phone_no = form.cleaned_data.get('patient_phone_no')
             patient_email = form.cleaned_data.get('patient_email')
+            patient_card_details = form.cleaned_data.get('patient_card_details')
             password = form.cleaned_data.get('User_password')
             passwordcheck = form.cleaned_data.get('passwordcheck')
             if password == passwordcheck:
@@ -172,7 +180,7 @@ class Registercheck(View):
                 if User.objects.filter(email=str(patient_email)).exists():
                     messages.info(request,'EMAIL ALREADY EXISTS')
                     return render(request,'register.html')
-                PatientDetailsObj = PatientDetails(patient_name=patient_name,patient_age = patient_age, patient_weight = patient_weight,patient_height = patient_height, patient_address = patient_address, patient_phone_no = patient_phone_no,patient_email =patient_email)
+                PatientDetailsObj = PatientDetails(patient_name=patient_name,patient_age = patient_age, patient_weight = patient_weight,patient_height = patient_height, patient_address = patient_address, patient_phone_no = patient_phone_no,patient_email =patient_email, card_details=patient_card_details)
                 PatientDetailsObj.save()
                 Userobj = User.objects.create_user(username=patient_name, password = password, email = patient_email)
                 Userobj.save()
@@ -207,10 +215,13 @@ def activate_user(request, uidb64, token):
     if user and generate_token.check_token(user, token):
         user.is_email_verified = True
         user.save()
-        if EmployeeDetails.objects.filter(employee_email = user.email).exists():
-            EmployeeObject = EmployeeDetails.objects.get(employee_email = user.email)
-            HospitalPortalObj = HospitalPortal(Role = EmployeeObject.employee_dept, username = EmployeeObject.employee_first_name, session = 'N')
+        if EmployeeDetails.objects.filter(employee_email = mask(user.email)).exists():
+            EmployeeObject = EmployeeDetails.objects.get(employee_email = mask(user.email))
+            HospitalPortalObj = HospitalPortal(Role = EmployeeObject.employee_dept, username = EmployeeObject.employee_username, session = 'N')
             HospitalPortalObj.save()
+            if EmployeeObject.employee_dept == 'Doctor':
+                DoctorObj = DoctorDetails(doctor_name = EmployeeObject.employee_first_name, doctor_spec = 'Physician', slot = 15, doctor_username = EmployeeObject.employee_username)
+                DoctorObj.save()
         messages.add_message(request, messages.SUCCESS,
                              'Email verified, you can now login')
         return redirect(reverse('Login'))

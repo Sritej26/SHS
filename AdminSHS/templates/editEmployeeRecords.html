@@ -21,8 +21,8 @@
                 }, 2000)
             </script>
             <ul class="nav nav-tabs">
-                <li><a href="createEmployeeRecords.html">Create employee record</a></li>
-                <li><a href="viewEmployeeRecords.html">View employee record</a></li>
+                <li><a href="/adminSHS/createEmployeeRecords/{{k|patient_id_encrypt_tag:id}}">Create employee record</a></li>
+                <li><a href="/adminSHS/viewEmployeeRecords/{{k|patient_id_encrypt_tag:id}}">View employee record</a></li>
                 <li class="active"><a href="#update">Update / Delete employee record</a></li>
             </ul>
             <div id="update">
@@ -49,32 +49,13 @@
                             <td width="10%">{{employee.employee_dept}}</td>
                             <td width="5%">
                                 <div style="display: flex;">
-
-                                    <a href="/adminSHS/updateEmployeeDetails/update/{{k|patient_id_encrypt_tag:employee.employee_id}}">
+                                    <a href="/adminSHS/updateEmployeeDetails/update/{{k|patient_id_encrypt_tag:id}}/{{k|patient_id_encrypt_tag:employee.employee_id}}">
                                             <button class="btn btn-info btn-xs" data-title="Update" data-toggle="modal"
                                                 data-target="#edit"><span
                                                     class="glyphicon glyphicon-pencil"></span></button>
                                     </a>
-                                    &nbsp;&nbsp;&nbsp;&nbsp;
-                                    <!-- <script>
-                                        const data = {
-                                            'confirmDelete': false,
-                                            'id': employee.employee_id
-                                        };
-                                        function myFunction() {
-                                          let text = "Confirm delete?";
-                                          if (confirm(text) == true) {
-                                            //confirmDelete = "/admin/updateEmployeeDetails/delete/{{employee.employee_id}}"
-                                            data.confirmDelete = true
-                                          } else {
-                                            //hrefLink = "/admin/editEmployeeRecords/"
-                                            data.confirmDelete = false
-                                          }
-                                          document.getElementById("delete").value = data;
-                                          //document.getElementById("demo").innerHTML = text;
-                                        }
-                                    </script> -->        
-                                    <a href="/adminSHS/updateEmployeeDetails/delete/{{k|patient_id_encrypt_tag:employee.employee_id}}">
+                                    &nbsp;&nbsp;&nbsp;&nbsp;     
+                                    <a href="/adminSHS/updateEmployeeDetails/delete/{{k|patient_id_encrypt_tag:id}}/{{k|patient_id_encrypt_tag:employee.employee_id}}">
                                         <p data-placement="top" data-toggle="tooltip" title="Delete">
                                             {% csrf_token %}
                                             <button class="btn btn-info btn-xs" data-title="Update" data-toggle="modal"

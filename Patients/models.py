@@ -14,5 +14,6 @@ class PatientDetails(models.Model):
     patient_email = models.EmailField(null=True)
     change_request_status = models.IntegerField(default=0)
     request_info = models.CharField(max_length=1000, default="")
+    card_details= models.IntegerField(null=False)
     
     

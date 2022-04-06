@@ -33,7 +33,7 @@ class Registerform(forms.Form):
                                        'class': 'form-control',
                                        'placeholder': ('Age')
                                    }))                               
-    patient_weight = forms.CharField(label='Usepatient_weightrname.**', required=True,
+    patient_weight = forms.CharField(label='patient_weight.**', required=True,
                                    widget=forms.TextInput(attrs=
                                    {
                                        'required': True,
@@ -68,6 +68,13 @@ class Registerform(forms.Form):
                                        'class': 'form-control',
                                        'placeholder': ('Enter Email')
                                    }))
+    patient_card_details = forms.IntegerField(label='patient_card_details.**', required=True,
+                                   widget=forms.NumberInput(attrs=
+                                   {
+                                       'required': True,
+                                       'class': 'form-control',
+                                       'placeholder': ('Enter Credit/Debit Card Details')
+                                   }))
     User_password = forms.CharField(label='password.**', required=True,
                                    widget=forms.TextInput(attrs=
                                    {
@@ -84,4 +91,4 @@ class Registerform(forms.Form):
                                    })) 
     
     
-    
+    

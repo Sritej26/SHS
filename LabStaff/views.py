@@ -17,8 +17,10 @@ class labStaffHome(View):
 class viewRequests(View):
     def get(self, request):
         request_details = labTests.objects.all()
+        number_of_requests = len(request_details)
         return render(request, 'viewRequests.html', {
-            'requests': request_details
+            'requests': request_details,
+            'number_of_requests': number_of_requests
         })
 
     def post(self,request):

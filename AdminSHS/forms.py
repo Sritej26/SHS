@@ -37,7 +37,7 @@ class createEmployeeForm(forms.Form):
                                     'class': 'form-control',
                                     'placeholder': ('Email')
                                 }))
-    employee_dept = forms.ChoiceField(choices = employee_depts)
+    employee_dept = forms.ChoiceField(choices = employee_depts, label="Department")
 
     
 class editEmployeeForm(forms.Form):

@@ -1,4 +1,5 @@
 {% include 'adminNavbar.html' %}
+{% load encrypt%}
 
 <head>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -21,10 +22,10 @@
             </script>
             <ul class="nav nav-tabs">
                 <li class="active"><a href="#patientFiles">Patient Files</a></li>
-                <li><a href="showDoctorFiles.html">Doctor Files</a></li>
-                <li><a href="showInsuranceFiles.html">Insurance Files</a></li>
-                <li><a href="showLabFiles.html">Lab Files</a></li>
-                <li><a href="showHospitalFiles.html">Hospital Files</a></li>
+                <li><a href="/adminSHS/showDoctorFiles/{{k|patient_id_encrypt_tag:id}}">Doctor Files</a></li>
+                <li><a href="/adminSHS/showInsuranceFiles/{{k|patient_id_encrypt_tag:id}}">Insurance Files</a></li>
+                <li><a href="/adminSHS/showLabFiles/{{k|patient_id_encrypt_tag:id}}">Lab Files</a></li>
+                <li><a href="/adminSHS/showHospitalFiles/{{k|patient_id_encrypt_tag:id}}">Hospital Files</a></li>
             </ul>
             <div class="tab-content">
                 <div id="patientFiles">

@@ -12,6 +12,7 @@ urlpatterns = [
     re_path(r'^approveTransaction/(?P<id>\d+)/$', views.approveTransaction.as_view(), name='approveTransaction'),
     re_path(r'^patientPayment/(?P<id>\d+)/$', views.patientPayment.as_view(), name='patientPayment'),
     
+    # re_path(r'^patientPayment/(?P<id>\d+)/$', views.patientPayment.as_view(), name='patientPayment'),
     re_path(r'^logout/(?P<id>(.*))$', views.logout_user),
     re_path(r'^home/(?P<id>(.*))$', views.patientHome.as_view(), name='patientHome'),
     re_path(r'^requestLabTests/(?P<id>(.*))$', views.requestLabTests.as_view(), name='requestLabTests'),

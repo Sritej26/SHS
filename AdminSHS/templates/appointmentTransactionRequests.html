@@ -1,4 +1,5 @@
 {% include 'adminNavbar.html' %}
+{% load encrypt%}
 
 <head>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -21,7 +22,7 @@
             </script>
             <ul class="nav nav-tabs">
                 <li class="active"><a href="#appointmentTransactionRequests">Appointment requests</a></li>
-                <li><a href="insuranceTransactionRequests.html">Insurance requests</a></li>
+                <li><a href="/adminSHS/insuranceTransactionRequests/{{k|patient_id_encrypt_tag:id}}">Insurance requests</a></li>
             </ul>
             <br>
             <br>
@@ -58,14 +59,14 @@
                                         </button>
                                         <br>
                                         <br>
-                                        <form method="POST" role="form" id="form-client-info"
-                                            action="{% url 'AdminSHS:appointmentTransactionRequests' %}">
-                                            {% csrf_token %}
-                                            <button type="submit" class="btn btn-outline-success btn-sm"
-                                                value={{request.appointment_id}} name="approve">
+                                        <a href="/adminSHS/appointmentTransactionRequests/delete/{{k|patient_id_encrypt_tag:id}}/{{k|patient_id_encrypt_tag:request.appointment_id}}">
+                                            <button type="submit" class="btn btn-outline-success btn-sm" name="approve" value={{request.appointment_id}}>
                                                 Approve
                                             </button>
-                                        </form>
+                                            <button type="submit" class="btn btn-outline-danger btn-sm" name="deny" value={{request.appointment_id}}>
+                                                Deny
+                                            </button>
+                                        </a>
                                     </div>
                                 </div>
                             </li>

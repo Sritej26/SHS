@@ -1,4 +1,5 @@
 {% include 'adminNavbar.html' %}
+{% load encrypt%}
 
 <head>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -22,8 +23,8 @@
             </script>
             <ul class="nav nav-tabs">
                 <li class="active"><a href="#create">Create employee record</a></li>
-                <li><a href="viewEmployeeRecords.html">View employee record</a></li>
-                <li><a href="editEmployeeRecords.html">Update / Delete employee record</a></li>
+                <li><a href="/adminSHS/viewEmployeeRecords/{{k|patient_id_encrypt_tag:id}}">View employee record</a></li>
+                <li><a href="/adminSHS/editEmployeeRecords/{{k|patient_id_encrypt_tag:id}}">Update / Delete employee record</a></li>
             </ul>
             <div class="tab-content">
                 <div id="create">
