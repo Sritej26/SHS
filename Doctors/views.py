@@ -145,13 +145,14 @@ class addPrescription(View):
             #msgE="Something Went Wrong"
             messages.error(request, error)
         finally:
-            id = signing.dumps(id)
+            
             #messages.add_message(request, messages.SUCCESS if msgS else messages.ERROR, (msgS if not msgS == '' else msgE),
              #                    extra_tags='callout callout-success calloutCustom lead' if msgS else 'callout callout-danger calloutCustom lead')
             #return redirect('/doctors/patientRecords/search/', args=[detail1.patient_id])
             details = AppointmentDetails.objects.filter(appointment_id=id)
             details1 = {}
             prescriptionDetails = prescriptions.objects.filter(appointment_id = detail1.appointment_id)
+            id = signing.dumps(id)
             return render(request, 'addPrescription.html',{"patientdetails" : details, 'patientPrescriptionForm': patientPrescriptionForm(details1),'prescriptionDetails': prescriptionDetails})
 
 class viewLabReports(View):
@@ -226,7 +227,7 @@ class addDiagnosis(View):
                 #msgE="Something Went Wrong"
                 messages.error(request, error)
             finally:
-                id = signing.dumps(id)
+               
                 #messages.add_message(request, messages.SUCCESS if msgS else messages.ERROR, (msgS if not msgS == '' else msgE),
                     #                    extra_tags='callout callout-success calloutCustom lead' if msgS else 'callout callout-danger calloutCustom lead')
                 #return redirect('/doctors/patientRecords/search/', args=[detail1.patient_id])
@@ -238,6 +239,7 @@ class addDiagnosis(View):
                 labTestDetails = labTests.objects.filter(appointment_id = id)
                 print(labTestDetails)
                 details2 = AppointmentDetails.objects.filter(appointment_id=id)
+                id = signing.dumps(id)
                 return render(request, 'patientDiagnosis.html', {'details2':details2,'flag': flag,'labTestDetails': labTestDetails, 'diagnosisForm': diagnosisForm(details), 'labTestsForm': labTestsForm(), 'details': details})
 
         else:
@@ -274,7 +276,7 @@ class addDiagnosis(View):
                 #msgE="Something Went Wrong"
                 messages.error(request, 'Something Went Wrong!')
             finally:
-                id = signing.dumps(id)
+               
                 #messages.add_message(request, messages.SUCCESS if msgS else messages.ERROR, (msgS if not msgS == '' else msgE),
                 #                    extra_tags='callout callout-success calloutCustom lead' if msgS else 'callout callout-danger calloutCustom lead')
                 #return redirect('/doctors/patientRecords/search/', args=[detail1.patient_id])
@@ -285,6 +287,7 @@ class addDiagnosis(View):
                 details = {'patient_diagnosis': details.patient_diagnosis, 'appointment_id': id}
                 #lab_tests = {'lab_tests': lab_tests1.lab_tests, 'appointment_id': id}
                 labTestDetails = labTests.objects.filter(appointment_id = id)
+                id = signing.dumps(id)
                 return render(request, 'patientDiagnosis.html', {'details2':details2,'flag': flag,'labTestDetails': labTestDetails, 'diagnosisForm': diagnosisForm(details), 'labTestsForm': labTestsForm(), 'details': details})
 
 class patientRecords(View):
@@ -318,7 +321,7 @@ def searchBar(request):
             details = {}
             return render(request, 'searchResultsView.html', {'patientdetails': patientdetails, "details": details, "flag1": flag1, "flag":flag})
         else:
-            flag1 = "flase"
+            flag1 = "false"
             print("No patient with this id number")
             #messages.error(request, 'No patient with this id number')
             return render(request, 'searchResultsView.html',{"flag1":flag1, "flag":flag})
@@ -386,6 +389,7 @@ class updatePatientDetails(View):
     def get(self, request, id):
         flag = 'false'
         try:
+            print("entered update")
             if not (request.user.is_authenticated):
                 return redirect('/Login')
             print("Entered try")
@@ -441,7 +445,7 @@ class updatePatientDetails(View):
             #msgE="Something Went Wrong"
             messages.error(request, 'Something Went Wrong!')
         finally:
-            id = signing.dumps(id)
+        
             #messages.add_message(request, messages.SUCCESS if msgS else messages.ERROR, (msgS if not msgS == '' else msgE),
              #                    extra_tags='callout callout-success calloutCustom lead' if msgS else 'callout callout-danger calloutCustom lead')
             flag = 'true'
@@ -449,6 +453,7 @@ class updatePatientDetails(View):
             print(detail1.patient_id)
             patientdetails = PatientDetails.objects.filter(patient_id = detail1.patient_id)
             print(patientdetails)
+            id = signing.dumps(id)
             return render(request, 'searchResultsView.html',{"patientdetails":patientdetails, "flag":flag})
 
 
@@ -505,7 +510,7 @@ class updatePatientDiagnosis(View):
             #msgE="Something Went Wrong"
             messages.error(request, 'Something Went Wrong!')
         finally:
-            id = signing.dumps(id)
+           
             #messages.add_message(request, messages.SUCCESS if msgS else messages.ERROR, (msgS if not msgS == '' else msgE),
              #                    extra_tags='callout callout-success calloutCustom lead' if msgS else 'callout callout-danger calloutCustom lead')
             flag = 'true'
@@ -513,10 +518,13 @@ class updatePatientDiagnosis(View):
             print(detail1.patient_id)
             patientdetails = AppointmentDetails.objects.filter(patient_id = request.POST.get('patient_id'))
             print(patientdetails)
+            id = signing.dumps(id)
             return render(request, 'ViewDiagnosis.html',{"patientdetails":patientdetails, "flag":flag})
 
 class deletePatientDiagnosis(View):
     def get(self, request, id, id1):
+        id1 = signing.loads(id1)
+        id = signing.loads(id)
         if not (request.user.is_authenticated):
             return redirect('/Login')
         flag = "true"
@@ -566,7 +574,7 @@ class addnextAppointment(View):
              print("in except block")
              msgE = "Something went Wrong"
          finally:
-             id = signing.dumps(id)
+             
              print("in finally block")
              details = AppointmentDetails.objects.get(appointment_id=id)
              #lab_tests1 = AppointmentDetails.objects.get(appointment_id = id)
@@ -577,6 +585,7 @@ class addnextAppointment(View):
             # print(lab_tests)
              labTestDetails = labTests.objects.filter(appointment_id = id)
              print(labTestDetails)
+             id = signing.dumps(id)
              messages.add_message(request, messages.SUCCESS if msgS else messages.ERROR,
                                   (msgS if not msgS == '' else msgE),
                                   extra_tags='callout callout-success calloutCustom lead' if msgS else 'callout callout-danger calloutCustom lead')

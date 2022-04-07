@@ -74,8 +74,8 @@ class bookAppointment(View):
        record =[]
        for detail in appDetail:
             docDetail = DoctorDetails.objects.get(doctor_id =detail.doctor_id)
-            data = {'appointment_id': detail.appointment_id,'first_name': detail.first_name,'last_name': detail.last_name,
-            'doctor_name': docDetail.doctor_name,'doctor_spec': docDetail.doctor_spec,'requested_date': detail.requested_date,'status':detail.status}
+            data = {'appointment_id': detail.appointment_id,'first_name': detail.first_name,'last_name': detail.last_name,'transaction_status':detail.transaction_status,
+            'transaction_id':detail.transaction_id,'doctor_name': docDetail.doctor_name,'doctor_spec': docDetail.doctor_spec,'requested_date': detail.requested_date,'status':detail.status}
             record.append(data)
 
        return render(request,'bookAppointment.html',{

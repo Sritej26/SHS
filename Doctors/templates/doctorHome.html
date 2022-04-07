@@ -1,6 +1,6 @@
 {% load static %}
 {% include 'navbardoctors.html' %}
-
+{%load encrypt%}
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -106,14 +106,14 @@
                             <td width="5%">{{a.requested_date}}</td>
                             <td width="10%">{{a.status}}</td>  
                             <td width="5%">
-                                <a href="/doctors/addDiagnosis/{{a.appointment_id}}">
+                                <a href="/doctors/addDiagnosis/{{k|patient_id_encrypt_tag:a.appointment_id}}">
                                 <button class="btn btn-outline-success" type="submit">
                                     <i class="fa fa-plus" aria-hidden="true"></i>
                                 </button>
                                 </a>
                             </td>
                             <td width="5%">
-                                <a href="/doctors/addPrescription/{{a.appointment_id}}">
+                                <a href="/doctors/addPrescription/{{k|patient_id_encrypt_tag:a.appointment_id}}">
                                     <button class="btn btn-outline-success" type="submit">
                                         <i class="fa fa-plus" aria-hidden="true"></i>
                                     </button>
