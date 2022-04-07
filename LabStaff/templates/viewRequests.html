@@ -57,6 +57,7 @@
                                     <div class="row">
                                         <div class="col">
                                             <p>Patient ID: {{request.patient_id}}</p>
+                                            <p>Appointment_id: {{request.appointment_id}}</p>
                                             <p>Patient name: {{request.first_name}}{{request.last_name}}</p>
                                             <p>Test precribed: {{request.lab_test}} by doctor: {{request.doctor_id}}
                                             </p>
@@ -68,10 +69,10 @@
                                             <br>
                                             <br>
                                             <form method="POST" role="form" id="form-client-info"
-                                                action="{% url 'viewRequests' %}">
+                                                action="{% url 'labStaff:viewRequests' %}">
                                                 {% csrf_token %}
                                                 <button type="submit" class="btn btn-outline-success btn-sm"
-                                                    value={{request.appointment_id}} name="approve">
+                                                    value={{request.id}} name="approve">
                                                     Approve
                                                 </button>
                                             </form>

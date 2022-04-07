@@ -61,7 +61,8 @@ class viewRequests(View):
         #if not (request.user.is_authenticated):
          #   return redirect('/Login')
         request_details = labTests.objects.all()
-        number_of_requests = len(request_details)
+        pending_details = labTests.objects.filter(lab_test_status='Pending')
+        number_of_requests = len(pending_details)
         return render(request, 'viewRequests.html', {
             'requests': request_details,
             'number_of_requests': number_of_requests,
@@ -72,12 +73,16 @@ class viewRequests(View):
         msgS = ''
         try:
             request_details = labTests.objects.all()
-            appoitment_id = int(request.POST.get('approve'))
+            test_id = int(request.POST.get('approve'))
+            
             for entry in request_details:
-                if entry.appointment_id == appoitment_id:
+               
+                if entry.id == test_id:
                     lab_report = LabReports(doctor_id = entry.doctor_id, patient_id = entry.patient_id, patient_diagnosis = entry.patient_diagnosis, lab_staff_id = 1, report_status = "Approved", test_name = entry.lab_test)
                     lab_report.save()
-                    appointment = labTests.objects.get(appointment_id=entry.appointment_id)
+                    appointment = labTests.objects.get(id=entry.id)
+                   
+                   
                     appointment.lab_test_status = "Approved"
                     appointment.save()
                     msgS = "Added Successfully"
@@ -94,6 +99,7 @@ class viewRequests(View):
             #                      extra_tags='callout callout-success calloutCustom lead' if msgS else 'callout callout-danger calloutCustom lead')
             # return redirect('/labStaff/viewRequests')
             return HttpResponseRedirect(reverse('labStaff:viewRequests'))
+            #return redirect('/labStaff/viewRequests')
 class addLabRecord(View):
     def get(self, request):
         if not (request.user.is_authenticated):
@@ -101,6 +107,7 @@ class addLabRecord(View):
         #if not (request.user.is_authenticated):
          #   return redirect('/Login')
         request_details = LabReports.objects.filter(report_status="Approved")
+        print(request_details)
         return render(request, 'labReportPage.html', {
             'requests': request_details,
             'user' : labStaffName
@@ -110,9 +117,12 @@ class addLabRecord(View):
         details = str(request.POST.get('details'))
         record_id=request.POST.get('addData')
         
+        
         message=""
+        #print(record_id)
         try:
-            report_data= LabReports.objects.get(id=record_id)
+           
+            report_data= LabReports.objects.get(report_id=record_id)
             report_data.report_info=details
             report_data.report_status="Added"
             report_data.save()    
@@ -122,8 +132,8 @@ class addLabRecord(View):
             print("exception while fetching reports")
             message="Exception in fetching Lab Reports"
         finally:
-            # return redirect('/labStaff/addLabRecord')
-            return HttpResponseRedirect(reverse('labStaff:addLabRecord'))
+            return redirect('/labStaff/addLabRecord')
+            #return HttpResponseRedirect(reverse('labStaff/addLabRecord'))
 
             
 
@@ -144,7 +154,7 @@ class updateLabRecord(View):
         record_id=request.POST.get('update')
         message=""
         try:
-            report_data= LabReports.objects.get(id=record_id)
+            report_data= LabReports.objects.get(report_id=record_id)
             report_data.report_info=details
             report_data.report_status="Updated"
             report_data.save()      

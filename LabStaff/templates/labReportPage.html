@@ -65,7 +65,7 @@
 
                                 <li class="list-group-item">
                                     <form method="POST" role="form" id="form-client-info"
-                                    action="{% url 'addLabRecord' %}">
+                                    action="{% url 'labStaff:addLabRecord' %}">
                                     {% csrf_token %}
                                     <div class="col">
                                         <div class="row">
@@ -83,7 +83,7 @@
                                         </div>
                                         <br>
                                         <div class="row">
-                                            <button type="submit" class="btn btn-primary"  value={{request.id}} name="addData" >Submit</button>
+                                            <button type="submit" class="btn btn-primary"  value={{request.report_id}} name="addData" >Submit</button>
                                         </div>
                                     </form>
                                     </div>

@@ -56,7 +56,7 @@
                                 {% for request in requests %}
                                
                                 <form method="POST" role="form" id="form-client-info"
-                                            action="{% url 'updateLabRecord' %}">
+                                            action="{% url 'labStaff:updateLabRecord' %}">
                                             {% csrf_token %}
                                     <div class="col">
                                         <div class="row">
@@ -75,7 +75,7 @@
                                         <br>
                                         <div class="row">
                                            
-                                            <button type="submit" class="btn btn-primary" value={{request.id}} name="update">Update</button>
+                                            <button type="submit" class="btn btn-primary" value={{request.report_id}} name="update">Update</button>
                                        
                                         </div>
                                         <br>
