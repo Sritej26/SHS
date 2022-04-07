@@ -55,7 +55,7 @@
                                                                  style="width:50%; font-size:15px">
                                                              <option disabled selected value> -- select --</option>
                                                              {%for doc in docDetails%}
-                                                             <option value="{{doc.doctor_id}}">{{doc.doctor_name}} -- {{doc.doctor_spec}}</option>
+                                                             <option value="{{k|patient_id_encrypt_tag:doc.doctor_id}}">{{doc.doctor_name}} -- {{doc.doctor_spec}}</option>
                                                              {%endfor%}
                                                          </select>
                                                      </div>
@@ -94,12 +94,12 @@
                             <td width="10%">{{a.transaction_status}} 
                                 {% if a.transaction_status == 'Pending'%} 
                                 <p data-placement="top" data-toggle="tooltip" title="Update"></p>
-                                <a href="/patient/approveTransaction/{{a.appointment_id}}">
+                                <a href="/patient/approveTransaction/{{k|patient_id_encrypt_tag:a.appointment_id}}">
                                         <button class="btn btn-info btn-xs" data-title="Update" data-toggle="modal"
                                                 data-target="#edit"><span class="fa fa-thumbs-up"></span></button>
                                     
                                 </a> 
-                                <a href="/patient/declineTransaction/{{a.appointment_id}}">
+                                <a href="/patient/declineTransaction/{{k|patient_id_encrypt_tag:a.appointment_id}}">
                                         <button class="btn btn-info btn-xs" data-title="Update" data-toggle="modal"
                                                 data-target="#edit"><span class="fa fa-thumbs-down"></span></button>
                                   

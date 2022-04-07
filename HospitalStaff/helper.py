@@ -22,7 +22,6 @@ def shift_date(value, reverse=False):
 
 
 def shift(value, reverse=False):
-    print("In Shift function")
     """
     Shift each character in string based on ord value within range.
     This is intended for this example only, to enable demonstration of the application's
@@ -76,7 +75,6 @@ def shift(value, reverse=False):
 
 def mask(value):
     """Shift characters/numbers/date values by one to mask the value of personal data."""
-    print("In mask() function -- calling shift() function")
     return shift(value)
 
 

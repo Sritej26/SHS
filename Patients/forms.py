@@ -3,17 +3,17 @@ from django.forms import formset_factory
 # from bootstrap_datepicker_plus import DatePickerInput
 
 class appointmentForm(forms.Form):
-    first_name = forms.CharField(label='Firstname.**', required=True,
+    first_name = forms.CharField(label='Firstname.**', required=False,
                                    widget=forms.TextInput(attrs=
                                    {
-                                       'required': True,
+                                       'required': False,
                                        'class': 'form-control',
                                        'placeholder': ('Firstname')
                                    }))
-    last_name = forms.CharField(label='Lastname.**', required=True,
+    last_name = forms.CharField(label='Lastname.**', required=False,
                                    widget=forms.TextInput(attrs=
                                    {
-                                       'required': True,
+                                       'required': False,
                                        'class': 'form-control',
                                        'placeholder': ('Lastname')
                                    }))                               

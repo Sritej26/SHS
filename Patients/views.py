@@ -44,8 +44,6 @@ def logout_user(request,id):
 class patientHome(View):
      def get(self,request,id):     
         id = signing.loads(id)   
-        print(request.user.is_authenticated)
-        DoctorDetails(doctor_id=1,doctor_name="Dr. Raj",doctor_spec="Cardio",slot=10).save()
         if not (request.user.is_authenticated):
             return redirect('/Login')
             docObj = DoctorDetails(doctor_id=3,doctor_name="Dr.Prem",doctor_spec="General Appointment",
@@ -70,17 +68,15 @@ class bookAppointment(View):
     def get(self,request,id):
        if not (request.user.is_authenticated):
             return redirect('/Login') 
-       print("In get1")
        id = signing.loads(id)
        docDetails = DoctorDetails.objects.all()
        appDetail = AppointmentDetails.objects.filter(patient_id=id)
        record =[]
        for detail in appDetail:
             docDetail = DoctorDetails.objects.get(doctor_id =detail.doctor_id)
-            data = {'appointment_id': detail.appointment_id,'first_name': unmask(detail.first_name),'last_name': detail.last_name,
+            data = {'appointment_id': detail.appointment_id,'first_name': detail.first_name,'last_name': detail.last_name,
             'doctor_name': docDetail.doctor_name,'doctor_spec': docDetail.doctor_spec,'requested_date': detail.requested_date,'status':detail.status}
             record.append(data)
-            print("In get3")
 
        return render(request,'bookAppointment.html',{
             'user':'aish',
@@ -91,20 +87,44 @@ class bookAppointment(View):
         })
     def post(self,request,id):
         msgS = ''
+        msgE=[]
+        error=0
         try:
             form = appointmentForm(request.POST)
             id = signing.loads(id)
             if form.is_valid():
-                first_name = mask(form.cleaned_data.get('first_name'))
+                doc_id_list = []
+                first_name = form.cleaned_data.get('first_name')
                 last_name = form.cleaned_data.get('last_name')
-                print("1")        
                 requested_date = form.cleaned_data.get('requested_date')
-                doctor_id=request.POST.get('doctor_id')     
-                print("2")    
-                print(first_name) 
-                print(last_name)
-                print(requested_date)
-                print(doctor_id)   
+                
+                docs = DoctorDetails.objects.all()
+
+                for i in docs :
+                     doc_id_list.append(i.doctor_id)  
+ 
+
+                if not request.POST.get('first_name'):
+                     msgE.append( "First Name is Mandatory")
+                     error=error+1
+                if not request.POST.get('last_name'):
+                     msgE.append( "Last Name is Mandatory")
+                     error=error+1
+                if not request.POST.get('requested_date'):
+                    msgE.append( "Requested Date is Mandatory")
+                    error=error+1
+                 
+                if request.POST.get('doctor_id'):
+                    doctor_id=signing.loads(request.POST.get('doctor_id')   )
+                    if int(doctor_id) not in doc_id_list :
+                        msgE.append("Invalid Doctor Selection")
+                        error=error+1
+                else :
+                    msgE.append("Selecting a Doctor is Mandatory")
+                    error = error + 1
+                if(error>=1):
+                    exit()
+
                 AppointmentObj = AppointmentDetails(patient_id=id,first_name=first_name,last_name=last_name,
                                              doctor_id=doctor_id,requested_date=requested_date)
                 print("3")
@@ -112,10 +132,11 @@ class bookAppointment(View):
                 print("Saved")
                 msgS = "Added Successfully"
             else:
-                msgE = "Mention Name of the Application Type"
+                msgE = "Enter Valid Inputs"
         except:
             print("in except block")
-            msgE = "Something went Wrong"
+            msgE = msgE
+            exit()
         finally:
             id = signing.dumps(id)
             print("in finally block")
@@ -146,7 +167,9 @@ class updateAppointment(View):
                'docDetails':docDetails              
             })
     def post(self, request,a_id, id):
-        msgS='Entered'
+        msgS=''
+        error = 0
+        msgE=[]
         try:
             # try:
             #     id = signing.loads(id)
@@ -161,13 +184,45 @@ class updateAppointment(View):
                 detail.first_name = detailForm.cleaned_data.get('first_name')
                 detail.last_name = detailForm.cleaned_data.get('last_name')
              
-                detail.doctor_id = request.POST.get('doctor_id')
+                # detail.doctor_id = request.POST.get('doctor_id')
                 detail.requested_date = detailForm.cleaned_data.get('requested_date')
 
+                if not request.POST.get('first_name'):
+                    print("In exception !!!!!!!!!!!!!")
+                    msgE.append( "First Name is Mandatory")
+                    error=error+1
+                if not request.POST.get('last_name'):
+                    msgE.append( "Last Name is Mandatory")
+                    error=error+1
+                if not request.POST.get('requested_date'):
+                    msgE.append( "Requested Date is Mandatory")
+                    error=error+1
+
+
+                doc_id_list =[]
+                docs = DoctorDetails.objects.all()
+                for i in docs :
+                    doc_id_list.append(i.doctor_id)  
+
+
+                if request.POST.get('doctor_id'):
+                    doctor_id=signing.loads(request.POST.get('doctor_id')   )
+                    if int(doctor_id) not in doc_id_list :
+                        msgE.append("Invalid Doctor Selection")
+                        error=error+1
+                else :
+                    msgE.append("Selecting a Doctor is Mandatory")
+                    error = error + 1
+                if(error>=1):
+                    exit()
+                
+                detail.doctor_id = doctor_id
                 detail.save()
             msgS="Updated Successfully"
         except:
-            msgE="Something Went Wrong"
+            print("in except block")
+            msgE = msgE
+            exit()
         finally:
             id = signing.dumps(id)
             a_id = signing.dumps(a_id)

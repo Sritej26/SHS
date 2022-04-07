@@ -36,15 +36,12 @@
                         {{ field.label_tag }} {{ field }}</br>
                         {%endfor%}
 
-
-                       
-
                         <select class="form-control" style="margin-block-end: 20px;" name="doctor_id"
                             style="width:50%; font-size:15px">
-                            <option selected value = "{{docDetail.doctor_id}}"> {{docDetail.doctor_name}} -- {{docDetail.doctor_spec}}</option>
+                            <option selected value = "{{k|patient_id_encrypt_tag:docDetail.doctor_id}}"> {{docDetail.doctor_name}} -- {{docDetail.doctor_spec}}</option>
                             {%for doc in docDetails%}
-                                {% if docDetail.doctor_id != doc.id %}
-                                <option value="{{doc.id}}">{{doc.doctor_name}} -- {{doc.doctor_spec}}</option>
+                                {% if docDetail.doctor_id != doc.doctor_id %}
+                                <option value="{{k|patient_id_encrypt_tag:doc.doctor_id}}">{{doc.doctor_name}} -- {{doc.doctor_spec}}</option>
                                 {% endif %}
                             {%endfor%}
                         </select>
