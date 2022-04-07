@@ -483,7 +483,7 @@ class requestLabTests(View):
               if not (request.user.is_authenticated):
                 return redirect('/Login')
               id = signing.loads(id)
-              testDetails = labTests.objects.filter(patient_id=id ,lab_test_status="adding....")
+              testDetails = labTests.objects.filter(patient_id=id ,lab_test_status="Recommended")
               testRequestRecord =[]
               for detail in testDetails:
                  docDetail = DoctorDetails.objects.get(doctor_id =detail.doctor_id)
