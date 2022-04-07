@@ -449,12 +449,13 @@ class updatePatientDetails(View):
             #messages.add_message(request, messages.SUCCESS if msgS else messages.ERROR, (msgS if not msgS == '' else msgE),
              #                    extra_tags='callout callout-success calloutCustom lead' if msgS else 'callout callout-danger calloutCustom lead')
             flag = 'true'
+            flag1 = 'true'
             #return redirect('/doctors/patientRecords/search/', args=[detail1.patient_id])
             print(detail1.patient_id)
             patientdetails = PatientDetails.objects.filter(patient_id = detail1.patient_id)
             print(patientdetails)
             id = signing.dumps(id)
-            return render(request, 'searchResultsView.html',{"patientdetails":patientdetails, "flag":flag})
+            return render(request, 'searchResultsView.html',{"flag1": flag1, "patientdetails":patientdetails, "flag":flag})
 
 
 class updatePatientDiagnosis(View):
@@ -514,12 +515,13 @@ class updatePatientDiagnosis(View):
             #messages.add_message(request, messages.SUCCESS if msgS else messages.ERROR, (msgS if not msgS == '' else msgE),
              #                    extra_tags='callout callout-success calloutCustom lead' if msgS else 'callout callout-danger calloutCustom lead')
             flag = 'true'
+            flag1 = 'true'
             #return redirect('/doctors/patientRecords/search/', args=[detail1.patient_id])
             print(detail1.patient_id)
             patientdetails = AppointmentDetails.objects.filter(patient_id = request.POST.get('patient_id'))
             print(patientdetails)
             id = signing.dumps(id)
-            return render(request, 'ViewDiagnosis.html',{"patientdetails":patientdetails, "flag":flag})
+            return render(request, 'ViewDiagnosis.html',{"patientdetails":patientdetails, "flag":flag, "flag1":flag1})
 
 class deletePatientDiagnosis(View):
     def get(self, request, id, id1):
