@@ -16,10 +16,10 @@ def patient_id_encrypt_tag(k,a):
 def getHospitalStaffId(k,a):
     try:
         username = EmployeeDetails.objects.get(employee_username=a)
-        return username.employee_id
+        #id = signing.loads(id)
+        return signing.dumps(username.employee_id)
     except:
         return ''
-
 @register.filter
 def name_from_id(k,a):
     try:

@@ -36,8 +36,9 @@ logger.setLevel(logging.INFO)
 
 class hospitalStaffHome(View):
     def get(self,request,id):
-        # id = signing.loads(id)
+        id = signing.loads(id)
         username = EmployeeDetails.objects.get(employee_id=id)
+      
         global hospitalStaffName 
         hospitalStaffName = username.employee_username
         print(hospitalStaffName)
@@ -280,6 +281,7 @@ class updatepersonalinfo(View):
 class edit(View):
     def get(self, request, id):
         details = PatientDetails.objects.get(patient_id=id) 
+   
         d = {'patient_name': details.patient_name, 'patient_id': id,'patient_age':details.patient_age,'patient_weight':details.patient_weight,'patient_height':details.patient_height,'patient_address':details.patient_address,'patient_phone_no':details.patient_phone_no,'patient_email':details.patient_email}
         print('ID'+str(details.patient_id))
 
@@ -314,3 +316,4 @@ class edit(View):
                 print('sadfghjkl')
         except:
             msgE = "SomeThing"
+        

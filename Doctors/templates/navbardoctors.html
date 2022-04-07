@@ -1,4 +1,5 @@
 {% load static %}
+{%load encrypt%}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -39,10 +40,10 @@
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="/doctors" class="nav-link">Home</a>
+        <a href="/doctors/doctorHome/{{k|getHospitalStaffId:user}}" class="nav-link">Home</a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="#" class="nav-link">Contact</a>
+        <a href="#" class="nav-link">Doctor Portal</a>
       </li>
     </ul>
 
@@ -63,7 +64,7 @@
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <li class="nav-item">
-            <a href="/doctors/doctorHome/{{user}}" class="nav-link">
+            <a href="/doctors/doctorHome/{{k|getHospitalStaffId:user}}" class="nav-link">
               <i class="nav-icon fas fa-home"></i>
               <p>Home</p>
             </a>
@@ -87,7 +88,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="/doctors/logout/{{user}}" class="nav-link">
+            <a href="/doctors/logout" class="nav-link">
                 <i class="nav-icon fas fa-sign-out-alt"></i>
                     <p> Sign out</p>
             </a>

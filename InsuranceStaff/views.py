@@ -13,26 +13,36 @@ from AdminSHS.models import EmployeeDetails
 from Hospitalportal.models import *
 from django.contrib.auth import logout
 import uuid
+import logging
+from django.core import signing
 
+logging.basicConfig(filename="userstatus.log",
+                    format='%(asctime)s %(message)s',
+                    filemode='w')
+logger = logging.getLogger()
+
+logger.setLevel(logging.INFO)
 # Create your views here.
 class insuranceHome(View):
-    def get(self,request, user):
+    def get(self,request, id):
+        id = signing.loads(id)
+        username = EmployeeDetails.objects.get(employee_id=id)
+        
         global insuranceStaffName
-        insuranceStaffName = user
+        insuranceStaffName = username.employee_username
         appDetails = InsuranceClaimDetails.objects.filter(claim_status = 'Pending')
         return render(request,'insuranceHome.html',{
-            'user': user,
+            'user': insuranceStaffName,
             'appDetails': appDetails,
         })
 
-def logout_user(request,user):
+def logout_user(request):
     print("yes")
-    print(user)
     # name = signing.loads(user)
     logout(request)
     print("Loggedout")
-    username = EmployeeDetails.objects.get(employee_first_name=user)
-    test = HospitalPortal.objects.get(username = username.employee_first_name)
+    username = EmployeeDetails.objects.get(employee_username=insuranceStaffName)
+    test = HospitalPortal.objects.get(username = username.employee_username)
     test.session='N'
     test.save()
     # now = datetime.now()

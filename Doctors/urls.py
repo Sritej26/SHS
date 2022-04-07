@@ -3,7 +3,7 @@ from . import views
 app_name = 'Doctors'
 
 urlpatterns = [
-    re_path(r'^doctorHome/(?P<user>(.*))$', views.doctorHome.as_view(), name='doctorHome'),
+    re_path(r'^doctorHome/(?P<id>(.*))$', views.doctorHome.as_view(), name='doctorHome'),
     # path('', views.doctorHome.as_view(), name='doctorHome'),
     path('patientRecords/', views.patientRecords.as_view(), name='patientRecords'),
     path('viewLabReports/', views.viewLabReports.as_view(), name='viewLabReports'),
@@ -18,5 +18,5 @@ urlpatterns = [
     path('searchAppointments',views.searchAppointments, name='searchAppointments'),
     re_path(r'addDiagnosis/(?P<id>\d+)/$',views.addDiagnosis.as_view(), name = 'addDiagnosis'),
     re_path(r'addPrescription/(?P<id>\d+)/$',views.addPrescription.as_view(), name = 'addPrescription'),
-    re_path(r'^logout/(?P<user>(.*))$', views.logout_user)
+    path('logout', views.logout_user)
 ]

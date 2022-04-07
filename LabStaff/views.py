@@ -9,14 +9,25 @@ from django.db.models import Q
 from django.contrib.auth import logout
 from AdminSHS.models import EmployeeDetails
 from Hospitalportal.models import HospitalPortal
+import logging
+from django.core import signing
 
-def logout_user(request,user):
+
+logging.basicConfig(filename="userstatus.log",
+                    format='%(asctime)s %(message)s',
+                    filemode='w')
+logger = logging.getLogger()
+
+logger.setLevel(logging.INFO)
+
+
+def logout_user(request):
     print("yes")
-    print(user)
+    #print(user)
     # name = signing.loads(user)
     logout(request)
     print("Loggedout")
-    username = EmployeeDetails.objects.get(employee_username=user)
+    username = EmployeeDetails.objects.get(employee_username=labStaffName)
     test = HospitalPortal.objects.get(username = username.employee_username)
     test.session='N'
     test.save()
@@ -26,24 +37,29 @@ def logout_user(request,user):
     return redirect('/Login')
 # Create your views here.
 class labStaffHome(View):
-    def get(self, request,user):
-        print(user)
-        if not (request.user.is_authenticated):
-            return redirect('/Login') 
+    def get(self, request,id):
+        #print(user)
+        id = signing.loads(id)
+        username = EmployeeDetails.objects.get(employee_id=id)
+        global labStaffName
+        labStaffName = username.employee_username
+
+        #if not (request.user.is_authenticated):
+         #   return redirect('/Login') 
         return render(request, 'labStaffHome.html', {
-            'user': user
+            'user': labStaffName
         })
 
 class viewRequests(View):
-    def get(self, request,user):
-        if not (request.user.is_authenticated):
-            return redirect('/Login')
+    def get(self, request):
+        #if not (request.user.is_authenticated):
+         #   return redirect('/Login')
         request_details = labTests.objects.all()
         number_of_requests = len(request_details)
         return render(request, 'viewRequests.html', {
             'requests': request_details,
             'number_of_requests': number_of_requests,
-            'user' : user
+            'user' : labStaffName
         })
 
     def post(self,request):
@@ -71,15 +87,15 @@ class viewRequests(View):
             #                      (msgS if not msgS == '' else msgE),
             #                      extra_tags='callout callout-success calloutCustom lead' if msgS else 'callout callout-danger calloutCustom lead')
             # return redirect('/labStaff/viewRequests')
-            return HttpResponseRedirect(reverse('labStaff:viewRequests', args=[user]))
+            return HttpResponseRedirect(reverse('labStaff:viewRequests'))
 class addLabRecord(View):
-    def get(self, request,user):
-        if not (request.user.is_authenticated):
-            return redirect('/Login')
+    def get(self, request):
+        #if not (request.user.is_authenticated):
+         #   return redirect('/Login')
         request_details = LabReports.objects.filter(report_status="Approved")
         return render(request, 'labReportPage.html', {
             'requests': request_details,
-            'user' : user
+            'user' : labStaffName
         })
     def post(self,request):
         
@@ -99,21 +115,21 @@ class addLabRecord(View):
             message="Exception in fetching Lab Reports"
         finally:
             # return redirect('/labStaff/addLabRecord')
-            return HttpResponseRedirect(reverse('labStaff:addLabRecord', args=[user]))
+            return HttpResponseRedirect(reverse('labStaff:addLabRecord'))
 
             
 
 class updateLabRecord(View):
-    def get(self, request,user):
-        if not (request.user.is_authenticated):
-            return redirect('/Login')
+    def get(self, request):
+        #if not (request.user.is_authenticated):
+         #   return redirect('/Login')
         crit=Q(report_status="Added")
         crit1=Q(report_status="Updated")
         request_details = LabReports.objects.filter(crit | crit1 )
        
         return render(request, 'updateReportPage.html', {
             'requests': request_details,
-            'user' : user
+            'user' : labStaffName
         })
     def post(self,request):
         details = str(request.POST.get('details'))
@@ -129,18 +145,18 @@ class updateLabRecord(View):
             print("exception while updating  reports")
             message="Exception in fetching Lab Reports"
         finally:
-            return HttpResponseRedirect(reverse('labStaff:updateLabRecord', args=[user]))
+            return HttpResponseRedirect(reverse('labStaff:updateLabRecord'))
 
             # return redirect('/labStaff/updateLabRecord')
 
 
     
 class viewLabRecord(View):
-    def get(self, request,user):
+    def get(self, request):
         if not (request.user.is_authenticated):
             return redirect('/Login')
         request_details = LabReports.objects.all()
         return render(request, 'viewReportPage.html', {
             'requests': request_details,
-            'user' : user
+            'user' : labStaffName
         })

@@ -147,13 +147,28 @@ class Login(View):
                     # elif test.Role == 'AdminSHS':
                     #     return redirect("/adminSHS/",{'name':user})
                     elif test.Role == 'Labstaff':
-                        return HttpResponseRedirect(reverse('labStaff:labStaffHome', args=[user]))
+                        username = EmployeeDetails.objects.get(employee_username = user)
+                        id = username.employee_id
+                        id = signing.dumps(id)
+                        return HttpResponseRedirect(reverse('labStaff:labStaffHome', args=[id]))
                     elif test.Role == 'Doctor':
-                        return HttpResponseRedirect(reverse('doctors:doctorHome', args=[user]))
+                        username = EmployeeDetails.objects.get(employee_username = user)
+                        id = username.employee_id
+                        id = signing.dumps(id)
+                        return HttpResponseRedirect(reverse('doctors:doctorHome', args=[id]))
                     elif test.Role == 'Insurancestaff':
-                        return HttpResponseRedirect(reverse('insuranceStaff:insuranceHome', args=[user]))
+                        username = EmployeeDetails.objects.get(employee_username = user)
+                        id = username.employee_id
+                        id = signing.dumps(id)
+                        return HttpResponseRedirect(reverse('insuranceStaff:insuranceHome', args=[id]))
                     elif test.Role == 'Hospitalstaff':
-                        return redirect("/hospitalStaff/", {'name': user})
+                        username = EmployeeDetails.objects.get(employee_username = user)
+                        id = username.employee_id
+                        id = signing.dumps(id)
+                        return HttpResponseRedirect(reverse('hospitalStaff:hospitalStaffHome', args=[id]))
+
+                        
+                        #return redirect("/hospitalStaff/", {'name': user})
                 else:
                     messages.info(request,'User already logged in')
                     return render(request,'Login.html')  

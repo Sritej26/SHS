@@ -1,4 +1,5 @@
 {% load static %}
+{%load encrypt%}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -43,8 +44,11 @@
                     <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
-                    <a href="./index3" class="nav-link">Home</a>
+                    <a href="/labStaff/labStaffHome/{{k|getHospitalStaffId:user}}" class="nav-link">Home</a>
                 </li>
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a href="#" class="nav-link">Lab Staff Portal</a>
+                  </li>
             </ul>
         </nav>
         <!-- /.navbar -->
@@ -63,37 +67,37 @@
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                         data-accordion="false">
                         <li class="nav-item">
-                            <a href="/labStaff/labStaffHome/{{user}}" class="nav-link">
+                            <a href="/labStaff/labStaffHome/{{k|getHospitalStaffId:user}}" class="nav-link">
                                 <i class="nav-icon fas fa-home"></i>
                                 <p>Home</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="/labStaff/viewRequests/{{user}}" class="nav-link">
+                            <a href="/labStaff/viewRequests" class="nav-link">
                                 <i class="nav-icon fas fa-tasks" aria-hidden="true"></i>
                                 <p>View Requests</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="/labStaff/addLabRecord/{{user}}" class="nav-link">
+                            <a href="/labStaff/addLabRecord" class="nav-link">
                                 <i class="nav-icon fas fa-plus" aria-hidden="true"></i>
                                 <p> Add Lab Record </p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="/labStaff/updateLabRecord/{{user}}" class="nav-link">
+                            <a href="/labStaff/updateLabRecord" class="nav-link">
                                 <i class="nav-icon fas fa-plus" aria-hidden="true"></i>
                                 <p> Update Lab Record </p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="/labStaff/viewLabRecord/{{user}}" class="nav-link">
+                            <a href="/labStaff/viewLabRecord" class="nav-link">
                                 <i class="nav-icon fas fa-tasks" aria-hidden="true"></i>
                                 <p> View Lab Record </p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="/labStaff/logout/{{user}}" class="nav-link">
+                            <a href="/labStaff/logout" class="nav-link">
                                 <i class="nav-icon fas fa-sign-out-alt"></i>
                                     <p> Sign out</p>
                             </a>

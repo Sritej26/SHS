@@ -28,16 +28,24 @@ from django.core import signing
 from AdminSHS.models import EmployeeDetails
 from django.contrib.auth import logout
 #from HospitalStaff.helper import mask,unmask
+import logging
+
+logging.basicConfig(filename="userstatus.log",
+                    format='%(asctime)s %(message)s',
+                    filemode='w')
+logger = logging.getLogger()
+
+logger.setLevel(logging.INFO)
 
 flag = 'true'
 
-def logout_user(request,user):
+def logout_user(request):
     print("yes")
-    print(user)
+    #print(user)
     # name = signing.loads(user)
     logout(request)
     print("Loggedout")
-    username = EmployeeDetails.objects.get(employee_username=user)
+    username = EmployeeDetails.objects.get(employee_username=doctorName)
     test = HospitalPortal.objects.get(username = username.employee_username)
     test.session='N'
     test.save()
@@ -47,9 +55,12 @@ def logout_user(request,user):
     return redirect('/Login')
 
 class doctorHome(View):
-    def get(self,request,user):
+    def get(self,request,id):
+        id = signing.loads(id)
+        username = EmployeeDetails.objects.get(employee_id=id)
         global doctorName
-        doctorName = user
+        user = username.employee_username
+        doctorName = username.employee_username
         print("called doctor again")
         doctormap = DoctorDetails.objects.get(doctor_username=user)
         doctorId = doctormap.doctor_id
@@ -59,7 +70,7 @@ class doctorHome(View):
         print(datetime.date.today())
         date = datetime.date.today()
         return render(request,'doctorHome.html',{
-            'user': user,
+            'user': doctorName,
             'appDetails': appDetails,
             'date':date
         })
@@ -68,8 +79,10 @@ class addPrescription(View):
     def get(self,request, id):
         try:
             print("Entered Try")
+            id = signing.loads(id)
             details = AppointmentDetails.objects.filter(appointment_id=id)
             prescriptionDetails = prescriptions.objects.filter(appointment_id = id)
+
             details1 = {}
             print(details)
         finally:
@@ -83,6 +96,7 @@ class addPrescription(View):
             #     id = signing.loads(id)
             # except:
             #     raise Http404
+            id = signing.loads(id)
             detail1 = AppointmentDetails.objects.get(appointment_id = id)
             print(detail1.patient_id)
             print("user detail")
@@ -127,7 +141,7 @@ class addPrescription(View):
             #msgE="Something Went Wrong"
             messages.error(request, error)
         finally:
-            # id = signing.dumps(id)
+            id = signing.dumps(id)
             #messages.add_message(request, messages.SUCCESS if msgS else messages.ERROR, (msgS if not msgS == '' else msgE),
              #                    extra_tags='callout callout-success calloutCustom lead' if msgS else 'callout callout-danger calloutCustom lead')
             #return redirect('/doctors/patientRecords/search/', args=[detail1.patient_id])
@@ -148,6 +162,7 @@ class addDiagnosis(View):
         flag = 'false'
         try:
             print("Entered Try")
+            id = signing.loads(id)
             details = AppointmentDetails.objects.get(appointment_id=id)
             #lab_tests1 = AppointmentDetails.objects.get(appointment_id = id)
             print(details)
@@ -172,6 +187,7 @@ class addDiagnosis(View):
                 #     id = signing.loads(id)
                 # except:
                 #     raise Http404
+                id = signing.loads(id)
                 detail1 = AppointmentDetails.objects.get(appointment_id = id)
                 labDeatils = labTests.objects.filter(appointment_id = id)
                 testNames = []
@@ -202,7 +218,7 @@ class addDiagnosis(View):
                 #msgE="Something Went Wrong"
                 messages.error(request, error)
             finally:
-                # id = signing.dumps(id)
+                id = signing.dumps(id)
                 #messages.add_message(request, messages.SUCCESS if msgS else messages.ERROR, (msgS if not msgS == '' else msgE),
                     #                    extra_tags='callout callout-success calloutCustom lead' if msgS else 'callout callout-danger calloutCustom lead')
                 #return redirect('/doctors/patientRecords/search/', args=[detail1.patient_id])
@@ -224,6 +240,7 @@ class addDiagnosis(View):
                 #     id = signing.loads(id)
                 # except:
                 #     raise Http404
+                id = signing.loads(id)
                 detail1 = AppointmentDetails.objects.get(appointment_id = id)
                 print(detail1.patient_id)
                 print("user detail")
@@ -249,7 +266,7 @@ class addDiagnosis(View):
                 #msgE="Something Went Wrong"
                 messages.error(request, 'Something Went Wrong!')
             finally:
-                # id = signing.dumps(id)
+                id = signing.dumps(id)
                 #messages.add_message(request, messages.SUCCESS if msgS else messages.ERROR, (msgS if not msgS == '' else msgE),
                 #                    extra_tags='callout callout-success calloutCustom lead' if msgS else 'callout callout-danger calloutCustom lead')
                 #return redirect('/doctors/patientRecords/search/', args=[detail1.patient_id])
@@ -350,6 +367,7 @@ class updatePatientDetails(View):
         flag = 'false'
         try:
             print("Entered try")
+            id = signing.loads(id)
             details = PatientDetails.objects.get(patient_id=id)
             print(details)
             details = {'patient_id': details.patient_id,'patient_name': details.patient_name,'patient_age': details.patient_age, 'patient_weight': details.patient_weight,
@@ -368,6 +386,7 @@ class updatePatientDetails(View):
             #     id = signing.loads(id)
             # except:
             #     raise Http404
+            id = signing.loads(id)
             detail1 = PatientDetails.objects.get(patient_id = id)
             print(detail1.patient_id)
             print("user detail")
@@ -400,7 +419,7 @@ class updatePatientDetails(View):
             #msgE="Something Went Wrong"
             messages.error(request, 'Something Went Wrong!')
         finally:
-            # id = signing.dumps(id)
+            id = signing.dumps(id)
             #messages.add_message(request, messages.SUCCESS if msgS else messages.ERROR, (msgS if not msgS == '' else msgE),
              #                    extra_tags='callout callout-success calloutCustom lead' if msgS else 'callout callout-danger calloutCustom lead')
             flag = 'true'
@@ -417,6 +436,7 @@ class updatePatientDiagnosis(View):
         try:
             print("Entered try")
             print(id)
+            id = signing.loads(id)
             details = AppointmentDetails.objects.get(appointment_id=id)
             print(details)
             details = {'appointment_id': details.appointment_id,'patient_id': details.patient_id,'first_name': details.first_name, 'last_name': details.last_name,
@@ -435,6 +455,7 @@ class updatePatientDiagnosis(View):
             #     id = signing.loads(id)
             # except:
             #     raise Http404
+            id = signing.loads(id)
             detail1 = AppointmentDetails.objects.get(appointment_id = id)
             print(detail1.patient_id)
             print("user detail")
@@ -460,7 +481,7 @@ class updatePatientDiagnosis(View):
             #msgE="Something Went Wrong"
             messages.error(request, 'Something Went Wrong!')
         finally:
-            # id = signing.dumps(id)
+            id = signing.dumps(id)
             #messages.add_message(request, messages.SUCCESS if msgS else messages.ERROR, (msgS if not msgS == '' else msgE),
              #                    extra_tags='callout callout-success calloutCustom lead' if msgS else 'callout callout-danger calloutCustom lead')
             flag = 'true'
@@ -487,6 +508,7 @@ class deletePatientDiagnosis(View):
 class addnextAppointment(View):
      def get(self, request, id):
          try:
+             id = signing.loads(id)
              detail = AppointmentDetails.objects.get(appointment_id=id)
              detail = {'appointment_id': detail.appointment_id,'patient_id': detail.patient_id,'first_name': detail.first_name,'last_name': detail.last_name,
                          'doctor_id': detail.doctor_id}
@@ -498,6 +520,7 @@ class addnextAppointment(View):
          msgS = ''
          try:
              form = appointmentForm(request.POST)
+             id = signing.loads(id)
              if form.is_valid():
                  first_name = form.cleaned_data.get('first_name')
                  last_name = form.cleaned_data.get('last_name')
@@ -515,6 +538,7 @@ class addnextAppointment(View):
              print("in except block")
              msgE = "Something went Wrong"
          finally:
+             id = signing.dumps(id)
              print("in finally block")
              details = AppointmentDetails.objects.get(appointment_id=id)
              #lab_tests1 = AppointmentDetails.objects.get(appointment_id = id)
