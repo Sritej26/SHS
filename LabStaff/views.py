@@ -1,5 +1,7 @@
 from django.contrib import messages
+from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
+from django.urls import reverse
 from django.views import View
 from Doctors.models import labTests
 from LabStaff.models import LabReports
@@ -38,6 +40,8 @@ def logout_user(request):
 # Create your views here.
 class labStaffHome(View):
     def get(self, request,id):
+        if not (request.user.is_authenticated):
+            return redirect('/Login')
         #print(user)
         id = signing.loads(id)
         username = EmployeeDetails.objects.get(employee_id=id)
@@ -52,6 +56,8 @@ class labStaffHome(View):
 
 class viewRequests(View):
     def get(self, request):
+        if not (request.user.is_authenticated):
+            return redirect('/Login')
         #if not (request.user.is_authenticated):
          #   return redirect('/Login')
         request_details = labTests.objects.all()
@@ -90,6 +96,8 @@ class viewRequests(View):
             return HttpResponseRedirect(reverse('labStaff:viewRequests'))
 class addLabRecord(View):
     def get(self, request):
+        if not (request.user.is_authenticated):
+            return redirect('/Login')
         #if not (request.user.is_authenticated):
          #   return redirect('/Login')
         request_details = LabReports.objects.filter(report_status="Approved")

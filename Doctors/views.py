@@ -56,6 +56,8 @@ def logout_user(request):
 
 class doctorHome(View):
     def get(self,request,id):
+        if not (request.user.is_authenticated):
+            return redirect('/Login')
         id = signing.loads(id)
         username = EmployeeDetails.objects.get(employee_id=id)
         global doctorName
@@ -78,6 +80,8 @@ class doctorHome(View):
 class addPrescription(View):
     def get(self,request, id):
         try:
+            if not (request.user.is_authenticated):
+                return redirect('/Login')
             print("Entered Try")
             id = signing.loads(id)
             details = AppointmentDetails.objects.filter(appointment_id=id)
@@ -152,6 +156,8 @@ class addPrescription(View):
 
 class viewLabReports(View):
     def get(self,request):
+        if not (request.user.is_authenticated):
+                return redirect('/Login')
         return render(request,'viewLabReports.html',{
             'user':doctorName,
             'flag1': 'true'
@@ -161,6 +167,8 @@ class addDiagnosis(View):
     def get(self,request, id):
         flag = 'false'
         try:
+            if not (request.user.is_authenticated):
+                return redirect('/Login')
             print("Entered Try")
             id = signing.loads(id)
             details = AppointmentDetails.objects.get(appointment_id=id)
@@ -281,12 +289,16 @@ class addDiagnosis(View):
 
 class patientRecords(View):
     def get(self,request):
+        if not (request.user.is_authenticated):
+                return redirect('/Login')
         return render(request,'patientRecords.html',{
             'user':doctorName
         })
 
 class patientDiagnosis(View):
     def get(self,request):
+        if not (request.user.is_authenticated):
+                return redirect('/Login')
         return render(request,'searchDiagnosis.html',{
             'user':doctorName
         })
@@ -295,6 +307,8 @@ def searchBar(request):
     flag = "true"
     flag1 = "true"
     if request.method == 'GET':
+        if not (request.user.is_authenticated):
+                return redirect('/Login')
         query = request.GET.get('query')
         patientid = PatientDetails.objects.all()
         patientdetails = PatientDetails.objects.filter(patient_id = query)
@@ -312,6 +326,8 @@ def searchBar(request):
 def searchLabReports(request):
     flag1 = "true"
     if request.method == 'GET':
+        if not (request.user.is_authenticated):
+                return redirect('/Login')
         query = request.GET.get('query')
         #query1 = request.GET.get('query1')
         labreportdetails = labTests.objects.filter(appointment_id = query)
@@ -330,6 +346,8 @@ def searchDiagnosis(request):
     flag = "true"
     flag1 = "true"
     if request.method == 'GET':
+        if not (request.user.is_authenticated):
+                return redirect('/Login')
         print("Entered Serach Diagnosis")
         query = request.GET.get('query')
         patientdetails = AppointmentDetails.objects.filter(patient_id = query)
@@ -346,6 +364,8 @@ def searchDiagnosis(request):
 
 def searchAppointments(request):
     if request.method == 'GET':
+        if not (request.user.is_authenticated):
+                return redirect('/Login')
         print(request)
         print("Entered search")
         doctormap = DoctorDetails.objects.get(doctor_username=doctorName)
@@ -366,6 +386,8 @@ class updatePatientDetails(View):
     def get(self, request, id):
         flag = 'false'
         try:
+            if not (request.user.is_authenticated):
+                return redirect('/Login')
             print("Entered try")
             id = signing.loads(id)
             details = PatientDetails.objects.get(patient_id=id)
@@ -434,6 +456,8 @@ class updatePatientDiagnosis(View):
     def get(self, request, id):
         flag = 'false'
         try:
+            if not (request.user.is_authenticated):
+                return redirect('/Login')
             print("Entered try")
             print(id)
             id = signing.loads(id)
@@ -493,6 +517,8 @@ class updatePatientDiagnosis(View):
 
 class deletePatientDiagnosis(View):
     def get(self, request, id, id1):
+        if not (request.user.is_authenticated):
+            return redirect('/Login')
         flag = "true"
         flag1 = "true"
         query = request.GET.get('query')
@@ -508,6 +534,8 @@ class deletePatientDiagnosis(View):
 class addnextAppointment(View):
      def get(self, request, id):
          try:
+             if not (request.user.is_authenticated):
+                return redirect('/Login')
              id = signing.loads(id)
              detail = AppointmentDetails.objects.get(appointment_id=id)
              detail = {'appointment_id': detail.appointment_id,'patient_id': detail.patient_id,'first_name': detail.first_name,'last_name': detail.last_name,

@@ -25,6 +25,8 @@ logger.setLevel(logging.INFO)
 # Create your views here.
 class insuranceHome(View):
     def get(self,request, id):
+        if not (request.user.is_authenticated):
+            return redirect('/Login')
         id = signing.loads(id)
         username = EmployeeDetails.objects.get(employee_id=id)
         
@@ -52,6 +54,8 @@ def logout_user(request):
 
 class newPolicies(View):
     def get(self,request):
+        if not (request.user.is_authenticated):
+            return redirect('/Login')
         appDetails = InsurancePolicies.objects.all()
         return render(request,'newPolicies.html',{
             'user':insuranceStaffName,
@@ -86,6 +90,8 @@ class newPolicies(View):
 
 class viewPolicies(View):
      def get(self, request):
+        if not (request.user.is_authenticated):
+            return redirect('/Login')
         appDetails = InsurancePolicies.objects.all()
         return render(request,'viewPolicies.html',{
             'user':insuranceStaffName,
@@ -95,6 +101,8 @@ class viewPolicies(View):
         
 class checkClaims(View):
     def get(self, request, id):
+        if not (request.user.is_authenticated):
+            return redirect('/Login')
         claimDetails = InsuranceClaimDetails.objects.get(claim_id=id)   
         print(claimDetails.claim_id)
         print(claimDetails.patient_id)
@@ -166,6 +174,8 @@ class checkClaims(View):
 
 class viewClaimRequests(View):
     def get(self,request):
+        if not (request.user.is_authenticated):
+            return redirect('/Login')
         appDetails = InsuranceClaimDetails.objects.all()
         return render(request,'viewClaimRequests.html',{
             'user':insuranceStaffName,
@@ -174,6 +184,8 @@ class viewClaimRequests(View):
 
 class insurancePayments(View):
     def get(self,request):
+        if not (request.user.is_authenticated):
+            return redirect('/Login')
         appDetails = InsuranceClaimDetails.objects.filter(claim_transaction_status = 'Done')
         return render(request,'insurancePayments.html',{
             'user':insuranceStaffName,

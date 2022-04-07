@@ -36,6 +36,8 @@ logger.setLevel(logging.INFO)
 
 class hospitalStaffHome(View):
     def get(self,request,id):
+        if not (request.user.is_authenticated):
+            return redirect('/Login')
         id = signing.loads(id)
         username = EmployeeDetails.objects.get(employee_id=id)
       
@@ -70,6 +72,8 @@ def logout_user(request):
 
 class createRecord(View):
     def get(self, request):
+        if not (request.user.is_authenticated):
+            return redirect('/Login')
         print(hospitalStaffName)
         flag = 'false'
         try:
@@ -120,7 +124,8 @@ class createRecord(View):
 
 class approveAppointment(View):
     def get(self, request):
-        
+        if not (request.user.is_authenticated):
+            return redirect('/Login')
         appDetails = AppointmentDetails.objects.all()
         
 
@@ -189,6 +194,8 @@ class approveAppointment(View):
 
 class viewDetails1(View):
     def get(self, request):
+        if not (request.user.is_authenticated):
+            return redirect('/Login')
         
         #appDetails = AppointmentDetails.objects.all()
         
@@ -203,7 +210,8 @@ class viewDetails1(View):
         })
     
 def search(request):
-    
+    if not (request.user.is_authenticated):
+            return redirect('/Login')
     print("In search")
     if request.method == 'GET':
         print("Entered Serach")
@@ -228,6 +236,8 @@ def search(request):
 class checkAppointmets(View):
     def get(self, request, id):
         try:
+            if not (request.user.is_authenticated):
+                return redirect('/Login')
             Details = AppointmentDetails.objects.get(appointment_id=id) 
             doctorId=Details.doctor_id
             date=Details.requested_date
@@ -260,6 +270,8 @@ class transactions(View):
     def get(self, request):
         
         try:
+            if not (request.user.is_authenticated):
+                return redirect('/Login')
             print("Entered try")
             #details = PatientDetails.objects.get(patient_id=id)
             patientdetail = AppointmentDetails.objects.all()
@@ -272,6 +284,8 @@ class updatepersonalinfo(View):
         #                                      patient_age=35,patient_weight=55,patient_height=5,patient_address="sasddd",patient_phone_no=67,change_req_status=1,request_info="Change weight to 73")
         # PatientDetailsObj.save()
         try:
+            if not (request.user.is_authenticated):
+                return redirect('/Login')
             print("Entered try")
             details = PatientDetails.objects.filter(change_request_status=1)
             
@@ -280,6 +294,8 @@ class updatepersonalinfo(View):
             return render(request, 'updatepersonalinfo.html', {'details': details,'user':hospitalStaffName})
 class edit(View):
     def get(self, request, id):
+        if not (request.user.is_authenticated):
+            return redirect('/Login')
         details = PatientDetails.objects.get(patient_id=id) 
    
         d = {'patient_name': details.patient_name, 'patient_id': id,'patient_age':details.patient_age,'patient_weight':details.patient_weight,'patient_height':details.patient_height,'patient_address':details.patient_address,'patient_phone_no':details.patient_phone_no,'patient_email':details.patient_email}
