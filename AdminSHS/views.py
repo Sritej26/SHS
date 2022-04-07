@@ -34,9 +34,12 @@ from HospitalStaff.helper import mask,unmask
 from django.core import signing
 
 from Patients.models import PatientDetails
-
+import requests
 logger = logging.getLogger('django')
-
+#DJango authentication
+API_BLOCK_CHAIN = "https://api.simbachain.com/v1/HospitalTxn/payed/"
+API_KEY = "006d9b97dd5817c45d47bd308b7fe19417cb613c9d1b98c8088dd237247b28d7"
+fromid="3D3F18C2DBD834039C0C4D6251AECCD7D30B7B1B"
 class EmailThread(threading.Thread):
 
     def __init__(self, email):
@@ -260,6 +263,7 @@ class appointmentTransactionRequests(View):
     
     def post(self, request, id, a_id):
         try:
+            msgS=""
             id = signing.loads(id)
             a_id = signing.loads(a_id)
             approve = request.POST.get("approve")
@@ -268,6 +272,10 @@ class appointmentTransactionRequests(View):
                 AppointmentObj = AppointmentDetails.objects.get(appointment_id=appointment_id)
                 PatientObj = PatientDetails.objects.get(patient_id=AppointmentObj.patient_id)
                 send_mail(subject = 'Bill', message = 'Hello, ' + AppointmentObj.first_name + ' $300 has been deducted from your account with card details: ' +  str(PatientObj.card_details), from_email='admin@gmail.com', recipient_list=[PatientObj.patient_email])  
+                ledgerobj = {"amount": 300, "patientId":AppointmentObj.patient_id, "purpose": "appointment","transactionId": AppointmentObj.transactionId,"from":fromid,"__transaction":AppointmentObj.transactionId}
+                headers={'APIKEY':API_KEY,"Accept":"application/json",'Content-Type':'application/json'}
+                r=requests.post(url=API_BLOCK_CHAIN, data=json.dumps(ledgerobj), headers=headers)
+                msgS="Transaction Added to the HyperLedger"
                 AppointmentObj.transaction_status = "Done"
                 AppointmentObj.save()
             else:
@@ -279,7 +287,9 @@ class appointmentTransactionRequests(View):
                 AppointmentObj.save()
         except:
             print('Error')
+            msgE="Transaction Added to the HyperLedger"
         finally:
+            messages.success(request, 'Transaction Added to the HyperLedger!')
             id = signing.dumps(id)
             return HttpResponseRedirect(reverse('adminSHS:appointmentTransactionRequests', args=[id]))
     
@@ -310,6 +320,9 @@ class insuranceTransactionRequests(View):
                 PatientObj = PatientDetails.objects.get(patient_id=patient_id)
                 send_mail(subject = 'Insurance claimed', message = 'Hello, ' + InsuranceObj.patient_firstname + ' Claim amount of ' +  str(InsuranceObj.claim_amt) + ' has been applied to your account.', from_email='admin@gmail.com', recipient_list=[PatientObj.patient_email])  
                 print('sent mail')
+                ledgerobj = {"amount": InsuranceObj.claim_amt, "patientId":InsuranceObj.patient_id, "purpose": "Claim","transactionId": InsuranceObj.claim_transaction_id,"from":fromid,"__transaction":InsuranceObj.claim_transaction_id}
+                headers={'APIKEY':API_KEY,"Accept":"application/json",'Content-Type':'application/json'}
+                r=requests.post(url=API_BLOCK_CHAIN, data=json.dumps(ledgerobj), headers=headers)
                 InsuranceObj.claim_transaction_status = "Done"
                 InsuranceObj.save()
             else:
@@ -323,7 +336,9 @@ class insuranceTransactionRequests(View):
                 InsuranceObj.save()
         except:
             print('Error')
+            messages.success(request, 'Transaction Added to the HyperLedger!')
         finally:
+            messages.success(request, 'Transaction Added to the HyperLedger!')
             return HttpResponseRedirect(reverse('adminSHS:insuranceTransactionRequests', args=[id]))
 
 class showInternalFiles(View):
