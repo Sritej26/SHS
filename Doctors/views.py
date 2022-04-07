@@ -29,6 +29,7 @@ from AdminSHS.models import EmployeeDetails
 from django.contrib.auth import logout
 #from HospitalStaff.helper import mask,unmask
 import logging
+from LabStaff.models import *
 
 logging.basicConfig(filename="userstatus.log",
                     format='%(asctime)s %(message)s',
@@ -333,7 +334,7 @@ def searchLabReports(request):
                 return redirect('/Login')
         query = request.GET.get('query')
         #query1 = request.GET.get('query1')
-        labreportdetails = labTests.objects.filter(appointment_id = query)
+        labreportdetails = LabReports.objects.filter(appointment_id = query)
         if query and labreportdetails:
             #labreportdetails = labreportdetails.filter(lab_Tests = query1)
             print("search bar")

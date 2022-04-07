@@ -78,7 +78,7 @@ class viewRequests(View):
             for entry in request_details:
                
                 if entry.id == test_id:
-                    lab_report = LabReports(doctor_id = entry.doctor_id, patient_id = entry.patient_id, patient_diagnosis = entry.patient_diagnosis, lab_staff_id = 1, report_status = "Approved", test_name = entry.lab_test)
+                    lab_report = LabReports(doctor_id = entry.doctor_id, patient_id = entry.patient_id, patient_diagnosis = entry.patient_diagnosis, lab_staff_id = 1, report_status = "Approved", test_name = entry.lab_test,appointment_id=entry.appointment_id)
                     lab_report.save()
                     appointment = labTests.objects.get(id=entry.id)
                    
@@ -141,9 +141,9 @@ class updateLabRecord(View):
     def get(self, request):
         #if not (request.user.is_authenticated):
          #   return redirect('/Login')
-        crit=Q(report_status="Added")
-        crit1=Q(report_status="Updated")
-        request_details = LabReports.objects.filter(crit | crit1 )
+        #crit=Q(report_status="Added")
+       
+        request_details = LabReports.objects.filter(report_status="Added")
        
         return render(request, 'updateReportPage.html', {
             'requests': request_details,
@@ -156,8 +156,7 @@ class updateLabRecord(View):
         try:
             report_data= LabReports.objects.get(report_id=record_id)
             report_data.report_info=details
-            report_data.report_status="Updated"
-            report_data.save()      
+                
             message="Updated Scuccessfully"
         except:
             print("exception while updating  reports")

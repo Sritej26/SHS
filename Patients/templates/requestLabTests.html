@@ -27,10 +27,11 @@
             <ul class="nav nav-tabs">
                 <li ><a data-toggle="tab" href="#request">View Reports</a></li>
                 <li class="active"><a data-toggle="tab" href="#view">Request Lab Tests</a></li>
+                <li ><a data-toggle="tab" href="#view2">Completed Lab Tests</a></li>
             </ul>
             <div class="tab-content">
                 <div id="request" class="tab-pane fade ">
-                    <h3>Request Lab Tests</h3>
+                    <h3>Lab Test Requests</h3>
                     <table id="data" class="table table-striped table-bordered compact" cellspacing="0" style="width:100%">
                         <thead>
                         <tr>
@@ -38,11 +39,11 @@
                             <!-- <th>Patient ID</th> -->
                             <th>First Name</th>
                             <th>Last Name</th>
-                            <th>Doctor</th>
+                           
                             <!-- <th>Requested Date</th> -->
                             <th>Lab Test</th>
-                            <th>Lab Report Status</th>
-                            <th>Lab Report</th>
+                            <th>Lab Test Status</th>
+                           
                             
                         </tr>
                         </thead>
@@ -53,14 +54,56 @@
                             <!-- <td width="5%">{{a.patient_id}}</td> -->
                             <td width="10%">{{a.first_name}}</td>
                             <td width="10%">{{a.last_name}}</td>
-                            <td width="10%">{{a.doctor_id}}</td>
+                            
                             <!-- <td width="20%">{{a.requested_date}}</td> -->
                             <td width="10%">{{a.lab_test}}</td>  
-                            <td width="10%">{{a.lab_report_status}}</td>  
-                            <td width="10%">{{a.lab_report}}</td>  
+                            <td width="10%">{{a.lab_test_status}}</td>  
+                           
 
                             
                            
+
+                        </tr>
+                        {%endfor%}
+                        </tbody>
+                    </table>
+        
+
+                </div>
+             
+                <div id="view2" class="tab-pane fade ">
+                    <h3>Completed Lab Reports</h3>
+                    <table id="data" class="table table-striped table-bordered compact" cellspacing="0" style="width:100%">
+                        <thead>
+                        <tr>
+                           
+                            <th>Report ID</th>
+                            <!-- <th>Patient ID</th> -->
+                           
+                            
+                            <!-- <th>Requested Date</th> -->
+                            <th>Lab Test</th>
+                            <th>Lab Test Status</th>
+                            <th>Lab Report</th>
+                            
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {%for a in doneDetails%}
+                        <tr>
+                           
+                            <td width="5%">{{a.report_id}}</td>
+                            <!-- <td width="5%">{{a.patient_id}}</td> -->
+                          
+                            
+                            
+                            <!-- <td width="20%">{{a.requested_date}}</td> -->
+                            <td width="10%">{{a.test_name}}</td>  
+                            <td width="10%">{{a.report_status}}</td>  
+                            <td width="10%">{{a.report_info}}</td>  
+
+                            
+                            
 
                         </tr>
                         {%endfor%}

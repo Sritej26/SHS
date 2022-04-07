@@ -17,6 +17,7 @@ from django.views.decorators.cache import cache_control
 import logging
 from datetime import datetime
 from Doctors.models import *
+from LabStaff.models import *
 from django.core import signing
 import uuid
 from HospitalStaff.helper import mask,unmask
@@ -492,14 +493,25 @@ class requestLabTests(View):
                  testRequestRecord.append(data)
               
              #  docDetail = DoctorDetails.objects.get(doctor_id =testDetails.doctor_id)
-              reportDetails = labTests.objects.filter(patient_id=id, lab_test_status = "Pending")
+              reportDetails = labTests.objects.filter(patient_id=id)
               reportDetailsRecord = []
               for detail in reportDetails:
                  docDetail = DoctorDetails.objects.get(doctor_id =detail.doctor_id)
                  data = {'appointment_id': detail.appointment_id,'first_name': detail.first_name,'last_name': detail.last_name,
                          'doctor_name': docDetail.doctor_name, 'lab_test':detail.lab_test,
-                          'lab_report_status':detail.lab_report_status,'lab_report':detail.lab_report}
+                          'lab_test_status':detail.lab_test_status,'lab_report':detail.lab_report}
                  reportDetailsRecord.append(data)
+            
+             
+             
+              doneDetails = LabReports.objects.filter(patient_id=id,report_status="Added")
+              doneDetailsRecord = []
+              for detail in doneDetails:
+                 docDetail = DoctorDetails.objects.get(doctor_id =detail.doctor_id)
+                 data = {'appointment_id': detail.appointment_id,'first_name': detail.first_name,'last_name': detail.last_name,
+                         'doctor_name': docDetail.doctor_name, 'test_name':detail.test_name,
+                         'report_info':detail.report_info,'report_id':detail.report_id}
+                 doneDetailsRecord.append(data)
                   
               
              
@@ -507,6 +519,7 @@ class requestLabTests(View):
               return render(request, 'requestLabTests.html', {
                   'testRequestRecord':testRequestRecord,          
                   'reportDetails':reportDetails,
+                  'doneDetails':doneDetails,
                   'id':id,
                   # 'appointmentForm': appointmentForm(detail),             
               })

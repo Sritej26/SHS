@@ -11,3 +11,4 @@ class LabReports(models.Model):
     lab_staff_id = models.IntegerField(null=False)
     report_status = models.CharField(max_length=100, null=False)
     test_name = models.CharField(max_length=255, null=True)
+    appointment_id = models.IntegerField(null=False)
