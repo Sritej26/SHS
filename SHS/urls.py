@@ -17,14 +17,16 @@ from django.contrib import admin
 from django.urls import path , include
 from Patients import urls
 from Doctors import urls
+from LabStaff import urls
 
 urlpatterns = [
     path('', include('Hospitalportal.urls')),
     path('adminSHS/', include('AdminSHS.urls', namespace='adminSHS')),
     path('admin/', admin.site.urls),
     path('patient/',include('Patients.urls')),
-    path('labStaff/', include('LabStaff.urls')),
+    # path('labStaff/', include('LabStaff.urls', namespace='labStaff')),
+    path('labStaff/', include('LabStaff.urls',namespace='labStaff')),
     path('doctors/', include('Doctors.urls', namespace='doctors')),
     path('insurance/', include('InsuranceStaff.urls', namespace='insuranceStaff')),
-    path('hospitalStaff/',include('HospitalStaff.urls', namespace='hospitalStaff')),
+     path('hospitalStaff/',include('HospitalStaff.urls', namespace='hospitalStaff')),
 ]

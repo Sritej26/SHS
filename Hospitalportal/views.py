@@ -147,7 +147,7 @@ class Login(View):
                     # elif test.Role == 'AdminSHS':
                     #     return redirect("/adminSHS/",{'name':user})
                     elif test.Role == 'Labstaff':
-                        return redirect("/labStaff/",{'name':user})
+                        return HttpResponseRedirect(reverse('labStaff:labStaffHome', args=[user])
                     elif test.Role == 'Doctor':
                         return HttpResponseRedirect(reverse('doctors:doctorHome', args=[user]))
                     elif test.Role == 'Insurancestaff':

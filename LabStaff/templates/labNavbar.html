@@ -63,35 +63,41 @@
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                         data-accordion="false">
                         <li class="nav-item">
-                            <a href="/labStaff" class="nav-link">
+                            <a href="/labStaff/labStaffHome/{{user}}" class="nav-link">
                                 <i class="nav-icon fas fa-home"></i>
                                 <p>Home</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="/labStaff/viewRequests" class="nav-link">
+                            <a href="/labStaff/viewRequests/{{user}}" class="nav-link">
                                 <i class="nav-icon fas fa-tasks" aria-hidden="true"></i>
                                 <p>View Requests</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="/labStaff/addLabRecord" class="nav-link">
+                            <a href="/labStaff/addLabRecord/{{user}}" class="nav-link">
                                 <i class="nav-icon fas fa-plus" aria-hidden="true"></i>
                                 <p> Add Lab Record </p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="/labStaff/updateLabRecord" class="nav-link">
+                            <a href="/labStaff/updateLabRecord/{{user}}" class="nav-link">
                                 <i class="nav-icon fas fa-plus" aria-hidden="true"></i>
                                 <p> Update Lab Record </p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="/labStaff/viewLabRecord" class="nav-link">
+                            <a href="/labStaff/viewLabRecord/{{user}}" class="nav-link">
                                 <i class="nav-icon fas fa-tasks" aria-hidden="true"></i>
                                 <p> View Lab Record </p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="/labStaff/logout/{{user}}" class="nav-link">
+                                <i class="nav-icon fas fa-sign-out-alt"></i>
+                                    <p> Sign out</p>
+                            </a>
+                          </li>
                     </ul>
                 </nav>
                 <!-- /.sidebar-menu -->
