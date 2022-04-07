@@ -10,7 +10,7 @@ class InsuranceClaimDetails(models.Model):
     policy_name =  models.CharField(max_length=1000, null=False)
     claim_status = models.CharField(max_length=100, null=False, default="Pending")
     claim_amt = models.IntegerField(null=False)
-    claim_transaction_status = models.CharField(max_length=100, null=False, default="null")
+    claim_transaction_status = models.CharField(max_length=100, null=False, default="Null")
     claim_transaction_id = models.CharField(max_length=100, null=False, default="#C")
 
 class InsurancePolicies(models.Model):

@@ -283,7 +283,11 @@ class updateInsuranceClaimRequest(View):
         if not (request.user.is_authenticated):
             return redirect('/Login')
         try:
+            claim_id = signing.loads(claim_id)
+            id = signing.loads(id)
             detail = InsuranceClaimDetails.objects.get(claim_id=claim_id)
+            
+
             detail = {'patient_id': detail.patient_id,'patient_firstname': detail.patient_firstname,'patient_lastname': detail.patient_lastname,
                         'policy_name': detail.policy_name,'claim_amt': detail.claim_amt}
         finally:
@@ -299,9 +303,12 @@ class updateInsuranceClaimRequest(View):
             #     id = signing.loads(id)
             # except:
             #     raise Http404
+            claim_id = signing.loads(claim_id)
+            id = signing.loads(id)
             detail = InsuranceClaimDetails.objects.get(claim_id=claim_id)
             # client_persons=client_person.objects.filter(client_id=id)
             detailForm = insuranceClaimRequestForm(request.POST)
+            
             if detailForm.is_valid():
                 # detail.first_name = escapeXSS(str(request.POST.get('first_name')))
                 # detail.first_name = escapeXSS(str(request.POST.get('address')))
@@ -316,7 +323,9 @@ class updateInsuranceClaimRequest(View):
         except:
             msgE="Something Went Wrong"
         finally:
-            # id = signing.dumps(id)
+            id = signing.dumps(id)
+            claim_id = signing.dumps(claim_id)
+            
             messages.add_message(request, messages.SUCCESS if msgS else messages.ERROR, (msgS if not msgS == '' else msgE),
                                  extra_tags='callout callout-success calloutCustom lead' if msgS else 'callout callout-danger calloutCustom lead')
             return HttpResponseRedirect(reverse('patient:updateInsuranceClaimRequest', args=[claim_id,id]))
@@ -430,13 +439,14 @@ class patientPayment(View):
 class declineTransaction(View):
     def get(self,request,id):
         detail = AppointmentDetails.objects.get(appointment_id=id)
+       
         detail.transaction_status = 'Declined'
         detail.save()
       
         print("Saved")
        
         messages.error(request, 'Transaction request has been declined')
-        return HttpResponseRedirect(reverse('patient:bookAppointment', args=[detail.patient_id]))
+        return HttpResponseRedirect(reverse('patient:bookAppointment', args=[signing.dumps(detail.patient_id)]))
         '''
         appDetails = AppointmentDetails.objects.all()
         return render(request,'bookAppointment.html',{
@@ -449,13 +459,14 @@ class declineTransaction(View):
 class approveTransaction(View):
     def get(self,request,id):
         detail = AppointmentDetails.objects.get(appointment_id=id)
+        
         detail.transaction_status = 'Approved'
         detail.transaction_id ='#C{}'.format(uuid.uuid1().time_low)
         detail.save()
         print("Saved")
        
         messages.success(request, 'Transaction request has been Approved')
-        return HttpResponseRedirect(reverse('patient:bookAppointment', args=[detail.patient_id]))
+        return HttpResponseRedirect(reverse('patient:bookAppointment', args=[signing.dumps(detail.patient_id)]))
        
         '''
         appDetails = AppointmentDetails.objects.all()
