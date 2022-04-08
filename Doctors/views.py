@@ -68,12 +68,13 @@ class doctorHome(View):
         doctormap = DoctorDetails.objects.get(doctor_username=user)
         doctorId = doctormap.doctor_id
         print(doctorId)
-        appDetails = AppointmentDetails.objects.filter(requested_date = datetime.date.today(), status = "Confirmed", doctor_id = doctorId)
+        appDetails = AppointmentDetails.objects.filter(requested_date = datetime.date.today(), doctor_id = doctorId)
         print(appDetails)
         print(datetime.date.today())
         date = datetime.date.today()
         return render(request,'doctorHome.html',{
             'user': doctorName,
+            # 'user': id,
             'appDetails': appDetails,
             'date':date
         })
@@ -91,7 +92,7 @@ class addPrescription(View):
             details1 = {}
             print(details)
         finally:
-            return render(request, 'addPrescription.html', {"prescriptionDetails": prescriptionDetails,"patientdetails" : details, 'patientPrescriptionForm': patientPrescriptionForm(details1)})
+            return render(request, 'addPrescription.html', {"prescriptionDetails": prescriptionDetails,"patientdetails" : details, 'patientPrescriptionForm': patientPrescriptionForm(details1),'user':doctorName})
     
     def post(self, request, id):
         msgS=''
@@ -154,7 +155,7 @@ class addPrescription(View):
             details1 = {}
             prescriptionDetails = prescriptions.objects.filter(appointment_id = detail1.appointment_id)
             id = signing.dumps(id)
-            return render(request, 'addPrescription.html',{"patientdetails" : details, 'patientPrescriptionForm': patientPrescriptionForm(details1),'prescriptionDetails': prescriptionDetails})
+            return render(request, 'addPrescription.html',{"patientdetails" : details, 'patientPrescriptionForm': patientPrescriptionForm(details1),'prescriptionDetails': prescriptionDetails,'user':doctorName})
 
 class viewLabReports(View):
     def get(self,request):
@@ -184,7 +185,7 @@ class addDiagnosis(View):
             print(labTestDetails)
             #print(lab_tests)
         finally:
-            return render(request, 'patientDiagnosis.html', {'details2': details2, 'flag': flag, 'labTestDetails': labTestDetails, 'diagnosisForm': diagnosisForm(details), 'labTestsForm': labTestsForm(), 'details': details})
+            return render(request, 'patientDiagnosis.html', {'details2': details2, 'flag': flag, 'labTestDetails': labTestDetails, 'diagnosisForm': diagnosisForm(details), 'labTestsForm': labTestsForm(), 'details': details,"user":doctorName})
 
     def post(self, request, id):
         msgS=''
@@ -241,7 +242,7 @@ class addDiagnosis(View):
                 print(labTestDetails)
                 details2 = AppointmentDetails.objects.filter(appointment_id=id)
                 id = signing.dumps(id)
-                return render(request, 'patientDiagnosis.html', {'details2':details2,'flag': flag,'labTestDetails': labTestDetails, 'diagnosisForm': diagnosisForm(details), 'labTestsForm': labTestsForm(), 'details': details})
+                return render(request, 'patientDiagnosis.html', {'details2':details2,'flag': flag,'labTestDetails': labTestDetails, 'diagnosisForm': diagnosisForm(details), 'labTestsForm': labTestsForm(), 'details': details,'user':doctorName})
 
         else:
             try:
@@ -289,7 +290,7 @@ class addDiagnosis(View):
                 #lab_tests = {'lab_tests': lab_tests1.lab_tests, 'appointment_id': id}
                 labTestDetails = labTests.objects.filter(appointment_id = id)
                 id = signing.dumps(id)
-                return render(request, 'patientDiagnosis.html', {'details2':details2,'flag': flag,'labTestDetails': labTestDetails, 'diagnosisForm': diagnosisForm(details), 'labTestsForm': labTestsForm(), 'details': details})
+                return render(request, 'patientDiagnosis.html', {'details2':details2,'flag': flag,'labTestDetails': labTestDetails, 'diagnosisForm': diagnosisForm(details), 'labTestsForm': labTestsForm(), 'details': details,'user':doctorName})
 
 class patientRecords(View):
     def get(self,request):
@@ -320,12 +321,12 @@ def searchBar(request):
             print("search bar")
             print(patientdetails)
             details = {}
-            return render(request, 'searchResultsView.html', {'patientdetails': patientdetails, "details": details, "flag1": flag1, "flag":flag})
+            return render(request, 'searchResultsView.html', {'patientdetails': patientdetails, "details": details, "flag1": flag1, "flag":flag,'user':doctorName})
         else:
             flag1 = "false"
             print("No patient with this id number")
             #messages.error(request, 'No patient with this id number')
-            return render(request, 'searchResultsView.html',{"flag1":flag1, "flag":flag})
+            return render(request, 'searchResultsView.html',{"flag1":flag1, "flag":flag,'user':doctorName})
 
 def searchLabReports(request):
     flag1 = "true"
@@ -341,10 +342,10 @@ def searchLabReports(request):
             print("labreportdetails")
             print(labreportdetails)
             details = {}
-            return render(request, 'viewLabReports.html', {'labreportdetails': labreportdetails, "details": details,"flag1":flag1})
+            return render(request, 'viewLabReports.html', {'labreportdetails': labreportdetails, "details": details,"flag1":flag1,'user':doctorName})
         else:
             flag1 = "false"
-            return render(request, 'viewLabReports.html',{"flag1":flag1})
+            return render(request, 'viewLabReports.html',{"flag1":flag1,'user':doctorName})
 
 def searchDiagnosis(request):
     flag = "true"
@@ -360,11 +361,11 @@ def searchDiagnosis(request):
             print("search bar")
             print(patientdetails)
             details = {}
-            return render(request, 'ViewDiagnosis.html', {'patientdetails': patientdetails, "details": details,"flag1":flag1, "flag":flag})
+            return render(request, 'ViewDiagnosis.html', {'patientdetails': patientdetails, "details": details,"flag1":flag1, "flag":flag,'user':doctorName})
         else:
             flag1 = "false"
             flag = "true"
-            return render(request, 'ViewDiagnosis.html',{"flag1":flag1, "flag":flag})
+            return render(request, 'ViewDiagnosis.html',{"flag1":flag1, "flag":flag,'user':doctorName})
 
 def searchAppointments(request):
     if request.method == 'GET':
@@ -403,7 +404,7 @@ class updatePatientDetails(View):
             print(details)
         finally:
             print("enteed finally")
-            return render(request, 'searchResultsView.html', {'details': details, 'patientDetailsForm': patientDetailsForm(details), "flag":flag})
+            return render(request, 'searchResultsView.html', {'details': details, 'patientDetailsForm': patientDetailsForm(details), "flag":flag,'user':doctorName})
     
     def post(self, request, id):
         msgS=''
@@ -456,7 +457,7 @@ class updatePatientDetails(View):
             patientdetails = PatientDetails.objects.filter(patient_id = detail1.patient_id)
             print(patientdetails)
             id = signing.dumps(id)
-            return render(request, 'searchResultsView.html',{"flag1": flag1, "patientdetails":patientdetails, "flag":flag})
+            return render(request, 'searchResultsView.html',{"flag1": flag1, "patientdetails":patientdetails, "flag":flag,'user':doctorName})
 
 
 class updatePatientDiagnosis(View):
@@ -476,7 +477,7 @@ class updatePatientDiagnosis(View):
             print(details)
         finally:
             print("enteed finally")
-            return render(request, 'ViewDiagnosis.html', {'details': details, 'patientDiagnosisForm': patientDiagnosisForm(details), "flag":flag})
+            return render(request, 'ViewDiagnosis.html', {'details': details, 'patientDiagnosisForm': patientDiagnosisForm(details), "flag":flag,'user':doctorName})
     
     def post(self, request, id):
         msgS=''
@@ -522,7 +523,7 @@ class updatePatientDiagnosis(View):
             patientdetails = AppointmentDetails.objects.filter(patient_id = request.POST.get('patient_id'))
             print(patientdetails)
             id = signing.dumps(id)
-            return render(request, 'ViewDiagnosis.html',{"patientdetails":patientdetails, "flag":flag, "flag1":flag1})
+            return render(request, 'ViewDiagnosis.html',{"patientdetails":patientdetails, "flag":flag, "flag1":flag1,'user':doctorName})
 
 class deletePatientDiagnosis(View):
     def get(self, request, id, id1):
@@ -540,7 +541,7 @@ class deletePatientDiagnosis(View):
         details.patient_diagnosis = ""
         details.save()
 
-        return render(request, 'ViewDiagnosis.html', {'patientdetails': patientdetails, 'details': details, 'patientDiagnosisForm': patientDiagnosisForm(details),"flag1": flag1, "flag":flag})
+        return render(request, 'ViewDiagnosis.html', {'patientdetails': patientdetails, 'details': details, 'patientDiagnosisForm': patientDiagnosisForm(details),"flag1": flag1, "flag":flag,'user':doctorName})
 
 class addnextAppointment(View):
      def get(self, request, id):
@@ -553,7 +554,8 @@ class addnextAppointment(View):
                          'doctor_id': detail.doctor_id}
          finally:
              return render(request, 'addnextAppointment.html', {               
-                 'appointmentForm': appointmentForm(detail),             
+                 'appointmentForm': appointmentForm(detail), 
+                 'user':doctorName            
              })
      def post(self,request, id):
          msgS = ''
@@ -592,4 +594,4 @@ class addnextAppointment(View):
              messages.add_message(request, messages.SUCCESS if msgS else messages.ERROR,
                                   (msgS if not msgS == '' else msgE),
                                   extra_tags='callout callout-success calloutCustom lead' if msgS else 'callout callout-danger calloutCustom lead')
-             return render(request, 'patientDiagnosis.html', {'details2': details2, 'flag': flag, 'labTestDetails': labTestDetails, 'diagnosisForm': diagnosisForm(details), 'labTestsForm': labTestsForm(), 'details': details})
+             return render(request, 'patientDiagnosis.html', {'details2': details2, 'flag': flag, 'labTestDetails': labTestDetails, 'diagnosisForm': diagnosisForm(details), 'labTestsForm': labTestsForm(), 'details': details,'user':doctorName})
