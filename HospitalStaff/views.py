@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from django.shortcuts import render
 from HospitalStaff.forms import patientDetailsForm
 from Hospitalportal.models import HospitalPortal
@@ -14,6 +16,8 @@ from django.views import View
 from HospitalStaff.models import AppointmentDetails
 #from .forms import *
 from Doctors.models import DoctorDetails
+from Doctors.models import prescriptions
+from Doctors.models import labTests
 from django.utils.decorators import method_decorator
 import logging
 from AdminSHS.models import EmployeeDetails
@@ -218,16 +222,46 @@ def search(request):
         query = request.GET.get('query')
         print(query)
         if query:
-            print("in query")
-            patientdetail = AppointmentDetails.objects.filter(appointment_id = query)
-            flag1=True
-            if(patientdetail):
-                flag1=False
-            else:
-                messages.error(request, 'No Appointment with this ID!')
-            
-            print(patientdetail)
-            return render(request, 'ViewDetails1.html', {'patientdetail': patientdetail,'mainflag':False,'flag1':flag1,'user':hospitalStaffName })
+            try:
+                print('in try')
+                patientdetail = AppointmentDetails.objects.filter(appointment_id = query)
+                print(patientdetail)
+                print('after get')
+                
+                prescription= prescriptions.objects.filter(appointment_id=query)
+                lab=labTests.objects.filter(appointment_id=query)
+                pres=''
+                la=''
+                if(prescription):
+                    for p in prescription:
+                        if pres=='':
+                            pres=p.prescription_text
+                        else:
+                            pres=pres+', '+p.prescription_text
+                else:
+                    pres='No Prescription yet'
+                if(lab):
+                    for l in lab:
+                        if la=='':
+                            la=l.lab_test
+                        else:
+                            la=la+', '+l.lab_test
+                else:
+                    la='No Lab test yet'
+                
+                flag1=True
+                if(patientdetail):
+
+                    flag1=False
+                    patientdetail1=patientdetail.get(appointment_id=query)
+                else:
+                    messages.error(request, 'No Appointment with this ID!')
+                
+                print(patientdetail1)
+                return render(request, 'ViewDetails1.html', {'patientdetail': patientdetail1,'mainflag':False,'flag1':flag1,'user':hospitalStaffName,'prescription':pres,'lab_test':la })
+            except:
+                print('in except')
+                return render(request, 'ViewDetails1.html',{'mainflag':True},{'flag1':True})
         else:
             
             print("enter ID")
@@ -244,16 +278,24 @@ class checkAppointmets(View):
             print(Details.appointment_id)
             appointments= AppointmentDetails.objects.filter(requested_date = date).filter(doctor_id=doctorId).count()
             print('count'+str(appointments))
-            doctor_details=DoctorDetails.objects.get(doctor_id=doctorId)
-            #chnage for doctor availability
-            if(appointments<doctor_details.slot):
-                print("In confirmed")
-                Details.status="Confirmed"
-                Details.transaction_status="Pending"
-                messages.success(request, 'Appointment has been Approved based on doctor availability')
+            docDetails = DoctorDetails.objects.all()
+            doc_id_list = []
+            for i in docDetails :
+                doc_id_list.append(i.doctor_id)
+            if(doctorId in doc_id_list):
+                doctor_details=DoctorDetails.objects.get(doctor_id=doctorId)
+                #chnage for doctor availability
+                if(appointments<doctor_details.slot):
+                    print("In confirmed")
+                    Details.status="Confirmed"
+                    Details.transaction_status="Pending"
+                    messages.success(request, 'Appointment has been Approved based on doctor availability')
+                else:
+                    Details.status="Cancelled"
+                    messages.error(request, 'Appointment has been Cancelled due to unavailability of doctor')
             else:
                 Details.status="Cancelled"
-                messages.error(request, 'Appointment has been Cancelled due to unavailability of doctor')
+                messages.error(request, 'Doctor left Oragnization!')
             Details.save()
         except:
             messages.error(request, 'Doctor not found !')

@@ -34,28 +34,26 @@
                     <h3>Patient Details</h3>        
                     <table  class="table table-striped table-bordered compact" cellspacing="0" style="width:100%">
                     <tbody>
-                        {% for p in patientdetail %}
                     <tr height="8%">
                         <td colspan="2">
-                        <b><h4>{{p.first_name}} {{p.last_name}}</h4></b>
+                            <b><h4>{{patientdetail.first_name}} {{patientdetail.last_name}}</h4></b>
                         </td>
                     </tr>
                     <tr>
                         <td width="5%" height="10%">Diagnosis</td>
-                        <td width="5%" height="10%">{{p.patient_diagnosis}}</td>
+                        <td width="5%" height="10%">{{patientdetail.patient_diagnosis}}</td>
                     
                     </tr>
                     <tr>
                         <td width="5%"height="5%">Prescription</td>
-                        <td width="5%"height="5%">{{p.prescription}}</td>
+                        <td width="5%"height="5%">{{prescription}}</td>
 
                     </tr>
                     <tr>
                         <td width="5%"height="5%">Lab tests</td>
-                        <td width="5%"height="5%">{{p.lab_tests}}</td>
+                        <td width="5%"height="5%">{{lab_test}}</td>
 
                     </tr>
-                {%endfor%}
                     </tbody>
                     </table>
                 {%endif%}

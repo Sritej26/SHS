@@ -27,3 +27,20 @@ def name_from_id(k,a):
         return patient_name
     except:
         return ''
+
+@register.filter
+def getDocname(k,a):
+    try:
+        docDetails = DoctorDetails.objects.all()
+        doc_id_list = []
+        for i in docDetails :
+                doc_id_list.append(i.doctor_id)
+        if a in doc_id_list:
+            doc = DoctorDetails.objects.get(doctor_id=a)
+            #id = signing.loads(id)
+            return doc.doctor_name
+        else:
+            return 'Unavailable - left organization'
+
+    except:
+        return ''

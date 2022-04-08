@@ -1,4 +1,5 @@
 {% include 'navbar1.html' %}
+{% load encrypt%}
 <head>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -34,11 +35,10 @@
             
             <td width="10%">{{a.first_name}}</td>
             <td width="10%">{{a.last_name}}</td>
-            <td width="10%">{{a.doctor_id}}</td>
+            <td width="10%">{{k|getDocname:a.doctor_id}}</td>
             <td width="5%">{{a.status}}</td>
             <td width="5%">{{a.transaction_status}}</td> 
-            <td width="5%">{{a.transaction_id}}</td> 
-            
+            <td width="5%">{{a.transaction_id}}</td>             
         </tr>
         {%endfor%}
 

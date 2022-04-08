@@ -4,7 +4,7 @@ app_name = 'HospitalStaff'
 print("in URL")
 urlpatterns = [
     re_path(r'^hospitalStaffHome/(?P<id>(.*))$', views.hospitalStaffHome.as_view(), name='hospitalStaffHome'),
-  
+    #path('activate-user/<uidb64>/<token>',views.activate_user1, name='activate'),
     #path('', views.staffHome.as_view(), name='staffHome'),
     path('createRecord',views.createRecord.as_view(),name='createRecord'),
     # path('viewDetails',views.viewDetails.as_view(),name='viewDetails'),
@@ -16,6 +16,7 @@ urlpatterns = [
     path('transactions',views.transactions.as_view(),name='transactions'),
     path('updatepersonalinfo',views.updatepersonalinfo.as_view(),name='updatepersonalinfo'),
     path('logout', views.logout_user)
+
     #re_path(r'^approveAppointment/',views.approveAppointment.as_view(),name='approveAppointment'),
     # re_path('searchDiagnosis/',views.searchDiagnosis,name='searchDiagnosis'),
     # re_path('searchPrescription/',views.searchPrescription,name='searchPrescription'),

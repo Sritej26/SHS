@@ -52,7 +52,13 @@ class patientDetailsForm(forms.Form):
                                        'class': 'form-control',
                                        'placeholder': ('Patient Email')
                                    }))
-                                   
+    patient_card_details = forms.IntegerField(label='patient_card_details.**', required=False,
+                                    widget=forms.NumberInput(attrs=
+                                    {
+                                        'required': False,
+                                        'class': 'form-control',
+                                        'placeholder': ('Enter Credit/Debit Card Details')
+                                    }))                               
     # patient_disease = forms.CharField(label='patient_disease.**', required=True,
     #                                widget=forms.TextInput(attrs=
     #                                {

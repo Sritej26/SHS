@@ -7,7 +7,7 @@
 
 </head>
 
-
+{% load encrypt%}
 {{appointmentForm.media}}
 
 <div class="content-wrapper">
@@ -65,7 +65,7 @@
             
             <td width="10%">{{a.first_name}}</td>
             <td width="10%">{{a.last_name}}</td>
-            <td width="10%">{{a.doctor_id}}</td>
+            <td width="10%">{{k|getDocname:a.doctor_id}}</td>
             <td width="5%">{{a.requested_date}}</td>
             <td width="5%">{{a.status}}</td> 
             
