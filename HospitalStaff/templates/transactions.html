@@ -23,6 +23,7 @@
             <th>Appointment Status</th>
             <th>Transaction Status</th>
             <th>Transaction ID</th>
+            <th>Receipt Status</th>
         </tr>
         </thead>
         <tbody>
@@ -38,7 +39,9 @@
             <td width="10%">{{k|getDocname:a.doctor_id}}</td>
             <td width="5%">{{a.status}}</td>
             <td width="5%">{{a.transaction_status}}</td> 
-            <td width="5%">{{a.transaction_id}}</td>             
+            <td width="5%">{{a.transaction_id}}</td> 
+            <td width="5%">{{k|getReceipt_status:a.transaction_status}}</td> 
+            
         </tr>
         {%endfor%}
 

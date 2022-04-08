@@ -250,11 +250,13 @@ def search(request):
                     la='No Lab test yet'
                 
                 flag1=True
+                patientdetail1=' '
                 if(patientdetail):
 
                     flag1=False
                     patientdetail1=patientdetail.get(appointment_id=query)
                 else:
+                    print('at msg no id')
                     messages.error(request, 'No Appointment with this ID!')
                 
                 print(patientdetail1)

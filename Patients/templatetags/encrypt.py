@@ -44,3 +44,13 @@ def getDocname(k,a):
 
     except:
         return ''
+@register.filter
+def getReceipt_status(k,a):
+    try:
+        if(a=='done'):
+            return "Receipt sent to patent's mail"
+        else:
+            return 'NULL'
+
+    except:
+        return ''
