@@ -107,8 +107,8 @@ class showLogFiles(View):
         id = signing.loads(id)
         adminName = User.objects.get(id=id)
         log_files = []
-        for filename in os.listdir('/Users/harshilgandhi/Documents/CSE545/SHS_Grp14/logs'):
-            with open(os.path.join('/Users/harshilgandhi/Documents/CSE545/SHS_Grp14/logs', filename), 'r') as file:
+        for filename in os.listdir('logs/'):
+            with open(os.path.join('logs/', filename), 'r') as file:
                 log_files.append(filename)
         return render(request, 'showLogFiles.html', {
             'user': adminName.username,
@@ -119,7 +119,7 @@ class showLogFiles(View):
         try:
             filename = request.POST.get('filename')
             response = HttpResponse()  
-            response['X-File'] = '/Users/harshilgandhi/Documents/CSE545/SHS_Grp14/logs/' + filename 
+            response['X-File'] = 'logs/' + filename 
             #https://stackoverflow.com/questions/1156246/having-django-serve-downloadable-files
             return response
         except:
@@ -334,7 +334,12 @@ class deleteEmployeeRecord(View):
             if employee.employee_dept == 'Doctor':
                 if DoctorDetails.objects.filter(doctor_username = employee.employee_username).exists():
                     doctor = DoctorDetails.objects.get(doctor_username = employee.employee_username)
+                    appointmentObjects = AppointmentDetails.objects.filter(doctor_id = doctor.doctor_id).all()
+                    for appointmentObject in appointmentObjects:
+                        appointmentObject.doctor_id = 9999
+                        appointmentObject.save()
                     doctor.delete()
+
             employee.delete()
             logger.info('Record deleted')
         except:

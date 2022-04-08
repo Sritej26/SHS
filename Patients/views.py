@@ -71,13 +71,23 @@ class bookAppointment(View):
             return redirect('/Login') 
        id = signing.loads(id)
        docDetails = DoctorDetails.objects.all()
+       doc_id_list = []
+       for i in docDetails :
+            doc_id_list.append(i.doctor_id)  
+ 
+
        appDetail = AppointmentDetails.objects.filter(patient_id=id)
        record =[]
        for detail in appDetail:
-            docDetail = DoctorDetails.objects.get(doctor_id =detail.doctor_id)
-            data = {'appointment_id': detail.appointment_id,'first_name': detail.first_name,'last_name': detail.last_name,'transaction_status':detail.transaction_status,
-            'transaction_id':detail.transaction_id,'doctor_name': docDetail.doctor_name,'doctor_spec': docDetail.doctor_spec,'requested_date': detail.requested_date,'status':detail.status}
-            record.append(data)
+            if int(detail.doctor_id) in doc_id_list :
+                docDetail = DoctorDetails.objects.get(doctor_id =detail.doctor_id)
+                data = {'appointment_id': detail.appointment_id,'first_name': detail.first_name,'last_name': detail.last_name,'transaction_status':detail.transaction_status,
+                'transaction_id':detail.transaction_id,'doctor_name': docDetail.doctor_name,'doctor_spec': docDetail.doctor_spec,'requested_date': detail.requested_date,'status':detail.status}
+                record.append(data)
+            else:
+                data = {'appointment_id': detail.appointment_id,'first_name': detail.first_name,'last_name': detail.last_name,'transaction_status':detail.transaction_status,
+                'transaction_id':detail.transaction_id,'doctor_name': "Unavailable - left organization",'doctor_spec': " ",'requested_date': detail.requested_date,'status':"Cancelled"}
+                record.append(data)
 
        return render(request,'bookAppointment.html',{
             'user':'aish',
@@ -469,20 +479,41 @@ class requestLabTests(View):
               id = signing.loads(id)
               testDetails = labTests.objects.filter(patient_id=id ,lab_test_status="Recommended")
               testRequestRecord =[]
+
+              docDetails = DoctorDetails.objects.all()
+              doc_id_list = []
+              for i in docDetails :
+                 doc_id_list.append(i.doctor_id)  
+
               for detail in testDetails:
-                 docDetail = DoctorDetails.objects.get(doctor_id =detail.doctor_id)
-                 data = {'test_id':detail.id,'appointment_id': detail.appointment_id,'first_name': detail.first_name,'last_name': detail.last_name,
-                         'doctor_name': docDetail.doctor_name, 'lab_test':detail.lab_test, 'lab_test_status':detail.lab_test_status}
+                 if int(detail.doctor_id) in doc_id_list :
+                    docDetail = DoctorDetails.objects.get(doctor_id =detail.doctor_id)
+                    data = {'test_id':detail.id,'appointment_id': detail.appointment_id,'first_name': detail.first_name,'last_name': detail.last_name,
+                            'doctor_name': docDetail.doctor_name, 'lab_test':detail.lab_test, 'lab_test_status':detail.lab_test_status}
+                 else :
+                    data = {'test_id':detail.id,'appointment_id': detail.appointment_id,'first_name': detail.first_name,'last_name': detail.last_name,
+                            'doctor_name': "Not Available - left organization", 'lab_test':detail.lab_test, 'lab_test_status':detail.lab_test_status}
+
                  testRequestRecord.append(data)
               
              #  docDetail = DoctorDetails.objects.get(doctor_id =testDetails.doctor_id)
               reportDetails = labTests.objects.filter(patient_id=id)
               reportDetailsRecord = []
+
+              
+
               for detail in reportDetails:
-                 docDetail = DoctorDetails.objects.get(doctor_id =detail.doctor_id)
-                 data = {'appointment_id': detail.appointment_id,'first_name': detail.first_name,'last_name': detail.last_name,
-                         'doctor_name': docDetail.doctor_name, 'lab_test':detail.lab_test,
-                          'lab_test_status':detail.lab_test_status,'lab_report':detail.lab_report}
+                 if int(detail.doctor_id) in doc_id_list :
+                    docDetail = DoctorDetails.objects.get(doctor_id =detail.doctor_id)
+                    data = {'appointment_id': detail.appointment_id,'first_name': detail.first_name,'last_name': detail.last_name,
+                            'doctor_name': docDetail.doctor_name, 'lab_test':detail.lab_test,
+                            'lab_test_status':detail.lab_test_status,'lab_report':detail.lab_report}
+                 else:
+                    data = {'appointment_id': detail.appointment_id,'first_name': detail.first_name,'last_name': detail.last_name,
+                            'doctor_name': "not available - left organization", 'lab_test':detail.lab_test,
+                            'lab_test_status':detail.lab_test_status,'lab_report':detail.lab_report}
+                
+
                  reportDetailsRecord.append(data)
             
              
@@ -533,22 +564,40 @@ class viewRecords(View):
              id = signing.loads(id)
              appDetail = AppointmentDetails.objects.filter(patient_id=id)
              record =[]
+
+             docDetails = DoctorDetails.objects.all()
+             doc_id_list = []
+             for i in docDetails :
+               doc_id_list.append(i.doctor_id)  
+
+
+
              for detail in appDetail:
                  if(detail.status == "Confirmed"):
-                     print(detail.appointment_id)
-                     docDetail = DoctorDetails.objects.get(doctor_id =detail.doctor_id)
                      prespDetail = prescriptions.objects.filter(appointment_id =detail.appointment_id)
-                     print(prespDetail.exists())
-                 
                      if(prespDetail.exists()):
- 
-                         data = {'appointment_id': detail.appointment_id,'first_name': detail.first_name,'last_name': detail.last_name,
-                         'doctor_name': docDetail.doctor_name,'doctor_spec':docDetail.doctor_spec,'requested_date':detail.requested_date,'patient_diagnosis': detail.patient_diagnosis,'patient_diagnosis': detail.patient_diagnosis,
-                         'drug': prespDetail[0].drug,'unit': prespDetail[0].unit,'dosage': prespDetail[0].dosage,'prescription_text': prespDetail[0].prescription_text}
+                         if int(detail.doctor_id) in doc_id_list :
+                            docDetail = DoctorDetails.objects.get(doctor_id =detail.doctor_id)
+
+                            data = {'appointment_id': detail.appointment_id,'first_name': detail.first_name,'last_name': detail.last_name,
+                            'doctor_name': docDetail.doctor_name,'doctor_spec':docDetail.doctor_spec,'requested_date':detail.requested_date,'patient_diagnosis': detail.patient_diagnosis,'patient_diagnosis': detail.patient_diagnosis,
+                            'drug': prespDetail[0].drug,'unit': prespDetail[0].unit,'dosage': prespDetail[0].dosage,'prescription_text': prespDetail[0].prescription_text}
+                         else  :
+
+                            data = {'appointment_id': detail.appointment_id,'first_name': detail.first_name,'last_name': detail.last_name,
+                            'doctor_name': "Not available - Left organization",'doctor_spec':" ",'requested_date':detail.requested_date,'patient_diagnosis': detail.patient_diagnosis,'patient_diagnosis': detail.patient_diagnosis,
+                            'drug': prespDetail[0].drug,'unit': prespDetail[0].unit,'dosage': prespDetail[0].dosage,'prescription_text': prespDetail[0].prescription_text}                     
                      else:
-                         data = {'appointment_id': detail.appointment_id,'first_name': detail.first_name,'last_name': detail.last_name,
-                         'doctor_name': docDetail.doctor_name,'doctor_spec':docDetail.doctor_spec,'requested_date':detail.requested_date,'patient_diagnosis': detail.patient_diagnosis,'patient_diagnosis': detail.patient_diagnosis,
-                         'drug': "Not metioned",'unit': "Not mentioned",'dosage': "not mentioned",'prescription_text': "not mentioned"}
+                         if int(detail.doctor_id) in doc_id_list :
+                            docDetail = DoctorDetails.objects.get(doctor_id =detail.doctor_id)
+                            data = {'appointment_id': detail.appointment_id,'first_name': detail.first_name,'last_name': detail.last_name,
+                            'doctor_name': docDetail.doctor_name,'doctor_spec':docDetail.doctor_spec,'requested_date':detail.requested_date,'patient_diagnosis': detail.patient_diagnosis,'patient_diagnosis': detail.patient_diagnosis,
+                            'drug': "Not metioned",'unit': "Not mentioned",'dosage': "not mentioned",'prescription_text': "not mentioned"}
+                         else  :
+                            data = {'appointment_id': detail.appointment_id,'first_name': detail.first_name,'last_name': detail.last_name,
+                            'doctor_name': "Not Available - left organization",'doctor_spec':" ",'requested_date':detail.requested_date,'patient_diagnosis': detail.patient_diagnosis,'patient_diagnosis': detail.patient_diagnosis,
+                            'drug': "Not metioned",'unit': "Not mentioned",'dosage': "not mentioned",'prescription_text': "not mentioned"}
+
                      record.append(data)
          
          finally:
