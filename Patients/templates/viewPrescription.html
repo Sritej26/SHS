@@ -31,14 +31,16 @@
             <div class="tab-content">
                 <div id="request" class="tab-pane fade in active">
                     <h3>View Prescription</h3>
+                    {%for a in prespDetail%}
                     <div class="list-group">
-                        <p class="list-group-item">  Appointment Date : {{prespDetail.requested_date}}</p>
-                        <p  class="list-group-item"> Drug : {{prespDetail.drug}}</p>
-                        <p  class="list-group-item"> Unit : {{prespDetail.unit}}</p>
-                        <p  class="list-group-item"> Dosage : {{prespDetail.dosage}}</p>
-                        <p  class="list-group-item"> Prescription Details : {{prespDetail.prescription_text}}</p>
+                        <p class="list-group-item">  Appointment Date : {{a.requested_date}}</p>
+                        <p  class="list-group-item"> Drug : {{a.drug}}</p>
+                        <p  class="list-group-item"> Unit : {{a.unit}}</p>
+                        <p  class="list-group-item"> Dosage : {{a.dosage}}</p>
+                        <p  class="list-group-item"> Prescription Details : {{a.prescription_text}}</p>
                    
                     </div>
+                    {%endfor%}
                     <a href="/patient/viewRecords/{{k|patient_id_encrypt_tag:id}}" ><button class="btn btn-warning" >Back to View Records</button></a>
                     
 

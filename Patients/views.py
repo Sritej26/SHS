@@ -565,7 +565,7 @@ class viewPrescription(View):
                 return redirect('/Login')
              id = signing.loads(id)
              a_id = signing.loads(a_id)
-             prespDetail = prescriptions.objects.get(appointment_id=a_id)
+             prespDetail = prescriptions.objects.filter(appointment_id=a_id)
                  
          finally:
              return render(request, 'viewPrescription.html', {
