@@ -448,14 +448,6 @@ class declineTransaction(View):
        
         messages.error(request, 'Transaction request has been declined')
         return HttpResponseRedirect(reverse('patient:bookAppointment', args=[signing.dumps(detail.patient_id)]))
-        '''
-        appDetails = AppointmentDetails.objects.all()
-        return render(request,'bookAppointment.html',{
-            'user':'aish',
-            'appointmentForm': appointmentForm,
-            'appDetails': appDetails,
-        })
-        '''
 
 class approveTransaction(View):
     def get(self,request,id):
@@ -469,15 +461,6 @@ class approveTransaction(View):
         messages.success(request, 'Transaction request has been Approved')
         return HttpResponseRedirect(reverse('patient:bookAppointment', args=[signing.dumps(detail.patient_id)]))
        
-        '''
-        appDetails = AppointmentDetails.objects.all()
-        return render(request,'bookAppointment.html',{
-            'user':'aish',
-            'appointmentForm': appointmentForm,
-            'appDetails': appDetails,
-        })
-
-        '''
 class requestLabTests(View):
       def get(self, request, id):
           try:
@@ -513,7 +496,6 @@ class requestLabTests(View):
                          'report_info':detail.report_info,'report_id':detail.report_id}
                  doneDetailsRecord.append(data)
                   
-              
              
           finally:
               return render(request, 'requestLabTests.html', {

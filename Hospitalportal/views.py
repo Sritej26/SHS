@@ -127,6 +127,7 @@ class Login(View):
                 if user.is_superuser:
                     id = user.id
                     id = signing.dumps(id)
+                    login(request,user)
                     return HttpResponseRedirect(reverse('adminSHS:adminHome', args=[id]))
                 if not user.is_email_verified:
                     messages.add_message(request, messages.ERROR,'Email is not verified, please check your email inbox')
@@ -200,6 +201,9 @@ class Registercheck(View):
             if not (form.cleaned_data.get('User_password')):
                  messages.info(request,'password mandatory')
                  return render(request,'register.html')
+            if not (form.cleaned_data.get('patient_card_details')):
+                 messages.info(request,'Card details mandatory')
+                 return render(request,'register.html')    
             if password == passwordcheck:
                 if User.objects.filter(username=patient_name).exists():
                     messages.info(request,'USER NAME ALREADY EXISTS')
@@ -210,7 +214,7 @@ class Registercheck(View):
                 if User.objects.filter(email=str(patient_email)).exists():
                     messages.info(request,'EMAIL ALREADY EXISTS')
                     return render(request,'register.html')
-                PatientDetailsObj = PatientDetails(patient_name=patient_name,patient_age = patient_age, patient_weight = patient_weight,patient_height = patient_height, patient_address = patient_address, patient_phone_no = patient_phone_no,patient_email =patient_email)
+                PatientDetailsObj = PatientDetails(patient_name=patient_name,patient_age = patient_age, patient_weight = patient_weight,patient_height = patient_height, patient_address = patient_address, patient_phone_no = patient_phone_no,patient_email =patient_email, card_details = patient_card_details)
                 PatientDetailsObj.save()
                 Userobj = User.objects.create_user(username=patient_name, password = password, email = patient_email)
                 Userobj.save()

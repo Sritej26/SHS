@@ -94,6 +94,12 @@
                                 <p>Log files</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="/adminSHS/logout/{{k|patient_id_encrypt_tag:id}}" class="nav-link">
+                                <i class="nav-icon fas fa-sign-out-alt" aria-hidden="true"></i>
+                                <p>Logout</p>
+                            </a>
+                        </li>
                     </ul>
                 </nav>
                 <!-- /.sidebar-menu -->
@@ -134,3 +140,12 @@
         <!-- <script src="{% static 'dist/js/demo.js' %}"></script> -->
         <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
         <script src="{% static 'dist/js/pages/dashboard.js' %}"></script>
+        <script>
+            (function () {
+                window.onpageshow = function(event) {
+                    if (event.persisted) {
+                        window.location.reload();
+                    }
+                };
+            })();
+        </script>

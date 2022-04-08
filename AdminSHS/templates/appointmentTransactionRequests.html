@@ -59,14 +59,18 @@
                                         </button>
                                         <br>
                                         <br>
-                                        <a href="/adminSHS/appointmentTransactionRequests/delete/{{k|patient_id_encrypt_tag:id}}/{{k|patient_id_encrypt_tag:request.appointment_id}}">
+                                        <form method="POST" role="form" id="form-client-info">
+                                            {%csrf_token%}
                                             <button type="submit" class="btn btn-outline-success btn-sm" name="approve" value={{request.appointment_id}}>
                                                 Approve
                                             </button>
+                                        </form>
+                                        <form method="POST" role="form" id="form-client-info">
+                                            {%csrf_token%}
                                             <button type="submit" class="btn btn-outline-danger btn-sm" name="deny" value={{request.appointment_id}}>
                                                 Deny
                                             </button>
-                                        </a>
+                                        </form>
                                     </div>
                                 </div>
                             </li>

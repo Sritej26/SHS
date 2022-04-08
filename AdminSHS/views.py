@@ -32,9 +32,15 @@ import string
 import random
 from HospitalStaff.helper import mask,unmask
 from django.core import signing
-
+from django.contrib.auth import logout
+import datetime
 from Patients.models import PatientDetails
 import requests
+import json
+import re
+
+regex = re.compile(r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+')
+
 logger = logging.getLogger('django')
 #DJango authentication
 API_BLOCK_CHAIN = "https://api.simbachain.com/v1/HospitalTxn/payed/"
@@ -65,19 +71,39 @@ def send_action_email(user, request):
     if getattr(settings, 'TESTING', True):
         EmailThread(email).start()
 
+def logout_user(request,id):
+    logout(request)
+    return redirect(reverse('Login'))
+    #logger.info("USERNAME:  " username.patient_name "   LOGOUTIME:   "+dt_string)
+    
+def selectDepartment(id):
+    if signing.loads(id) == 1:
+        department = 'Doctor'
+    elif signing.loads(id) == 2:
+        department = 'Labstaff'
+    elif signing.loads(id) == 3:
+        department = 'Hospitalstaff'
+    elif signing.loads(id) == 4:
+        department = 'Insurancestaff'
+    
+    return department
+
 # Create your views here.
 class adminHome(View):
     def get(self, request, id):
+        if not (request.user.is_authenticated):
+            return redirect('/Login')
         id = signing.loads(id)
         adminName = User.objects.get(id=id)
-        print(adminName.first_name)
         return render(request, 'adminHome.html', {
-            'user': adminName.first_name,
+            'user': adminName.username,
             'id': id
         })
 
 class showLogFiles(View):
     def get(self, request, id):
+        if not (request.user.is_authenticated):
+            return redirect('/Login')
         id = signing.loads(id)
         adminName = User.objects.get(id=id)
         log_files = []
@@ -85,14 +111,12 @@ class showLogFiles(View):
             with open(os.path.join('/Users/harshilgandhi/Documents/CSE545/SHS_Grp14/logs', filename), 'r') as file:
                 log_files.append(filename)
         return render(request, 'showLogFiles.html', {
-            'user': adminName.first_name,
+            'user': adminName.username,
             'log_files': log_files,
             'id': id
         })
-    def post(self, request, id):
+    def post(self, request):
         try:
-            id = signing.loads(id)
-            print(id)
             filename = request.POST.get('filename')
             response = HttpResponse()  
             response['X-File'] = '/Users/harshilgandhi/Documents/CSE545/SHS_Grp14/logs/' + filename 
@@ -103,11 +127,16 @@ class showLogFiles(View):
 
 class viewEmployeeRecords(View):
     def get(self, request, id):
+        if not (request.user.is_authenticated):
+            return redirect('/Login')
         employeeDetails = EmployeeDetails.objects.all()
+        emails = []
+        for employee in employeeDetails:
+            employee.employee_email = unmask(employee.employee_email)
         id = signing.loads(id)
         adminName = User.objects.get(id=id)
         return render(request, 'viewEmployeeRecords.html', {
-            'user': adminName.first_name,
+            'user': adminName.username,
             'createEmployeeForm': createEmployeeForm,
             'employeeDetails': employeeDetails,
             'id': id
@@ -115,15 +144,19 @@ class viewEmployeeRecords(View):
 
 class createEmployeeRecords(View):
     def get(self, request, id):
+        if not (request.user.is_authenticated):
+            return redirect('/Login')
         id = signing.loads(id)
         adminName = User.objects.get(id=id)
         return render(request, 'createEmployeeRecords.html', {
-            'user': adminName.first_name,
+            'user': adminName.username,
             'createEmployeeForm': createEmployeeForm,
             'id': id
         })
     def post(self, request, id):
         msgS = ''
+        msgE = []
+        error = 0
         try:
             form = createEmployeeForm(request.POST)
             if form.is_valid():
@@ -132,42 +165,68 @@ class createEmployeeRecords(View):
                 employee_username = form.cleaned_data.get('employee_username')
                 employee_dept = form.cleaned_data.get('employee_dept')
                 employee_email = mask(form.cleaned_data.get('employee_email'))
-                if User.objects.filter(email = unmask(employee_email)).exists():
-                    msgE = 'Email already exists. Try another email'
-                elif EmployeeDetails.objects.filter(employee_email = employee_email).exists():
-                    msgE = 'Email already exists. Try another email'
-                elif EmployeeDetails.objects.filter(employee_username = employee_username).exists():
-                    msgE = 'Username already exists. Try another username'
+                if not request.POST.get('employee_first_name'):
+                     msgE.append( "First Name is Mandatory")
+                     error=error+1
+                if not request.POST.get('employee_last_name'):
+                     msgE.append( "Last Name is Mandatory")
+                     error=error+1
+                if not request.POST.get('employee_username'):
+                    msgE.append( "Username is Mandatory")
+                    error=error+1
+                if not request.POST.get('employee_email'):
+                    msgE.append( "Email is Mandatory")
+                    error=error+1
+                if request.POST.get('employee_email'):
+                    if re.fullmatch(regex, employee_email):
+                        print('valid email')
+                    else:
+                        msgE.append("Please enter a valid email")
+                        error+=1
+                if signing.loads(employee_dept) == 0:
+                    print('came here')
+                    msgE.append('Departnemt is required')
+                    error += 1
+                if User.objects.filter(email = unmask(employee_email)).exists() or EmployeeDetails.objects.filter(employee_email = employee_email).exists():
+                    msgE.append('Email already exists. Try another email')
+                    error+=1
+                if EmployeeDetails.objects.filter(employee_username = employee_username).exists() or User.objects.filter(username = employee_username).exists():
+                    msgE.append('Username already exists. Try another username')
+                    error+=1
+                if error >= 1:
+                    exit()
                 else:
                     password = ''.join(random.choices(string.ascii_uppercase + string.digits, k = 10))
-                    Userobj = User.objects.create_user(username=employee_username, password = password, email = unmask(employee_email))
+                    Userobj = User.objects.create_user(username=employee_username, password = password, email = unmask(employee_email), first_name = employee_first_name, last_name = employee_last_name)
                     Userobj.save()
                     to_send_email = unmask(employee_email)
                     send_mail(subject = 'Login credentials', message = 'Username: ' +  employee_username + ' Password: ' + password, from_email='admin@gmail.com', recipient_list=[to_send_email])
                     send_action_email(Userobj,request)
                     messages.info(request,'Please check your email to verify the account')
-                    EmployeeObj = EmployeeDetails(employee_first_name = employee_first_name, employee_last_name = employee_last_name, employee_username = employee_username, employee_email = employee_email, employee_dept = employee_dept)
+                    EmployeeObj = EmployeeDetails(employee_first_name = employee_first_name, employee_last_name = employee_last_name, employee_username = employee_username, employee_email = employee_email, employee_dept = selectDepartment(employee_dept))
                     EmployeeObj.save()
                     msgS = "Added Successfully"
             else:
-                msgE = "Mention Name of the Application Type"
+                msgE.append("Something went wrong")
         except:
-            msgE = "Something went Wrong"
+            msgE = msgE
         finally:
-            # id = signing.dumps(id)
             messages.add_message(request, messages.SUCCESS if msgS else messages.ERROR,
                                     (msgS if not msgS == '' else msgE),
                                     extra_tags='callout callout-success calloutCustom lead' if msgS else 'callout callout-danger calloutCustom lead')
-            # return redirect('/adminSHS/createEmployeeRecords.html')
             return HttpResponseRedirect(reverse('AdminSHS:createEmployeeRecords', args=[id]))
             
 class editEmployeeRecords(View):
     def get(self, request, id):
+        if not (request.user.is_authenticated):
+            return redirect('/Login')
         employeeDetails = EmployeeDetails.objects.all()
         id = signing.loads(id)
         adminName = User.objects.get(id=id)
+        for employee in employeeDetails:
+            employee.employee_email = unmask(employee.employee_email)
         return render(request, 'editEmployeeRecords.html', {
-            'user': adminName.first_name,
+            'user': adminName.username,
             'createEmployeeForm': createEmployeeForm,
             'employeeDetails': employeeDetails,
             'id': id
@@ -178,6 +237,8 @@ class editEmployeeRecords(View):
 
 class updateEmployeeDetails(View):
     def get(self, request, id, a_id):
+        if not (request.user.is_authenticated):
+            return redirect('/Login')
         flag = 'false'
         try:
             id = signing.loads(id)
@@ -193,11 +254,13 @@ class updateEmployeeDetails(View):
                 'employeeDetailsForm': editEmployeeForm(details), 
                 'flag': flag, 
                 'id': id, 
-                'user': adminName.first_name
+                'user': adminName.username
             })
 
     def post(self, request, id, a_id):
         msgS=''
+        msgE = []
+        error = 0
         try:
             id = signing.loads(id)
             a_id = signing.loads(a_id)
@@ -207,15 +270,46 @@ class updateEmployeeDetails(View):
                 detail1.employee_first_name = request.POST.get('employee_first_name')
                 detail1.employee_last_name = request.POST.get('employee_last_name')
                 detail1.employee_dept = request.POST.get('employee_dept')
-                if detail1.employee_dept == 'Doctor':
-                        DoctorObj = DoctorDetails.objects.get(doctor_username = detail1.employee_username)
-                        DoctorObj.doctor_name = detail1.employee_first_name
-                        DoctorObj.doctor_spec = 'Physician'
-                        DoctorObj.slot = 15
-                        DoctorObj.save()
-                detail1.save()
-                messages.success(request, 'Employee Details Updated Successfully!')
+                if not request.POST.get('employee_first_name'):
+                     msgE.append( "First Name is Mandatory")
+                     error+=1
+                if not request.POST.get('employee_last_name'):
+                     msgE.append( "Last Name is Mandatory")
+                     error+=1
+                if signing.loads(detail1.employee_dept) == 0:
+                    msgE.append('Departnemt is required')
+                    error += 1
+                if error >= 1:
+                    exit()
+                else:
+                    userObj = User.objects.get(username=detail1.employee_username)
+                    userObj.first_name = detail1.employee_first_name
+                    userObj.last_name = detail1.employee_last_name
+                    userObj.save()
+                    if HospitalPortal.objects.filter(username=detail1.employee_username).exists():
+                        hospitalObj = HospitalPortal.objects.get(username=detail1.employee_username)
+                        hospitalObj.Role = selectDepartment(detail1.employee_dept) 
+                        hospitalObj.save()
+                    if selectDepartment(detail1.employee_dept) == 'Doctor':
+                        if DoctorDetails.objects.filter(doctor_username = detail1.employee_username).exists():
+                            DoctorObj = DoctorDetails.objects.get(doctor_username = detail1.employee_username)
+                            DoctorObj.doctor_name = detail1.employee_first_name
+                            DoctorObj.doctor_spec = 'Physician'
+                            DoctorObj.slot = 15
+                            DoctorObj.save()
+                        elif DoctorDetails.objects.filter(doctor_username = detail1.employee_username).exists() and HospitalPortal.objects.filter(username=detail1.employee_username).exists():
+                            DoctorObj = DoctorDetails(doctor_name = detail1.employee_first_name, doctor_spec = 'Physician', slot = 15, doctor_username = detail1.employee_username)
+                            DoctorObj.save()
+                    if selectDepartment(detail1.employee_dept) != 'Doctor':
+                        if DoctorDetails.objects.filter(doctor_username = detail1.employee_username).exists():
+                            DoctorObj = DoctorDetails.objects.get(doctor_username = detail1.employee_username)
+                            DoctorObj.delete()
+                    detail1.save()
+                    messages.success(request, 'Employee Details Updated Successfully!')
+            else:
+                msgE.append("Something went wrong")
         except:
+            msgE = msgE
             messages.error(request, 'Something Went Wrong!')
         finally:
             flag = 'true'
@@ -226,16 +320,22 @@ class updateEmployeeDetails(View):
 
 class deleteEmployeeRecord(View):
     def get(self, request, id, a_id):
+        if not (request.user.is_authenticated):
+            return redirect('/Login')
         try:
             id = signing.loads(id)
             a_id = signing.loads(a_id)
             employee = EmployeeDetails.objects.get(employee_id=a_id)
+            userObj = User.objects.get(username = employee.employee_username)
+            userObj.delete()
+            if HospitalPortal.objects.filter(username = employee.employee_username).exists():
+                hospitalObj = HospitalPortal.objects.get(username = employee.employee_username)
+                hospitalObj.delete()
             if employee.employee_dept == 'Doctor':
-                doctor = DoctorDetails.objects.get(doctor_username = employee.employee_username)
-                doctor.delete()
-            user = User.objects.get(email=unmask(employee.employee_email))
+                if DoctorDetails.objects.filter(doctor_username = employee.employee_username).exists():
+                    doctor = DoctorDetails.objects.get(doctor_username = employee.employee_username)
+                    doctor.delete()
             employee.delete()
-            user.delete()
             logger.info('Record deleted')
         except:
             print('Error')
@@ -247,7 +347,9 @@ class deleteEmployeeRecord(View):
         pass
 
 class appointmentTransactionRequests(View):
-    def get(self, request, id, a_id):
+    def get(self, request, id):
+        if not (request.user.is_authenticated):
+            return redirect('/Login')
         try:
             appointmentDetails = AppointmentDetails.objects.all()
             id = signing.loads(id)
@@ -258,43 +360,42 @@ class appointmentTransactionRequests(View):
             return render(request, 'appointmentTransactionRequests.html', {
                 'appointmentTransactions': appointmentDetails,
                 'id': id,
-                'user': adminName.first_name
+                'user': adminName.username
             })
     
-    def post(self, request, id, a_id):
+    def post(self, request, id):
         try:
             msgS=""
             id = signing.loads(id)
-            a_id = signing.loads(a_id)
-            approve = request.POST.get("approve")
-            if approve != None:
-                appointment_id = a_id
-                AppointmentObj = AppointmentDetails.objects.get(appointment_id=appointment_id)
+            approve_id = request.POST.get("approve")
+            deny_id = request.POST.get("deny")
+            if approve_id != None:
+                AppointmentObj = AppointmentDetails.objects.get(appointment_id=approve_id)
                 PatientObj = PatientDetails.objects.get(patient_id=AppointmentObj.patient_id)
                 send_mail(subject = 'Bill', message = 'Hello, ' + AppointmentObj.first_name + ' $300 has been deducted from your account with card details: ' +  str(PatientObj.card_details), from_email='admin@gmail.com', recipient_list=[PatientObj.patient_email])  
+                AppointmentObj.transaction_status = "Done"
+                AppointmentObj.save()
                 ledgerobj = {"amount": 300, "patientId":AppointmentObj.patient_id, "purpose": "appointment","transactionId": AppointmentObj.transactionId,"from":fromid,"__transaction":AppointmentObj.transactionId}
                 headers={'APIKEY':API_KEY,"Accept":"application/json",'Content-Type':'application/json'}
                 r=requests.post(url=API_BLOCK_CHAIN, data=json.dumps(ledgerobj), headers=headers)
                 msgS="Transaction Added to the HyperLedger"
-                AppointmentObj.transaction_status = "Done"
-                AppointmentObj.save()
-            else:
-                appointment_id = a_id
-                AppointmentObj = AppointmentDetails.objects.get(appointment_id=appointment_id)
+            if deny_id != None:
+                AppointmentObj = AppointmentDetails.objects.get(appointment_id=deny_id)
                 PatientObj = PatientDetails.objects.get(patient_id=AppointmentObj.patient_id)
                 send_mail(subject = 'Bill', message = 'Hello, ' + AppointmentObj.first_name + ' your transaction is declined.', from_email='admin@gmail.com', recipient_list=[PatientObj.patient_email])  
                 AppointmentObj.transaction_status = "Declined"
                 AppointmentObj.save()
         except:
             print('Error')
-            msgE="Transaction Added to the HyperLedger"
         finally:
             messages.success(request, 'Transaction Added to the HyperLedger!')
             id = signing.dumps(id)
             return HttpResponseRedirect(reverse('adminSHS:appointmentTransactionRequests', args=[id]))
     
 class insuranceTransactionRequests(View):
-    def get(self, request, id, a_id):
+    def get(self, request, id):
+        if not (request.user.is_authenticated):
+            return redirect('/Login')
         try:
             insuranceDetails = InsuranceClaimDetails.objects.all()
             id = signing.loads(id)
@@ -305,17 +406,17 @@ class insuranceTransactionRequests(View):
             return render(request, 'insuranceTransactionRequests.html', {
                 'insuranceTransactions': insuranceDetails,
                 'id': id,
-                'user': adminName.first_name
+                'user': adminName.username
             })
 
-    def post(self, request, id, a_id):
+    def post(self, request, id):
         try:
             id = signing.loads(id)
-            a_id = signing.loads(a_id)
-            approve = request.POST.get("approve")
-            if approve != None:
-                claim_id = a_id
-                InsuranceObj = InsuranceClaimDetails.objects.get(claim_id=claim_id)
+            approve_id = request.POST.get("approve")
+            deny_id = request.POST.get("deny")
+            print('362')
+            if approve_id != None:
+                InsuranceObj = InsuranceClaimDetails.objects.get(claim_id=approve_id)
                 patient_id = InsuranceObj.patient_id
                 PatientObj = PatientDetails.objects.get(patient_id=patient_id)
                 send_mail(subject = 'Insurance claimed', message = 'Hello, ' + InsuranceObj.patient_firstname + ' Claim amount of ' +  str(InsuranceObj.claim_amt) + ' has been applied to your account.', from_email='admin@gmail.com', recipient_list=[PatientObj.patient_email])  
@@ -325,9 +426,8 @@ class insuranceTransactionRequests(View):
                 r=requests.post(url=API_BLOCK_CHAIN, data=json.dumps(ledgerobj), headers=headers)
                 InsuranceObj.claim_transaction_status = "Done"
                 InsuranceObj.save()
-            else:
-                claim_id = a_id
-                InsuranceObj = InsuranceClaimDetails.objects.get(claim_id=claim_id)
+            if deny_id != None:
+                InsuranceObj = InsuranceClaimDetails.objects.get(claim_id=deny_id)
                 patient_id = InsuranceObj.patient_id
                 PatientObj = PatientDetails.objects.get(patient_id=patient_id)
                 send_mail(subject = 'Insurance claimed', message = 'Hello, ' + InsuranceObj.patient_firstname + ' Your insurance claim is declined ', from_email='admin@gmail.com', recipient_list=[PatientObj.patient_email])  
@@ -339,10 +439,13 @@ class insuranceTransactionRequests(View):
             messages.success(request, 'Transaction Added to the HyperLedger!')
         finally:
             messages.success(request, 'Transaction Added to the HyperLedger!')
+            id = signing.dumps(id)
             return HttpResponseRedirect(reverse('adminSHS:insuranceTransactionRequests', args=[id]))
 
 class showInternalFiles(View):
     def get(self, request, id):
+        if not (request.user.is_authenticated):
+            return redirect('/Login')
         try:
             patient_details = PatientDetails.objects.all()
             id = signing.loads(id)
@@ -353,11 +456,13 @@ class showInternalFiles(View):
             return render(request, 'showInternalFiles.html', {
                 'patient_details': patient_details,
                 'id': id,
-                'user': adminName.first_name
+                'user': adminName.username
             })
 
 class showHospitalFiles(View):
     def get(self, request, id):
+        if not (request.user.is_authenticated):
+            return redirect('/Login')
         try:
             appointment_details = AppointmentDetails.objects.all()
             id = signing.loads(id)
@@ -368,11 +473,13 @@ class showHospitalFiles(View):
             return render(request, 'showHospitalFiles.html', {
                 'appointment_details': appointment_details,
                 'id': id,
-                'user': adminName.first_name
+                'user': adminName.username
             })
 
 class showInsuranceFiles(View):
      def get(self, request, id):
+        if not (request.user.is_authenticated):
+            return redirect('/Login')
         try:
             policy_details = InsurancePolicies.objects.all()
             claim_details = InsuranceClaimDetails.objects.all()
@@ -385,11 +492,13 @@ class showInsuranceFiles(View):
                 'policy_details': policy_details,
                 'claim_details': claim_details,
                 'id': id,
-                'user': adminName.first_name
+                'user': adminName.username
             })
 
 class showLabFiles(View):
     def get(self, request, id):
+        if not (request.user.is_authenticated):
+            return redirect('/Login')
         try:
             lab_details = LabReports.objects.all()
             id = signing.loads(id)
@@ -400,11 +509,13 @@ class showLabFiles(View):
             return render(request, 'showLabFiles.html', {
                 'lab_details': lab_details,
                 'id': id,
-                'user': adminName.first_name
+                'user': adminName.username
             })
 
 class showDoctorFiles(View):
     def get(self, request, id):
+        if not (request.user.is_authenticated):
+            return redirect('/Login')
         try:
             prescription_details = prescriptions.objects.all()
             id = signing.loads(id)
@@ -415,5 +526,5 @@ class showDoctorFiles(View):
             return render(request, 'showDoctorFiles.html', {
                 'prescription_details': prescription_details,
                 'id': id,
-                'user': adminName.first_name
+                'user': adminName.username
             })
