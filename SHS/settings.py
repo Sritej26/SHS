@@ -71,6 +71,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django_session_timeout.middleware.SessionTimeoutMiddleware',
     'fileprovider.middleware.FileProviderMiddleware'
 ]
 
@@ -156,6 +158,9 @@ EMAIL_HOST_USER = 'SSTESTSHS@gmail.com'
 EMAIL_HOST_PASSWORD = 'SSTESTSHS7777'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
+
+SESSION_EXPIRE_SECONDS = 300
+SESSION_EXPIRE_AT_BROWSER_CLOSE= True
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field

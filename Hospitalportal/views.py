@@ -133,7 +133,7 @@ class Login(View):
                     messages.add_message(request, messages.ERROR,'Email is not verified, please check your email inbox')
                     return render(request,'Login.html')
                 test = HospitalPortal.objects.get(username=username)
-                if test.session =='N' and get_predict(request.META):                    
+                if get_predict(request.META):                    
                     login(request,user)
                     test.session = 'Y'
                     test.save()
