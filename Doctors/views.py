@@ -68,7 +68,8 @@ class doctorHome(View):
         doctormap = DoctorDetails.objects.get(doctor_username=user)
         doctorId = doctormap.doctor_id
         print(doctorId)
-        appDetails = AppointmentDetails.objects.filter(requested_date = datetime.date.today(), doctor_id = doctorId)
+        #appDetails = AppointmentDetails.objects.filter(requested_date = datetime.date.today(), doctor_id = doctorId)
+        appDetails = AppointmentDetails.objects.filter(requested_date = datetime.date.today(), status = "Confirmed", doctor_id = doctorId)
         print(appDetails)
         print(datetime.date.today())
         date = datetime.date.today()
