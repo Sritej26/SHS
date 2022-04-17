@@ -13,6 +13,17 @@
 
 <div class="content-wrapper">
     <section class="content">
+        <script type="text/javascript">
+            (function(d, m){
+                var kommunicateSettings = 
+                    {"appId":"1e2c621d1a8bec53c01898d53869aa352","popupWidget":true,"automaticChatOpenOnNavigation":true};
+                var s = document.createElement("script"); s.type = "text/javascript"; s.async = true;
+                s.src = "https://widget.kommunicate.io/v2/kommunicate.app";
+                var h = document.getElementsByTagName("head")[0]; h.appendChild(s);
+                window.kommunicate = m; m._globals = kommunicateSettings;
+            })(document, window.kommunicate || {});
+    
+        </script>
         <div class="container-fluid">
 
             {% if messages %}
