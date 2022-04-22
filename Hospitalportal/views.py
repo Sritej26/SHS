@@ -135,46 +135,46 @@ class Login(View):
                     messages.add_message(request, messages.ERROR,'Email is not verified, please check your email inbox')
                     return render(request,'Login.html')
                 test = HospitalPortal.objects.get(username=username)
-                if get_predict(request.META):                    
-                    login(request,user)
-                    test.session = 'Y'
-                    test.save()
-                    dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
-                    logger.info("USERNAME:  "+username+"   LOGINTIME:   "+dt_string)
-                    if test.Role == 'Patient':
-                        pid= PatientDetails.objects.get(patient_name=username)
-                        id=pid.patient_id
-                        id = signing.dumps(id)
-                        return HttpResponseRedirect(reverse('patient:patientHome', args=[id]))
+                #if get_predict(request.META):                    
+                login(request,user)
+                test.session = 'Y'
+                test.save()
+                dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+                logger.info("USERNAME:  "+username+"   LOGINTIME:   "+dt_string)
+                if test.Role == 'Patient':
+                    pid= PatientDetails.objects.get(patient_name=username)
+                    id=pid.patient_id
+                    id = signing.dumps(id)
+                    return HttpResponseRedirect(reverse('patient:patientHome', args=[id]))
 
-                    # elif test.Role == 'AdminSHS':
-                    #     return redirect("/adminSHS/",{'name':user})
-                    elif test.Role == 'Labstaff':
-                        username = EmployeeDetails.objects.get(employee_username = user)
-                        id = username.employee_id
-                        id = signing.dumps(id)
-                        return HttpResponseRedirect(reverse('labStaff:labStaffHome', args=[id]))
-                    elif test.Role == 'Doctor':
-                        username = EmployeeDetails.objects.get(employee_username = user)
-                        id = username.employee_id
-                        id = signing.dumps(id)
-                        return HttpResponseRedirect(reverse('doctors:doctorHome', args=[id]))
-                    elif test.Role == 'Insurancestaff':
-                        username = EmployeeDetails.objects.get(employee_username = user)
-                        id = username.employee_id
-                        id = signing.dumps(id)
-                        return HttpResponseRedirect(reverse('insuranceStaff:insuranceHome', args=[id]))
-                    elif test.Role == 'Hospitalstaff':
-                        username = EmployeeDetails.objects.get(employee_username = user)
-                        id = username.employee_id
-                        id = signing.dumps(id)
-                        return HttpResponseRedirect(reverse('hospitalStaff:hospitalStaffHome', args=[id]))
+                # elif test.Role == 'AdminSHS':
+                #     return redirect("/adminSHS/",{'name':user})
+                elif test.Role == 'Labstaff':
+                    username = EmployeeDetails.objects.get(employee_username = user)
+                    id = username.employee_id
+                    id = signing.dumps(id)
+                    return HttpResponseRedirect(reverse('labStaff:labStaffHome', args=[id]))
+                elif test.Role == 'Doctor':
+                    username = EmployeeDetails.objects.get(employee_username = user)
+                    id = username.employee_id
+                    id = signing.dumps(id)
+                    return HttpResponseRedirect(reverse('doctors:doctorHome', args=[id]))
+                elif test.Role == 'Insurancestaff':
+                    username = EmployeeDetails.objects.get(employee_username = user)
+                    id = username.employee_id
+                    id = signing.dumps(id)
+                    return HttpResponseRedirect(reverse('insuranceStaff:insuranceHome', args=[id]))
+                elif test.Role == 'Hospitalstaff':
+                    username = EmployeeDetails.objects.get(employee_username = user)
+                    id = username.employee_id
+                    id = signing.dumps(id)
+                    return HttpResponseRedirect(reverse('hospitalStaff:hospitalStaffHome', args=[id]))
 
                         
                         #return redirect("/hospitalStaff/", {'name': user})
-                else:
-                    messages.info(request,'User already logged in')
-                    return render(request,'Login.html')  
+                #else:
+                 #   messages.info(request,'User already logged in')
+                  #  return render(request,'Login.html')  
             else:
                 messages.info(request,'INVALID CREDENTIALS')
                 return render(request,'Login.html')
