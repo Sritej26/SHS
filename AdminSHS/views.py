@@ -187,10 +187,10 @@ class createEmployeeRecords(View):
                     print('came here')
                     msgE.append('Departnemt is required')
                     error += 1
-                if User.objects.filter(email = unmask(employee_email)).exists() or EmployeeDetails.objects.filter(employee_email = employee_email).exists():
+                if User.objects.filter(email = unmask(employee_email)).exists(): 
                     msgE.append('Email already exists. Try another email')
                     error+=1
-                if EmployeeDetails.objects.filter(employee_username = employee_username).exists() or User.objects.filter(username = employee_username).exists():
+                if User.objects.filter(username = employee_username).exists():
                     msgE.append('Username already exists. Try another username')
                     error+=1
                 if error >= 1:
